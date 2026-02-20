@@ -1,0 +1,5 @@
+mutation RequestAuth($input: RequestAuthInput!) {
+  requestAuth(input: $input) {
+    success
+  }
+}

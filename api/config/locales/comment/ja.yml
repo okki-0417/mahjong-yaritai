@@ -1,0 +1,7 @@
+ja:
+  activerecord:
+    models:
+      comment: "何切る問題"
+  errors:
+    messages:
+      missing_parent_comment: "存在しない親コメントIDです"

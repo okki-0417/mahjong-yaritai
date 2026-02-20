@@ -1,0 +1,15 @@
+mutation VerifyAuth($input: VerifyAuthInput!) {
+  verifyAuth(input: $input) {
+    user {
+      id
+      name
+      email
+      profileText
+      avatarUrl
+      followingCount
+      followersCount
+      createdAt
+      updatedAt
+    }
+  }
+}

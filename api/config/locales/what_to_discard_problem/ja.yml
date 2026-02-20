@@ -1,0 +1,35 @@
+ja:
+  activerecord:
+    models:
+      what_to_discard_problem: "何切る問題"
+    attributes:
+      what_to_discard_problem:
+        round: "局"
+        turn: "巡目"
+        wind: "風"
+        dora: "ドラ"
+        point_east: "東家の点数"
+        point_south: "南家の点数"
+        point_west: "西家の点数"
+        point_north: "北家の点数"
+        hand1: "手牌1"
+        hand2: "手牌2"
+        hand3: "手牌3"
+        hand4: "手牌4"
+        hand5: "手牌5"
+        hand6: "手牌6"
+        hand7: "手牌7"
+        hand8: "手牌8"
+        hand9: "手牌9"
+        hand10: "手牌10"
+        hand11: "手牌11"
+        hand12: "手牌12"
+        hand13: "手牌13"
+        tsumo: "ツモ"
+    errors:
+      models:
+        what_to_discard_problem:
+          attributes:
+            base:
+              too_many_duplicated_tiles: "手牌に5枚以上同じ牌が含まれています"
+              tiles_not_sorted: "手牌が理牌されていません（昇順になっていません）"

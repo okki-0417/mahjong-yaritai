@@ -1,0 +1,38 @@
+query ParticipatedMahjongSessions($after: String, $first: Int) {
+  participatedMahjongSessions(after: $after, first: $first) {
+    edges {
+      node {
+        id
+        name
+        totalGameFee
+        myTotalPoints
+        myAverageRanking
+        myTotalProfits
+        creatorUser {
+          id
+          name
+        }
+        mahjongScoringSetting {
+          id
+          rate
+          chipAmount
+          umaRuleLabel
+          okaRuleLabel
+        }
+        participantUsers {
+          id
+          name
+        }
+        createdAt
+        updatedAt
+      }
+      cursor
+    }
+    pageInfo {
+      hasNextPage
+      hasPreviousPage
+      startCursor
+      endCursor
+    }
+  }
+}

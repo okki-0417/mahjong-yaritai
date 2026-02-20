@@ -1,0 +1,6 @@
+query votedTileIds($whatToDiscardProblemIds: [ID!]!) {
+  votedTileIds(whatToDiscardProblemIds: $whatToDiscardProblemIds) {
+    tileId
+    whatToDiscardProblemId
+  }
+}

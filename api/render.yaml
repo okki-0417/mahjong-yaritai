@@ -1,0 +1,194 @@
+databases:
+  - name: mj_db
+    postgresMajorVersion: 16
+    databaseName: mahjong_yaritai_database_name
+    user: mahjong_yaritai_user
+    region: singapore
+    plan: basic-256mb
+    ipAllowList: []
+
+  - name: metabase_db
+    postgresMajorVersion: 16
+    databaseName: metabase_database_name
+    user: metabase_user
+    region: singapore
+    plan: free
+    ipAllowList: []
+
+services:
+  - name: app
+    type: web
+    runtime: docker
+    region: singapore
+    plan: starter
+    repo: https://github.com/okki-0417/Mahjong-Yaritai-API
+    branch: main
+    autoDeployTrigger: checksPass
+    healthCheckPath: /
+    dockerfilePath: ./Dockerfile
+    envVars:
+      - key: AWS_ACCESS_KEY_ID
+        sync: false
+      - key: AWS_REGION
+        value: ap-northeast-1
+      - key: AWS_S3_BUCKET
+        sync: false
+      - key: AWS_SECRET_ACCESS_KEY
+        sync: false
+      - key: DATABASE_HOST
+        fromDatabase:
+          name: mj_db
+          property: host
+      - key: DATABASE_NAME
+        value: mahjong_yaritai_database_name
+      - key: DATABASE_PASSWORD
+        fromDatabase:
+          name: mj_db
+          property: password
+      - key: DATABASE_USER
+        value: mahjong_yaritai_user
+      - key: ETLD_HOST
+        sync: false
+      - key: FRONTEND_HOST
+        sync: false
+      - key: FRONTEND_ORIGIN
+        sync: false
+      - key: GOOGLE_CLIENT_ID
+        sync: false
+      - key: GOOGLE_CLIENT_SECRET
+        sync: false
+      - key: GOOGLE_REDIRECT_URI
+        sync: false
+      - key: HOST_NAME
+        value: Must be fulfilled after the web server creation.
+      - key: LINE_CHANNEL_ID
+        sync: false
+      - key: LINE_CHANNEL_SECRET
+        sync: false
+      - key: LINE_REDIRECT_URI
+        sync: false
+      - key: MAIL_ADDRESS
+        sync: false
+      - key: MAIL_PASSWORD
+        sync: false
+      - key: RAILS_ENV
+        value: production
+      - key: RAILS_MASTER_KEY
+        sync: false
+      - key: REDIS_HOST
+        fromService:
+          name: mj_redis
+          type: keyvalue
+          property: host
+      - key: REDIS_PORT
+        fromService:
+          name: mj_redis
+          type: keyvalue
+          property: port
+      - key: SECRET_KEY_BASE
+        sync: false
+      - key: SENTRY_DSN
+        sync: false
+      - key: USER_AGENT
+        sync: false
+  - name: mj_redis
+    type: keyvalue
+    plan: free
+    region: singapore
+    maxmemoryPolicy: allkeys-lru
+    ipAllowList: []
+
+  - name: mj_sidekiq
+    type: worker
+    runtime: docker
+    region: singapore
+    plan: starter
+    repo: https://github.com/okki-0417/Mahjong-Yaritai-API
+    branch: main
+    autoDeployTrigger: checksPass
+    dockerfilePath: ./Dockerfile
+    dockerCommand: bundle exec sidekiq
+    envVars:
+      - key: AWS_ACCESS_KEY_ID
+        sync: false
+      - key: AWS_REGION
+        value: ap-northeast-1
+      - key: AWS_S3_BUCKET
+        sync: false
+      - key: AWS_SECRET_ACCESS_KEY
+        sync: false
+      - key: DATABASE_HOST
+        fromDatabase:
+          name: mj_db
+          property: host
+      - key: DATABASE_NAME
+        value: mahjong_yaritai_database_name
+      - key: DATABASE_PASSWORD
+        fromDatabase:
+          name: mj_db
+          property: password
+      - key: DATABASE_USER
+        value: mahjong_yaritai_user
+      - key: GOOGLE_CLIENT_ID
+        sync: false
+      - key: GOOGLE_CLIENT_SECRET
+        sync: false
+      - key: GOOGLE_REDIRECT_URI
+        sync: false
+      - key: LINE_CHANNEL_ID
+        sync: false
+      - key: LINE_CHANNEL_SECRET
+        sync: false
+      - key: LINE_REDIRECT_URI
+        sync: false
+      - key: MAIL_ADDRESS
+        sync: false
+      - key: MAIL_PASSWORD
+        sync: false
+      - key: RAILS_ENV
+        value: production
+      - key: RAILS_MASTER_KEY
+        sync: false
+      - key: REDIS_HOST
+        fromService:
+          name: mj_redis
+          type: keyvalue
+          property: host
+      - key: REDIS_PORT
+        fromService:
+          name: mj_redis
+          type: keyvalue
+          property: port
+      - key: SECRET_KEY_BASE
+        sync: false
+      - key: SENTRY_DSN
+        sync: false
+
+  - name: metabase
+    type: web
+    runtime: image
+    region: singapore
+    plan: free
+    image:
+      url: metabase/metabase:latest
+    envVars:
+      - key: MB_DB_DBNAME
+        value: metabase_database_name
+      - key: MB_DB_HOST
+        fromDatabase:
+          name: metabase_db
+          property: host
+      - key: MB_DB_PASS
+        fromDatabase:
+          name: metabase_db
+          property: password
+      - key: MB_DB_PORT
+        value: "5432"
+      - key: MB_DB_TYPE
+        value: postgres
+      - key: MB_DB_USER
+        value: metabase_user
+      - key: MB_ENCRYPTION_SECRET_KEY
+        sync: false
+      - key: MB_JETTY_PORT
+        value: ${PORT}

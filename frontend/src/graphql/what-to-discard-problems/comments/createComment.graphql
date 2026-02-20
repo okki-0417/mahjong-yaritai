@@ -1,0 +1,31 @@
+mutation CreateComment($whatToDiscardProblemId: ID!, $content: String!, $parentCommentId: ID) {
+  createWhatToDiscardProblemComment(
+    input: {
+      whatToDiscardProblemId: $whatToDiscardProblemId
+      content: $content
+      parentCommentId: $parentCommentId
+    }
+  ) {
+    comment {
+      id
+      content
+      userId
+      parentCommentId
+      repliesCount
+      createdAt
+      updatedAt
+      user {
+        id
+        name
+        email
+        profileText
+        avatarUrl
+        isFollowing
+        followingCount
+        followersCount
+        createdAt
+        updatedAt
+      }
+    }
+  }
+}

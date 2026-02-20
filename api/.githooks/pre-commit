@@ -1,0 +1,19 @@
+#!/bin/sh
+
+# Get staged Ruby files
+files=$(git diff --cached --name-only --diff-filter=ACM | grep '\.rb$')
+
+if [ -z "$files" ]; then
+  echo "No Ruby files staged for commit."
+  exit 0
+fi
+
+echo "Running pre-commit hook..."
+
+# Use --force-exclusion flag to ensure .rubocop.yml Exclude patterns are respected
+docker compose exec -T app bundle exec rubocop --force-exclusion $files -a
+
+if [ $? -ne 0 ]; then
+  echo "RuboCop failed. Commit aborted."
+  exit 1
+fi

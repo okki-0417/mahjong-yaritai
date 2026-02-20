@@ -1,0 +1,5 @@
+mutation DeleteWhatToDiscardProblemLike($whatToDiscardProblemId: ID!) {
+  deleteWhatToDiscardProblemLike(input: { whatToDiscardProblemId: $whatToDiscardProblemId }) {
+    id
+  }
+}

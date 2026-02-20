@@ -1,0 +1,17 @@
+query CurrentSession {
+  currentSession {
+    isLoggedIn
+    user {
+      id
+      name
+      email
+      profileText
+      avatarUrl
+      isFollowing
+      followingCount
+      followersCount
+      createdAt
+      updatedAt
+    }
+  }
+}

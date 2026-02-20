@@ -1,0 +1,8 @@
+tmp/
+log/
+.env
+spec/log.txt
+storage/
+node_modules
+config/master.key
+.aider*

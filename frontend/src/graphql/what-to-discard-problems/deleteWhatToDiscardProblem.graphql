@@ -1,0 +1,5 @@
+mutation DeleteWhatToDiscardProblem($input: DeleteWhatToDiscardProblemInput!) {
+  deleteWhatToDiscardProblem(input: $input) {
+    id
+  }
+}

@@ -1,0 +1,24 @@
+query Followers($first: Int, $after: String) {
+  followers(first: $first, after: $after) {
+    edges {
+      node {
+        id
+        name
+        email
+        profileText
+        avatarUrl
+        isFollowing
+        followingCount
+        followersCount
+        createdAt
+        updatedAt
+      }
+    }
+    pageInfo {
+      hasNextPage
+      hasPreviousPage
+      startCursor
+      endCursor
+    }
+  }
+}

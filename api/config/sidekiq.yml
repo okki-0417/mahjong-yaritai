@@ -1,0 +1,13 @@
+:max_retries: 5
+:timeout: 30
+:concurrency: 5
+
+development:
+  :concurrency: 2
+
+production:
+  :concurrency: 10
+
+:queues:
+  - default
+  - mailers

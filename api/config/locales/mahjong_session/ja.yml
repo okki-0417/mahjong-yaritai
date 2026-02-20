@@ -1,0 +1,12 @@
+ja:
+  activerecord:
+    models:
+      mahjong_session: 麻雀セッション
+    attributes:
+      mahjong_session:
+        name: セッション名
+        total_game_fee: ゲーム代
+        creator_user: 作成者
+        mahjong_scoring_setting: スコア設定
+        mahjong_games: ゲーム
+        mahjong_participants: 参加者

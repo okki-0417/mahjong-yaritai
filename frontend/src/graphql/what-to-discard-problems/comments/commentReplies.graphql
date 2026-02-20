@@ -1,0 +1,39 @@
+query CommentReplies($parentCommentId: ID!, $problemId: ID!, $first: Int, $after: String) {
+  whatToDiscardProblemCommentReplies(
+    parentCommentId: $parentCommentId
+    problemId: $problemId
+    first: $first
+    after: $after
+  ) {
+    edges {
+      node {
+        id
+        content
+        userId
+        parentCommentId
+        repliesCount
+        createdAt
+        updatedAt
+        user {
+          id
+          name
+          email
+          profileText
+          avatarUrl
+          isFollowing
+          followingCount
+          followersCount
+          createdAt
+          updatedAt
+        }
+      }
+      cursor
+    }
+    pageInfo {
+      hasNextPage
+      hasPreviousPage
+      startCursor
+      endCursor
+    }
+  }
+}

@@ -1,0 +1,10 @@
+ja:
+  activemodel:
+    attributes:
+      mahjong_session_form:
+        name: セッション名
+        rate: レート
+        chip_amount: チップ額
+        participant_users: 参加者
+        games: ゲーム
+        creator_user: 作成者

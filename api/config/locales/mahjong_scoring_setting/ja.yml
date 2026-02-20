@@ -1,0 +1,10 @@
+ja:
+  activerecord:
+    models:
+      mahjong_scoring_setting: スコア設定
+    attributes:
+      mahjong_scoring_setting:
+        rate: レート
+        chip_amount: チップ額
+        uma_rule_label: ウマルール
+        oka_rule_label: オカルール

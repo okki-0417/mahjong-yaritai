@@ -1,0 +1,121 @@
+inherit_gem: { rubocop-rails-omakase: rubocop.yml }
+
+AllCops:
+  Include:
+    - app/**/*.rb
+    - spec/**/*.rb
+  Exclude:
+    - db/schema.rb
+    - db/migrate/*.rb
+    - config/**/*.rb
+    - lib/tasks/**/*.rake
+    - vendor/**/*
+
+# ハッシュリテラルの波括弧内のスペース
+# 例: { key: value } を強制
+Layout/SpaceInsideHashLiteralBraces:
+  Enabled: true
+  EnforcedStyle: space
+
+# 配列リテラルの括弧内のスペース
+# 例: [ 1, 2, 3 ] を強制
+Layout/SpaceInsideArrayLiteralBrackets:
+  Enabled: false
+  EnforcedStyle: space
+
+# インデント幅を2スペースに設定
+Layout/IndentationWidth:
+  Enabled: true
+  Width: 2
+
+# 行末の余計なスペースを検出
+Layout/TrailingWhitespace:
+  Enabled: true
+
+# ブロック本体の前後の空行を検出
+# 例: do と end の直後に不要な空行がないかチェック
+Layout/EmptyLinesAroundBlockBody:
+  Enabled: true
+
+# 演算子の前後にスペースを入れる
+# 例: a + b を強制（a+b はNG）
+Layout/SpaceAroundOperators:
+  Enabled: true
+
+# 複数行のメソッドチェーンのインデント
+# 例: user.posts.where(...).order(...) の改行時のインデント
+Layout/MultilineMethodCallIndentation:
+  Enabled: true
+  EnforcedStyle: aligned
+
+# ブロックの end とブロック開始位置の整列
+Layout/BlockAlignment:
+  Enabled: true
+
+# ガード節（return/next等）の後に空行を入れる
+Layout/EmptyLineAfterGuardClause:
+  Enabled: true
+
+# メソッド定義の間に空行を入れる
+Layout/EmptyLineBetweenDefs:
+  Enabled: true
+
+# 単語の配列をパーセント記法で書く
+# 例: ["foo", "bar"] を %w[foo bar] に
+Style/WordArray:
+  Enabled: true
+  EnforcedStyle: percent
+
+# シンボルの配列をパーセント記法で書く
+# 例: [:foo, :bar] を %i[foo bar] に
+Style/SymbolArray:
+  Enabled: true
+  EnforcedStyle: percent
+
+# 使われていない変数への代入を検出
+Lint/UselessAssignment:
+  Enabled: true
+
+# binding.pry や debugger 等のデバッグコードを検出
+Lint/Debugger:
+  Enabled: true
+
+# puts や print 等の出力コードを検出（本番に残すべきでない）
+Rails/Output:
+  Enabled: true
+
+# 文字列リテラルをダブルクォートで統一
+# 例: "string" を強制（'string' はNG）
+Style/StringLiterals:
+  Enabled: true
+  EnforcedStyle: double_quotes
+
+# 複数行のハッシュリテラルの末尾カンマを統一
+# 例: { key: value, } のように末尾カンマを付ける
+Style/TrailingCommaInHashLiteral:
+  EnforcedStyleForMultiline: consistent_comma
+
+# 複数行の配列リテラルの末尾カンマを統一
+# 例: [1, 2, 3,] のように末尾カンマを付ける
+Style/TrailingCommaInArrayLiteral:
+  EnforcedStyleForMultiline: consistent_comma
+
+# 複数行のメソッド引数の末尾カンマを統一
+# 例: method(arg1, arg2,) のように末尾カンマを付ける
+Style/TrailingCommaInArguments:
+  EnforcedStyleForMultiline: consistent_comma
+
+# ガード節の使用を推奨（早期return等）
+# 例: if文のネストを減らすためにガード節を使う
+Style/GuardClause:
+  Enabled: true
+
+# ファイル末尾に空行を入れる
+Layout/TrailingEmptyLines:
+  Enabled: true
+
+# privateメソッド等のインデントを統一
+# normal: private キーワードの後のメソッドをインデントしない
+Layout/IndentationConsistency:
+  Enabled: true
+  EnforcedStyle: normal

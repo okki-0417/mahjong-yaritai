@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <style>
+    body {
+      font-family: "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Noto Sans JP", sans-serif;
+      line-height: 1.6;
+      color: #333;
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    .header {
+      background-color: #f8f9fa;
+      padding: 20px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+    }
+    .content {
+      margin-bottom: 20px;
+    }
+    .footer {
+      font-size: 0.9em;
+      color: #666;
+      border-top: 1px solid #eee;
+      padding-top: 20px;
+      margin-top: 30px;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>退会完了のお知らせ</h1>
+  </div>
+
+  <div class="content">
+    <p><%= @user_name %> 様</p>
+
+    <p>麻雀ヤリタイをご利用いただき、ありがとうございました。</p>
+
+    <p>お客様のアカウントの退会処理が完了いたしました。<br>
+    これまでにご投稿いただいた問題やコメント等のデータはすべて削除されております。</p>
+
+    <p>今後とも麻雀ヤリタイをよろしくお願いいたします。</p>
+  </div>
+
+  <div class="footer">
+    <p>このメールは自動送信されています。<br>
+    ご不明な点がございましたら、サポートまでお問い合わせください。</p>
+
+    <p>麻雀ヤリタイ運営チーム</p>
+  </div>
+</body>
+</html>

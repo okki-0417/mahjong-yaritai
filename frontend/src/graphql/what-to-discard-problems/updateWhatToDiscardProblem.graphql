@@ -1,0 +1,46 @@
+mutation UpdateWhatToDiscardProblem($input: UpdateWhatToDiscardProblemInput!) {
+  updateWhatToDiscardProblem(input: $input) {
+    whatToDiscardProblem {
+      id
+      round
+      turn
+      wind
+      points
+      description
+      votesCount
+      commentsCount
+      likesCount
+      doraId
+      hand1Id
+      hand2Id
+      hand3Id
+      hand4Id
+      hand5Id
+      hand6Id
+      hand7Id
+      hand8Id
+      hand9Id
+      hand10Id
+      hand11Id
+      hand12Id
+      hand13Id
+      tsumoId
+      isLikedByMe
+      myVoteTileId
+      createdAt
+      updatedAt
+      user {
+        id
+        name
+        email
+        profileText
+        avatarUrl
+        isFollowing
+        followingCount
+        followersCount
+        createdAt
+        updatedAt
+      }
+    }
+  }
+}

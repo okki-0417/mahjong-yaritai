@@ -1,0 +1,14 @@
+query UserProfile($userId: ID!) {
+  user(id: $userId) {
+    id
+    name
+    email
+    profileText
+    avatarUrl
+    isFollowing
+    followingCount
+    followersCount
+    createdAt
+    updatedAt
+  }
+}

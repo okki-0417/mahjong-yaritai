@@ -1,0 +1,10 @@
+ja:
+  activerecord:
+    models:
+      mahjong_participant: 麻雀参加者
+    attributes:
+      mahjong_participant:
+        mahjong_session: セッション
+        user: ユーザー
+        name: 参加者名
+        mahjong_results: 結果

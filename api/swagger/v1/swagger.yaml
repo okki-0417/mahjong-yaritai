@@ -1,0 +1,536 @@
+---
+openapi: 3.0.1
+info:
+  title: API V1
+  version: v1
+paths:
+  "/auth/google/callback":
+    post:
+      summary: create callback
+      tags:
+      - Auth::Google::Callback
+      operationId: createGoogleCallback
+      parameters: []
+      responses:
+        '400':
+          description: bad request
+        '422':
+          description: unprocessable entity - auth request validation fails
+        '200':
+          description: successful - existing user
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - session
+                properties:
+                  session:
+                    "$ref": "#/components/schemas/Session"
+        '204':
+          description: successful - new user creates auth request
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - code
+              properties:
+                code:
+                  type: string
+                  description: Authorization code from Google
+  "/auth/line/callback":
+    post:
+      summary: create callback
+      tags:
+      - Auth::Line::Callback
+      operationId: createLineCallback
+      parameters: []
+      responses:
+        '400':
+          description: bad request - missing code
+        '422':
+          description: unprocessable entity - auth request validation fails
+        '200':
+          description: successful - existing user
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - session
+                properties:
+                  session:
+                    "$ref": "#/components/schemas/Session"
+        '204':
+          description: successful - new user creates auth request
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - code
+              - state
+              properties:
+                code:
+                  type: string
+                  description: Authorization code from LINE
+                state:
+                  type: string
+                  description: State parameter for CSRF protection
+  "/auth/line/login_url":
+    get:
+      summary: show login url
+      tags:
+      - Auth::Line::LoginUrl
+      operationId: getLineLoginUrl
+      responses:
+        '200':
+          description: successful
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - login_url
+                properties:
+                  login_url:
+                    type: string
+                    description: LINE OAuth authorization URL
+                    example: https://access.line.me/oauth2/v2.1/authorize?client_id=xxx&redirect_uri=xxx&response_type=code&scope=profile+openid+email&state=xxx
+servers:
+- url: http://murai.local:3001
+components:
+  schemas:
+    Like:
+      type: object
+      required:
+      - id
+      - likable_type
+      - likable_id
+      - created_at
+      - updated_at
+      properties:
+        id:
+          type: integer
+        user_id:
+          type: integer
+        likable_type:
+          type: string
+        likable_id:
+          type: integer
+        created_at:
+          type: string
+          format: date_time
+        updated_at:
+          type: string
+          format: date_time
+    Comment:
+      type: object
+      required:
+      - id
+      - user
+      - replies_count
+      - commentable_type
+      - commentable_id
+      - content
+      - created_at
+      - updated_at
+      properties:
+        id:
+          type: integer
+        user:
+          "$ref": "#/components/schemas/User"
+        parent_comment_id:
+          type: integer
+          nullable: true
+        replies_count:
+          type: integer
+        commentable_type:
+          type: string
+        commentable_id:
+          type: integer
+        content:
+          type: string
+        created_at:
+          type: string
+          format: date_time
+        updated_at:
+          type: string
+          format: date_time
+    User:
+      type: object
+      required:
+      - id
+      - name
+      - is_following
+      - created_at
+      - updated_at
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        profile_text:
+          type: string
+          nullable: true
+        avatar_url:
+          type: string
+          nullable: true
+        is_following:
+          type: boolean
+        created_at:
+          type: string
+          format: date_time
+        updated_at:
+          type: string
+          format: date_time
+    WhatToDiscardProblemVote:
+      type: object
+      required:
+      - id
+      - user_id
+      - what_to_discard_problem_id
+      - tile
+      - created_at
+      - updated_at
+      properties:
+        id:
+          type: integer
+        user_id:
+          type: integer
+        what_to_discard_problem_id:
+          type: integer
+        tile:
+          "$ref": "#/components/schemas/Tile"
+        created_at:
+          type: string
+          format: date_time
+        updated_at:
+          type: string
+          format: date_time
+    WhatToDiscardProblem:
+      type: object
+      required:
+      - id
+      - user
+      - round
+      - turn
+      - wind
+      - points
+      - dora_id
+      - hand1_id
+      - hand2_id
+      - hand3_id
+      - hand4_id
+      - hand5_id
+      - hand6_id
+      - hand7_id
+      - hand8_id
+      - hand9_id
+      - hand10_id
+      - hand11_id
+      - hand12_id
+      - hand13_id
+      - tsumo_id
+      - description
+      - comments_count
+      - likes_count
+      - votes_count
+      - created_at
+      - updated_at
+      properties:
+        id:
+          type: integer
+        user:
+          "$ref": "#/components/schemas/User"
+        round:
+          type: string
+          nullable: true
+        turn:
+          type: integer
+          nullable: true
+        wind:
+          type: string
+          nullable: true
+        points:
+          type: integer
+          nullable: true
+        dora_id:
+          type: integer
+        hand1_id:
+          type: integer
+        hand2_id:
+          type: integer
+        hand3_id:
+          type: integer
+        hand4_id:
+          type: integer
+        hand5_id:
+          type: integer
+        hand6_id:
+          type: integer
+        hand7_id:
+          type: integer
+        hand8_id:
+          type: integer
+        hand9_id:
+          type: integer
+        hand10_id:
+          type: integer
+        hand11_id:
+          type: integer
+        hand12_id:
+          type: integer
+        hand13_id:
+          type: integer
+        tsumo_id:
+          type: integer
+        description:
+          type: string
+          nullable: true
+        comments_count:
+          type: integer
+        likes_count:
+          type: integer
+        votes_count:
+          type: integer
+        created_at:
+          type: string
+          format: date_time
+        updated_at:
+          type: string
+          format: date_time
+    WhatToDiscardProblem_NoRel:
+      type: object
+      required:
+      - user_id
+      - round
+      - turn
+      - wind
+      - point_east
+      - point_south
+      - point_west
+      - point_north
+      - dora_id
+      - hand1_id
+      - hand2_id
+      - hand3_id
+      - hand4_id
+      - hand5_id
+      - hand6_id
+      - hand7_id
+      - hand8_id
+      - hand9_id
+      - hand10_id
+      - hand11_id
+      - hand12_id
+      - hand13_id
+      - tsumo_id
+      - description
+      - comments_count
+      - likes_count
+      - votes_count
+      - created_at
+      - updated_at
+      properties:
+        id:
+          type: integer
+        user_id:
+          type: integer
+        round:
+          type: string
+        turn:
+          type: integer
+        wind:
+          type: string
+        point_east:
+          type: integer
+        point_south:
+          type: integer
+        point_west:
+          type: integer
+        point_north:
+          type: integer
+        dora_id:
+          type: integer
+        hand1_id:
+          type: integer
+        hand2_id:
+          type: integer
+        hand3_id:
+          type: integer
+        hand4_id:
+          type: integer
+        hand5_id:
+          type: integer
+        hand6_id:
+          type: integer
+        hand7_id:
+          type: integer
+        hand8_id:
+          type: integer
+        hand9_id:
+          type: integer
+        hand10_id:
+          type: integer
+        hand11_id:
+          type: integer
+        hand12_id:
+          type: integer
+        hand13_id:
+          type: integer
+        tsumo_id:
+          type: integer
+        comments_count:
+          type: integer
+        likes_count:
+          type: integer
+        votes_count:
+          type: integer
+        is_liked_by_me:
+          type: boolean
+        my_vote_tile_id:
+          type: integer
+          nullable: true
+        created_at:
+          type: string
+          format: date_time
+        updated_at:
+          type: string
+          format: date_time
+    WhatToDiscardProblemVoteResult:
+      type: object
+      required:
+      - tile_id
+      - count
+      properties:
+        tile_id:
+          type: integer
+        count:
+          type: integer
+    Tile:
+      type: object
+      required:
+      - id
+      - suit
+      - ordinal_number_in_suit
+      - name
+      - created_at
+      - updated_at
+      properties:
+        id:
+          type: integer
+        suit:
+          type: string
+        ordinal_number_in_suit:
+          type: integer
+        name:
+          type: string
+        created_at:
+          type: string
+          format: date_time
+        updated_at:
+          type: string
+          format: date_time
+    Errors:
+      type: array
+      items:
+        type: object
+        required:
+        - message
+        properties:
+          message:
+            type: string
+    CursorPagination:
+      type: object
+      required:
+      - has_next
+      - limit
+      properties:
+        next:
+          type: integer
+          nullable: true
+        has_next:
+          type: boolean
+        limit:
+          type: integer
+    Meta:
+      type: object
+      required:
+      - cursor
+      properties:
+        cursor:
+          "$ref": "#/components/schemas/CursorPagination"
+    Session:
+      type: object
+      required:
+      - is_logged_in
+      - user_id
+      properties:
+        is_logged_in:
+          type: boolean
+        user_id:
+          type: integer
+          nullable: true
+    WithdrawalSummary:
+      type: object
+      required:
+      - what_to_discard_problems_count
+      properties:
+        what_to_discard_problems_count:
+          type: integer
+    LearningCategory:
+      type: object
+      required:
+      - id
+      - name
+      - description
+      - created_at
+      - updated_at
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        description:
+          type: string
+        created_at:
+          type: string
+          format: date_time
+        updated_at:
+          type: string
+          format: date_time
+    LearningQuestion:
+      type: object
+      required:
+      - id
+      - statement
+      - answer
+      - category
+      - created_at
+      - updated_at
+      properties:
+        id:
+          type: integer
+        statement:
+          type: string
+        answer:
+          type: string
+        category:
+          "$ref": "#/components/schemas/LearningCategory"
+        created_at:
+          type: string
+          format: date_time
+        updated_at:
+          type: string
+          format: date_time
+    Error:
+      type: object
+      required:
+      - error
+      properties:
+        error:
+          type: string

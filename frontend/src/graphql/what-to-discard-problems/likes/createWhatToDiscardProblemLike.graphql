@@ -1,0 +1,11 @@
+mutation CreateWhatToDiscardProblemLike($problemId: ID!) {
+  createWhatToDiscardProblemLike(input: { problemId: $problemId }) {
+    like {
+      id
+      userId
+      likableId
+      likableType
+      createdAt
+    }
+  }
+}

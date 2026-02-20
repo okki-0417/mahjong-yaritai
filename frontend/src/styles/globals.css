@@ -1,0 +1,183 @@
+@import "tailwindcss";
+
+html {
+  overscroll-behavior: none;
+}
+
+@theme {
+  --color-primary: #171923;
+  --color-primary-light: #272933;
+  --color-secondary: #365158;
+  --color-secondary-light: #466163;
+  --color-accent: #fb64b6;
+  --color-accent-light: #f7c;
+  --color-neutral: #fff;
+  --color-mj-mat: #008236;
+  --color-mj-mat-light: #00a256;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    translate: 0 20px;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes pop {
+  0% {
+    transform: scale(0.9);
+  }
+
+  50% {
+    transform: scale(1.1);
+  }
+
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes marquee {
+  0% {
+    transform: translateX(0%);
+  }
+
+  100% {
+    transform: translateX(-100%);
+  }
+}
+
+@keyframes shiningTile {
+  0% {
+    left: -100%;
+  }
+  100% {
+    left: 100%;
+  }
+}
+
+.aspect-tile {
+  @apply aspect-[47/63];
+}
+
+.shining-tile {
+  @apply absolute z-30 inset-0;
+}
+
+.shining-tile::after {
+  @apply content-[''] h-[110%] w-10 rotate-15 absolute z-30 top-0;
+  animation: 1.5s 0s shiningTile ease-in-out infinite;
+  background: linear-gradient(
+    to right,
+    rgba(255, 255, 255, 0) 25%,
+    rgba(255, 255, 255, 1) 50%,
+    rgba(255, 255, 255, 0) 75%
+  );
+}
+
+@keyframes blinking {
+  0% {
+    opacity: 30%;
+  }
+  50% {
+    opacity: 100%;
+  }
+  100% {
+    opacity: 30%;
+  }
+}
+
+@keyframes tileSelected {
+  0% {
+    transform: scale(1.1);
+  }
+  50% {
+    transform: scale(1.15);
+  }
+  100% {
+    transform: scale(1.1);
+  }
+}
+
+.frozen-tile {
+  animation: blinking 2s linear infinite;
+  box-shadow: 0px 0px 5px 5px rgba(30, 184, 255, 0.5);
+  @apply transition-all bg-linear-to-r from-sky-500/40 via-white/40 to-sky-500/40;
+}
+
+.firing-tile {
+  animation: blinking 1.5s linear infinite;
+  box-shadow: 0px 0px 5px 3px rgba(255, 0, 0, 0.5);
+  @apply transition-all bg-red-500/40;
+}
+
+.selected-tile {
+  animation: tileSelected 1.3s ease-in-out infinite;
+  @apply lg:border-4 border-3 border-blue-400/80 rounded;
+}
+
+a,
+button,
+input {
+  cursor: pointer;
+}
+
+.link-text {
+  @apply text-blue-300 hover:text-blue-100 underline visited:text-purple-300;
+}
+
+.link-text::after {
+  content: " →";
+}
+
+.fade-in {
+  animation: fadeIn 1.5s ease-in-out;
+}
+
+.delayed-fade-in {
+  animation: fadeIn 1.5s ease-in-out 1s;
+  animation-fill-mode: both;
+}
+
+.fast-fade-in {
+  animation: fadeIn 0.25s linear;
+}
+
+.pop {
+  animation: pop 0.2s ease-in-out;
+}
+
+.marquee {
+  animation: marquee 30s linear infinite;
+}
+
+.form-button {
+  @apply border rounded border-primary-light px-2 py-1;
+}
+
+@layer components {
+  .marquee-container {
+    @apply flex gap-4 overflow-hidden;
+  }
+
+  .marquee-inner {
+    @apply h-full shrink-0;
+    animation: marquee 30s linear infinite;
+  }
+
+  .btn {
+    @apply max-w-full py-2 lg:px-8 px-8 lg:text-xl text-base rounded-full font-semibold hover:cursor-pointer text-center hover:scale-105 transition-all;
+  }
+
+  .btn-circle {
+    @apply w-12 h-12 flex items-center justify-center rounded-full lg:text-3xl text-xl font-bold hover:cursor-pointer hover:scale-105 transition-all;
+  }
+
+  .btn-main {
+    @apply text-white bg-pink-400 hover:bg-pink-300 border-none;
+  }
+}

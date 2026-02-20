@@ -1,0 +1,54 @@
+query WhatToDiscardProblems($first: Int, $after: String) {
+  whatToDiscardProblems(first: $first, after: $after) {
+    edges {
+      node {
+        id
+        round
+        turn
+        wind
+        points
+        description
+        votesCount
+        commentsCount
+        likesCount
+        doraId
+        hand1Id
+        hand2Id
+        hand3Id
+        hand4Id
+        hand5Id
+        hand6Id
+        hand7Id
+        hand8Id
+        hand9Id
+        hand10Id
+        hand11Id
+        hand12Id
+        hand13Id
+        tsumoId
+        createdAt
+        updatedAt
+        isLikedByMe
+        myVoteTileId
+        user {
+          id
+          name
+          profileText
+          avatarUrl
+          isFollowing
+          followingCount
+          followersCount
+          createdAt
+          updatedAt
+        }
+      }
+      cursor
+    }
+    pageInfo {
+      hasNextPage
+      hasPreviousPage
+      startCursor
+      endCursor
+    }
+  }
+}

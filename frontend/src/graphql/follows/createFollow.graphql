@@ -1,0 +1,9 @@
+mutation CreateFollow($userId: ID!) {
+  createFollow(input: { userId: $userId }) {
+    follow {
+      id
+      followerId
+      followeeId
+    }
+  }
+}

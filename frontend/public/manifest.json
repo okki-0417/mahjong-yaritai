@@ -1,0 +1,29 @@
+{
+  "name": "麻雀ヤリタイ",
+  "short_name": "麻雀ヤリタイ",
+  "description": "麻雀の「何切る問題」に特化したコミュニティプラットフォーム",
+  "start_url": "/what-to-discard-problems",
+  "display": "standalone",
+  "background_color": "#365158",
+  "theme_color": "#365158",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/app.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/app.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["games", "education", "social"],
+  "lang": "ja",
+  "dir": "ltr",
+  "scope": "/",
+  "prefer_related_applications": false
+}

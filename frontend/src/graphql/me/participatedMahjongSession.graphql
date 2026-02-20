@@ -1,0 +1,43 @@
+query ParticipatedMahjongSession($id: ID!) {
+  participatedMahjongSession(id: $id) {
+    id
+    name
+    creatorUser {
+      id
+      name
+      avatarUrl
+    }
+    mahjongScoringSetting {
+      id
+      rate
+      chipAmount
+      umaRuleLabel
+      okaRuleLabel
+    }
+    mahjongParticipants {
+      id
+      userId
+      name
+      averageRanking
+      totalPoints
+      totalProfits
+      user {
+        id
+        name
+        avatarUrl
+      }
+    }
+    mahjongGames {
+      id
+      mahjongResults {
+        id
+        ranking
+        score
+        resultPoints
+        mahjongParticipantId
+      }
+    }
+    createdAt
+    updatedAt
+  }
+}

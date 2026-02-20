@@ -1,0 +1,8 @@
+ja:
+  activerecord:
+    models:
+      mahjong_game: 麻雀ゲーム
+    attributes:
+      mahjong_game:
+        mahjong_session: セッション
+        mahjong_results: 結果

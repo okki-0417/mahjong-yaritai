@@ -1,0 +1,26 @@
+mutation CreateMahjongSession($input: CreateMahjongSessionInput!) {
+  createMahjongSession(input: $input) {
+    mahjongSession {
+      id
+      name
+      mahjongScoringSetting {
+        id
+        rate
+        chipAmount
+      }
+      mahjongParticipants {
+        id
+        name
+        userId
+      }
+      mahjongGames {
+        id
+        mahjongResults {
+          id
+          ranking
+          resultPoints
+        }
+      }
+    }
+  }
+}

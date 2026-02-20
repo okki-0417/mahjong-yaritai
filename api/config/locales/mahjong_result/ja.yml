@@ -1,0 +1,11 @@
+ja:
+  activerecord:
+    models:
+      mahjong_result: 麻雀結果
+    attributes:
+      mahjong_result:
+        mahjong_participant: 参加者
+        mahjong_game: ゲーム
+        ranking: 着順
+        result_points: ポイント
+        score: 得点

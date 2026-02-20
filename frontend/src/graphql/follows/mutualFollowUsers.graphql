@@ -1,0 +1,16 @@
+query MutualFollowers($first: Int, $after: String) {
+  mutualFollowers(first: $first, after: $after) {
+    edges {
+      node {
+        id
+        name
+        avatarUrl
+      }
+    }
+    pageInfo {
+      hasNextPage
+      hasPreviousPage
+      endCursor
+    }
+  }
+}
