@@ -1,10 +1,5 @@
-tmp/
-log/
 .env
 spec/log.txt
 storage/
 node_modules
 config/master.key
-.aider*
-.DS_Store
-dump.rdb
