@@ -18,19 +18,19 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+       - name: Set up pnpm
+        uses: pnpm/action-setup@v2.2.2
+        with:
+          version: 10
+
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
           node-version: 20
           cache: pnpm
 
-      - name: Set up pnpm
-        uses: pnpm/action-setup@v2.2.2
-        with:
-          version: 10
-
       - name: Install dependencies
-        run: pnpm ci
+        run: pnpm i --frozen-lockfile
 
       - name: Run typescript type check
         run: pnpm typecheck
