@@ -3,7 +3,8 @@ name: Frontend-CI
 on:
   pull_request:
   push:
-    branches: [ main ]
+    branches:
+      - main
 
 defaults:
   run:
@@ -24,9 +25,9 @@ jobs:
           cache: pnpm
 
       - name: Set up pnpm
-        uses: pnpm/setup-pnpm@v4
+        uses: pnpm/action-setup@v2.2.2
         with:
-          version: 9
+          version: 10
 
       - name: Install dependencies
         run: pnpm ci
