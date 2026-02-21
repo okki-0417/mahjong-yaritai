@@ -1,0 +1,41 @@
+name: Frontend-CI
+
+on:
+  pull_request:
+  push:
+    branches: [ main ]
+
+defaults:
+  run:
+    working-directory: frontend
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 20
+          cache: pnpm
+
+      - name: Set up pnpm
+        uses: pnpm/setup-pnpm@v4
+        with:
+          version: 9
+
+      - name: Install dependencies
+        run: pnpm ci
+
+      - name: Run typescript type check
+        run: pnpm typecheck
+
+      - name: Run format check
+        run: pnpm format:check
+
+      - name: Run lint
+        run: pnpm lint

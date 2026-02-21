@@ -10,6 +10,7 @@
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "format": "npx prettier . --write",
+    "format:check": "npx prettier . --check",
     "typecheck": "tsc --noEmit",
     "typecheck:watch": "tsc --noEmit --watch",
     "gen-client": "npx openapi-zod-client ../api/swagger/v1/swagger.yaml -o src/zodios/api.ts",
