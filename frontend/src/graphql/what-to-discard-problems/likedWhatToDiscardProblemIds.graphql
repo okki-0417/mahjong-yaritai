@@ -1,3 +1,5 @@
 query LikedWhatToDiscardProblemIds($whatToDiscardProblemIds: [ID!]!) {
-  likedWhatToDiscardProblemIds(whatToDiscardProblemIds: $whatToDiscardProblemIds)
+  likedWhatToDiscardProblemIds(
+    whatToDiscardProblemIds: $whatToDiscardProblemIds
+  )
 }

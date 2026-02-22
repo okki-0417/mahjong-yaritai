@@ -2,7 +2,14 @@
 
 import UserModal from "@/src/components/Modals/UserModal";
 import { User } from "@/src/generated/graphql";
-import { Avatar, Box, Button, HStack, Text, useDisclosure } from "@chakra-ui/react";
+import {
+  Avatar,
+  Box,
+  Button,
+  HStack,
+  Text,
+  useDisclosure,
+} from "@chakra-ui/react";
 
 type Props = {
   user: User;
@@ -25,7 +32,8 @@ export default function FollowStatsItem({ user }: Props) {
         variant="unstyled"
         _hover={{ bg: "neutral.300" }}
         colorScheme=""
-        color="secondary.500">
+        color="secondary.500"
+      >
         <HStack spacing={4} justify="start">
           <Box flexGrow="0">
             <Avatar src={user.avatarUrl} />

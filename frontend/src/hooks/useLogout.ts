@@ -1,4 +1,7 @@
-import { LogoutUserDocument, LogoutUserMutation } from "@/src/generated/graphql";
+import {
+  LogoutUserDocument,
+  LogoutUserMutation,
+} from "@/src/generated/graphql";
 import useGetSession from "@/src/hooks/useGetSession";
 import { useMutation } from "@apollo/client/react";
 import { useToast } from "@chakra-ui/react";
@@ -26,7 +29,7 @@ export const useLogout = () => {
       });
       router.push("/");
     },
-    onError: error => {
+    onError: (error) => {
       toast({
         title: "ログアウトに失敗しました。",
         description: error.message,

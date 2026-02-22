@@ -1,4 +1,11 @@
-import { Alert, AlertDescription, AlertIcon, AlertTitle, Container, Text } from "@chakra-ui/react";
+import {
+  Alert,
+  AlertDescription,
+  AlertIcon,
+  AlertTitle,
+  Container,
+  Text,
+} from "@chakra-ui/react";
 
 type Props = {
   message: string;
@@ -16,7 +23,8 @@ export default function ErrorPage({ message }: Props) {
         alignItems="center"
         justifyContent="center"
         textAlign="center"
-        height="200px">
+        height="200px"
+      >
         <AlertIcon boxSize="40px" mr={0} />
 
         <AlertTitle mt={4} mb={1} fontSize="lg">

@@ -1,7 +1,15 @@
 "use client";
 
 import { useLogout } from "@/src/hooks/useLogout";
-import { Button, HStack, Menu, MenuButton, MenuItem, MenuList, Text } from "@chakra-ui/react";
+import {
+  Button,
+  HStack,
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuList,
+  Text,
+} from "@chakra-ui/react";
 import { BsThreeDots } from "react-icons/bs";
 import { IoMdLogOut } from "react-icons/io";
 
@@ -20,7 +28,8 @@ export default function UserDashboardMenu() {
         size="sm"
         colorScheme=""
         color="neutral.50"
-        _hover={{ bg: "secondary.300" }}>
+        _hover={{ bg: "secondary.300" }}
+      >
         <BsThreeDots size={20} color="white" />
       </MenuButton>
 

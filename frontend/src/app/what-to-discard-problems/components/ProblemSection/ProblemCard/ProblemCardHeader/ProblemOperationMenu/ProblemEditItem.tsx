@@ -22,7 +22,7 @@ export default function ProblemEditItem({ problem }: Props) {
 
   const onProblemUpdated = (updatedProblem: WhatToDiscardProblem) => {
     setProblems(
-      prevProblems.map(prevProblem =>
+      prevProblems.map((prevProblem) =>
         prevProblem.id == updatedProblem.id ? updatedProblem : prevProblem,
       ),
     );
@@ -31,7 +31,10 @@ export default function ProblemEditItem({ problem }: Props) {
 
   return (
     <Fragment>
-      <MenuItem icon={<FiEdit3 size={18} color="black" />} onClick={onUpdateFormOpen}>
+      <MenuItem
+        icon={<FiEdit3 size={18} color="black" />}
+        onClick={onUpdateFormOpen}
+      >
         <span className="text-primary">編集する</span>
       </MenuItem>
 

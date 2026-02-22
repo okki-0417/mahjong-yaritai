@@ -25,10 +25,10 @@ export default function AuthVerificationForm() {
   const { updateSession } = useGetSession();
 
   const [verifyAuth] = useMutation(VerifyAuthDocument, {
-    onCompleted: async data => {
+    onCompleted: async (data) => {
       await updateSession();
 
-      if (data.verifyAuth?.user) {
+      if (data) {
         toast({
           status: "success",
           title: "認証が完了しました",
@@ -43,7 +43,7 @@ export default function AuthVerificationForm() {
         router.push("/users/new");
       }
     },
-    onError: error => {
+    onError: (error) => {
       toast({
         status: "error",
         title: "認証に失敗しました",
@@ -85,7 +85,12 @@ export default function AuthVerificationForm() {
           <FormErrorMessage>{errors.token?.message}</FormErrorMessage>
         </FormControl>
 
-        <Button type="submit" isLoading={isSubmitting} colorScheme="pink" size="lg">
+        <Button
+          type="submit"
+          isLoading={isSubmitting}
+          colorScheme="pink"
+          size="lg"
+        >
           認証を完了する
         </Button>
       </VStack>

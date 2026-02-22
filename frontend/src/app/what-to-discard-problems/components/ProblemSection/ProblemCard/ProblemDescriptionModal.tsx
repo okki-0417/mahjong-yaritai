@@ -21,7 +21,13 @@ export default function ProblemDescriptionModal({
   onClose: () => void;
 }) {
   return (
-    <Modal isOpen={isOpen} onClose={onClose} size="lg" scrollBehavior="inside" isCentered={true}>
+    <Modal
+      isOpen={isOpen}
+      onClose={onClose}
+      size="lg"
+      scrollBehavior="inside"
+      isCentered={true}
+    >
       <ModalOverlay />
 
       <ModalContent className="text-primary font-[PT_Serif,serif]">

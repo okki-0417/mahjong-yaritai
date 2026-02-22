@@ -48,7 +48,7 @@ export default function CommentForm({
   const toast = useToast();
 
   const [createComment] = useMutation(CreateCommentDocument, {
-    onCompleted: data => {
+    onCompleted: (data) => {
       toast({
         status: "success",
         title: "コメントを投稿しました",
@@ -57,7 +57,7 @@ export default function CommentForm({
       resetForm();
       onCommentCreate(data.createWhatToDiscardProblemComment.comment);
     },
-    onError: error => {
+    onError: (error) => {
       toast({
         status: "error",
         title: "コメントの投稿に失敗しました",
@@ -66,7 +66,7 @@ export default function CommentForm({
     },
   });
 
-  const onSubmit: SubmitHandler<CommentCreateFormInputs> = async formData => {
+  const onSubmit: SubmitHandler<CommentCreateFormInputs> = async (formData) => {
     await createComment({
       variables: {
         whatToDiscardProblemId: problemId,
@@ -85,7 +85,9 @@ export default function CommentForm({
   } = useForm<CommentCreateFormInputs>({
     defaultValues: {
       parentCommentId: replyingToComment
-        ? String(Number(replyingToComment.parentCommentId) || replyingToComment.id)
+        ? String(
+            Number(replyingToComment.parentCommentId) || replyingToComment.id,
+          )
         : undefined,
       content: "",
     },
@@ -96,7 +98,9 @@ export default function CommentForm({
       setFocus("content");
       setValue(
         "parentCommentId",
-        String(Number(replyingToComment.parentCommentId) || replyingToComment.id),
+        String(
+          Number(replyingToComment.parentCommentId) || replyingToComment.id,
+        ),
       );
     } else {
       setValue("parentCommentId", null);
@@ -110,8 +114,15 @@ export default function CommentForm({
           <VStack alignItems="stretch" gap="1">
             {replyingToComment && (
               <HStack justifyContent="space-between">
-                <Text fontStyle="italic">@{replyingToComment.user.name}...</Text>
-                <Button bgColor="inherit" size="xs" fontSize="sm" onClick={onReplyCancel}>
+                <Text fontStyle="italic">
+                  @{replyingToComment.user.name}...
+                </Text>
+                <Button
+                  bgColor="inherit"
+                  size="xs"
+                  fontSize="sm"
+                  onClick={onReplyCancel}
+                >
                   <IoMdClose />
                 </Button>
               </HStack>
@@ -119,7 +130,9 @@ export default function CommentForm({
 
             <FormControl>
               <VisuallyHiddenInput {...register("parentCommentId")} />
-              <FormErrorMessage>{errors.parentCommentId?.message}</FormErrorMessage>
+              <FormErrorMessage>
+                {errors.parentCommentId?.message}
+              </FormErrorMessage>
             </FormControl>
 
             <FormControl isRequired isInvalid={Boolean(errors.content)}>
@@ -136,7 +149,8 @@ export default function CommentForm({
                 type="submit"
                 colorScheme="pink"
                 isLoading={isSubmitting}
-                isDisabled={!isValid}>
+                isDisabled={!isValid}
+              >
                 送信
               </Button>
             </HStack>
@@ -144,7 +158,9 @@ export default function CommentForm({
         </form>
       ) : (
         <Container>
-          <Text textAlign="center">コメントを投稿するにはログインしてください</Text>
+          <Text textAlign="center">
+            コメントを投稿するにはログインしてください
+          </Text>
           <Container textAlign="center" mt={2}>
             <Link href="/auth/request">
               <Button colorScheme="pink">ログイン / 新規登録する</Button>

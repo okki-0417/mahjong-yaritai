@@ -9,10 +9,14 @@ type Props = {
 };
 
 type ReturnType = {
-  mahjongSession: ParticipatedMahjongSessionQuery["participatedMahjongSession"] | null;
+  mahjongSession:
+    | ParticipatedMahjongSessionQuery["participatedMahjongSession"]
+    | null;
 };
 
-export default async function fetchParticipatedMahjongSession({ id }: Props): Promise<ReturnType> {
+export default async function fetchParticipatedMahjongSession({
+  id,
+}: Props): Promise<ReturnType> {
   const client = getClient();
 
   const { data, error } = await client.query({

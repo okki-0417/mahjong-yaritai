@@ -16,13 +16,18 @@ export default function CreateProblemButton() {
   const { setProblems } = useProblems();
 
   const onProblemCreated = (newProblem: WhatToDiscardProblem) => {
-    setProblems(prevProblems => [newProblem, ...prevProblems]);
+    setProblems((prevProblems) => [newProblem, ...prevProblems]);
     onProblemFormClose();
   };
 
   return (
     <>
-      <Button variant="ghost" w="full" justifyContent="start" onClick={onProblemFormOpen}>
+      <Button
+        variant="ghost"
+        w="full"
+        justifyContent="start"
+        onClick={onProblemFormOpen}
+      >
         <HStack className="text-primary">
           <IoCreate size={20} />
           <Text>問題を作成する</Text>

@@ -1,4 +1,11 @@
-import { Box, HStack, Skeleton, SkeletonCircle, VStack, Wrap } from "@chakra-ui/react";
+import {
+  Box,
+  HStack,
+  Skeleton,
+  SkeletonCircle,
+  VStack,
+  Wrap,
+} from "@chakra-ui/react";
 
 export default function ProblemCardSkeleton() {
   return (
@@ -6,7 +13,13 @@ export default function ProblemCardSkeleton() {
       {/* Timestamp skeleton */}
       <Skeleton height="16px" width="150px" mb="2" />
 
-      <VStack borderRadius="md" shadow="md" alignItems="stretch" gap="0" overflow="hidden">
+      <VStack
+        borderRadius="md"
+        shadow="md"
+        alignItems="stretch"
+        gap="0"
+        overflow="hidden"
+      >
         <Box pt="2" px={["2", "4"]} pb="3" className="bg-mj-mat">
           {/* Header skeleton */}
           <HStack justify="space-between" mb="2">
@@ -39,7 +52,11 @@ export default function ProblemCardSkeleton() {
         </Box>
 
         {/* Bottom action bar skeleton */}
-        <HStack px={["2", "4"]} py={["1", "2"]} className="rounded-b-md bg-neutral">
+        <HStack
+          px={["2", "4"]}
+          py={["1", "2"]}
+          className="rounded-b-md bg-neutral"
+        >
           <Skeleton height="20px" width="60px" />
           <Skeleton height="20px" width="80px" />
           <Skeleton height="20px" width="100px" />

@@ -37,26 +37,26 @@ export default function ProfileEditForm({ user, onUpdated }: Props) {
   const previousImageUrlRef = useRef<string | null>(null);
   const imageInputRef = useRef<HTMLInputElement | null>(null);
 
-  const [updateUser] = useMutation<UpdateUserProfileMutation, UpdateUserProfileMutationVariables>(
-    UpdateUserProfileDocument,
-    {
-      onCompleted: () => {
-        onUpdated?.();
+  const [updateUser] = useMutation<
+    UpdateUserProfileMutation,
+    UpdateUserProfileMutationVariables
+  >(UpdateUserProfileDocument, {
+    onCompleted: () => {
+      onUpdated?.();
 
-        toast({
-          title: "プロフィールを更新しました",
-          status: "success",
-        });
-      },
-      onError: error => {
-        toast({
-          title: "プロフィールの更新に失敗しました",
-          description: error.message,
-          status: "error",
-        });
-      },
+      toast({
+        title: "プロフィールを更新しました",
+        status: "success",
+      });
     },
-  );
+    onError: (error) => {
+      toast({
+        title: "プロフィールの更新に失敗しました",
+        description: error.message,
+        status: "error",
+      });
+    },
+  });
 
   const {
     register,
@@ -71,7 +71,7 @@ export default function ProfileEditForm({ user, onUpdated }: Props) {
     },
   });
 
-  const onSubmit: SubmitHandler<ProfileEditFormInputs> = async formData => {
+  const onSubmit: SubmitHandler<ProfileEditFormInputs> = async (formData) => {
     await updateUser({
       variables: {
         input: {
@@ -102,7 +102,12 @@ export default function ProfileEditForm({ user, onUpdated }: Props) {
     <form onSubmit={handleSubmit(onSubmit)}>
       <VStack align="stretch">
         <VStack>
-          <Circle size="200" overflow="hidden" borderWidth="3px" borderColor="secondary.200">
+          <Circle
+            size="200"
+            overflow="hidden"
+            borderWidth="3px"
+            borderColor="secondary.200"
+          >
             <Image
               src={imageUrl || user?.avatarUrl || "/no-image.webp"}
               alt={user?.name}
@@ -124,11 +129,11 @@ export default function ProfileEditForm({ user, onUpdated }: Props) {
               <Input
                 type="file"
                 accept="image/png, image/jpeg, image/webp"
-                ref={element => {
+                ref={(element) => {
                   ref(element);
                   imageInputRef.current = element;
                 }}
-                onChange={event => {
+                onChange={(event) => {
                   const file = handleFileChange(event);
                   onChange(file);
                 }}
@@ -151,7 +156,9 @@ export default function ProfileEditForm({ user, onUpdated }: Props) {
             {...register("name")}
             isDisabled={isSubmitting}
           />
-          <FormErrorMessage color="red.200">{errors.name?.message}</FormErrorMessage>
+          <FormErrorMessage color="red.200">
+            {errors.name?.message}
+          </FormErrorMessage>
         </FormControl>
 
         <FormControl isInvalid={Boolean(errors.profileText)}>
@@ -165,7 +172,9 @@ export default function ProfileEditForm({ user, onUpdated }: Props) {
             {...register("profileText")}
             isDisabled={isSubmitting}
           />
-          <FormErrorMessage color="red.200">{errors.profileText?.message}</FormErrorMessage>
+          <FormErrorMessage color="red.200">
+            {errors.profileText?.message}
+          </FormErrorMessage>
         </FormControl>
 
         <Box w="full" textAlign="right">

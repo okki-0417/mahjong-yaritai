@@ -4,7 +4,12 @@ import { getClient } from "@/src/lib/apollo/server";
 import { redirect } from "next/navigation";
 import { isRedirectError } from "next/dist/client/components/redirect-error";
 import { Suspense } from "react";
-import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, Container } from "@chakra-ui/react";
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  Container,
+} from "@chakra-ui/react";
 import DashboardSection from "@/src/app/me/components/DashboardSection";
 import Fallback from "@/src/components/fallbacks/Fallback";
 

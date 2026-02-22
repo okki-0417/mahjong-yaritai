@@ -20,14 +20,16 @@ export default function ProblemDeleteItem({ problem }: Props) {
   const toast = useToast();
 
   const filterDeletedProblem = (deletedProblemId: string) => {
-    setProblems(prevProblems => prevProblems.filter(p => p.id !== deletedProblemId));
+    setProblems((prevProblems) =>
+      prevProblems.filter((p) => p.id !== deletedProblemId),
+    );
   };
 
   const [deleteWhatToDiscardProblem, { loading }] = useMutation<
     DeleteWhatToDiscardProblemMutation,
     DeleteWhatToDiscardProblemMutationVariables
   >(DeleteWhatToDiscardProblemDocument, {
-    onCompleted: data => {
+    onCompleted: (data) => {
       toast({
         title: "問題を削除しました",
         status: "success",
@@ -35,7 +37,7 @@ export default function ProblemDeleteItem({ problem }: Props) {
 
       filterDeletedProblem(data.deleteWhatToDiscardProblem.id);
     },
-    onError: error => {
+    onError: (error) => {
       toast({
         title: "問題の削除に失敗しました",
         description: error.message,
@@ -45,7 +47,9 @@ export default function ProblemDeleteItem({ problem }: Props) {
   });
 
   const handleDelete = async () => {
-    const isConfirmed = confirm("この問題を削除しますか？この操作は取り消せません。");
+    const isConfirmed = confirm(
+      "この問題を削除しますか？この操作は取り消せません。",
+    );
     if (!isConfirmed) return;
 
     await deleteWhatToDiscardProblem({

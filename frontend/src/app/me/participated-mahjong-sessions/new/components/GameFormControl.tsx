@@ -21,7 +21,8 @@ type Props = {
 };
 
 export default function GameFormControl({ gameIndex }: Props) {
-  const { participantUserFields, errors, watch, register, removeGame } = useMahjongSessionForm();
+  const { participantUserFields, errors, watch, register, removeGame } =
+    useMahjongSessionForm();
   const gameResultPoints = watch(`games.${gameIndex}.results`);
   const gameError = errors.games?.[gameIndex];
 
@@ -47,7 +48,8 @@ export default function GameFormControl({ gameIndex }: Props) {
         justifyContent="center"
         borderColor="secondary.50"
         borderRightWidth="1.5px"
-        bg={isBalanced ? undefined : "yellow.200"}>
+        bg={isBalanced ? undefined : "yellow.200"}
+      >
         <Menu>
           <Tooltip
             label={
@@ -55,14 +57,16 @@ export default function GameFormControl({ gameIndex }: Props) {
                 ? "クリックで削除"
                 : `収支が合いません (${totalPoints > 0 ? "+" : ""}${totalPoints})`
             }
-            hasArrow>
+            hasArrow
+          >
             <MenuButton
               as={Text}
               cursor="pointer"
               _hover={{ opacity: 0.7 }}
               py={["2", "4"]}
               fontSize={["md", "xl"]}
-              textAlign="center">
+              textAlign="center"
+            >
               {gameIndex + 1}
             </MenuButton>
           </Tooltip>
@@ -74,7 +78,12 @@ export default function GameFormControl({ gameIndex }: Props) {
         </Menu>
       </Th>
 
-      <SimpleGrid as="div" columns={participantUserFields.length} w="full" alignItems="stretch">
+      <SimpleGrid
+        as="div"
+        columns={participantUserFields.length}
+        w="full"
+        alignItems="stretch"
+      >
         {participantUserFields.map((participantUserField, participantIndex) => (
           <GameResultFormControl
             key={participantUserField.id}

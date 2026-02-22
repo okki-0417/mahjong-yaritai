@@ -1,6 +1,5 @@
 import GoogleVerification from "@/src/app/auth/google-callback/components/GoogleVerification";
 import ErrorPage from "@/src/components/errors/ErrorPage";
-import { captureException } from "@sentry/nextjs";
 
 type Props = {
   searchParams: Promise<{
@@ -16,8 +15,6 @@ export default async function GoogleCallbackPage({ searchParams }: Props) {
 
     return <GoogleVerification code={code} />;
   } catch (error) {
-    captureException(error);
-
     /* eslint-disable-next-line no-console */
     console.error("Google callback page error:", error);
     return <ErrorPage message={error.message || "認証に失敗しました"} />;

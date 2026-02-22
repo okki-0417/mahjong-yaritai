@@ -2,7 +2,8 @@ import { ProblemsContext } from "@/src/app/what-to-discard-problems/contexts/Pro
 import { useContext } from "react";
 
 export default function useProblems() {
-  const { problems, setProblems, pageInfo, setPageInfo } = useContext(ProblemsContext)!;
+  const { problems, setProblems, pageInfo, setPageInfo } =
+    useContext(ProblemsContext)!;
 
   return { problems, setProblems, pageInfo, setPageInfo };
 }

@@ -1,4 +1,8 @@
-query ParentComments($whatToDiscardProblemId: ID!, $first: Int, $after: String) {
+query ParentComments(
+  $whatToDiscardProblemId: ID!
+  $first: Int
+  $after: String
+) {
   whatToDiscardProblemComments(
     whatToDiscardProblemId: $whatToDiscardProblemId
     first: $first

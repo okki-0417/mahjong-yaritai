@@ -46,7 +46,11 @@ export const viewport = {
   initialScale: 1.0,
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
     <html lang="ja" suppressHydrationWarning>
       <body>
@@ -55,11 +59,14 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <SessionProvider>
               <main
                 className="flex pb-24 flex-col min-h-screen bg-secondary overflow-x-hidden text-neutral "
-                style={{ fontFamily: "PT Serif, serif" }}>
+                style={{ fontFamily: "PT Serif, serif" }}
+              >
                 <div className="mb-16">
                   <Header />
                 </div>
-                <div className="flex-grow w-screen flex items-stretch">{children}</div>
+                <div className="flex-grow w-screen flex items-stretch">
+                  {children}
+                </div>
               </main>
               <BottomNavigation />
             </SessionProvider>

@@ -47,7 +47,11 @@ export default function FetchRepliesButton({
     }
 
     if (result.data?.whatToDiscardProblemCommentReplies) {
-      onRepliesFetched(result.data.whatToDiscardProblemCommentReplies.edges.map(edge => edge.node));
+      onRepliesFetched(
+        result.data.whatToDiscardProblemCommentReplies.edges.map(
+          (edge) => edge.node,
+        ),
+      );
     }
   };
 
@@ -58,7 +62,8 @@ export default function FetchRepliesButton({
       variant="ghost"
       size="sm"
       px="1"
-      mx="0">
+      mx="0"
+    >
       <HStack gap="1">
         <FaRegComment size={20} />
         <Text fontSize="md" fontFamily="sans-serif" fontWeight="bold">

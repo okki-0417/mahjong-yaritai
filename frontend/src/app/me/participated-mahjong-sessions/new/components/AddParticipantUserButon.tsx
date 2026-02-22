@@ -5,7 +5,8 @@ import { IoMdAdd } from "react-icons/io";
 import { useMahjongSessionForm } from "@/src/app/me/participated-mahjong-sessions/new/contexts/MahjongSessionFormContextProvider";
 
 export default function AddParticipantUserButton() {
-  const { appendParticipantUser, gameFields, setValue } = useMahjongSessionForm();
+  const { appendParticipantUser, gameFields, setValue } =
+    useMahjongSessionForm();
 
   const handleAddParticipantUser = () => {
     appendParticipantUser({ userId: null, name: "NONAME", avatarUrl: null });
@@ -33,7 +34,8 @@ export default function AddParticipantUserButton() {
       variant="ghost"
       borderLeft="1px solid"
       borderColor="secondary.50"
-      onClick={handleAddParticipantUser}>
+      onClick={handleAddParticipantUser}
+    >
       <IoMdAdd size={18} />
       <Text as="span" fontSize="xs">
         ユーザーを追加

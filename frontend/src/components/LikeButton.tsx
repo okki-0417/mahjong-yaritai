@@ -20,11 +20,20 @@ export default function LikeButton({
   type = "button",
 }: LikeButtonType) {
   const Icon = () => {
-    return isLiked ? <FaHeart color="#f765d6" size={24} /> : <FaRegHeart color="#333" size={24} />;
+    return isLiked ? (
+      <FaHeart color="#f765d6" size={24} />
+    ) : (
+      <FaRegHeart color="#333" size={24} />
+    );
   };
 
   return (
-    <PopButton type={type} onClick={handleClick} defaultClassName="w-10" disabled={isLoading}>
+    <PopButton
+      type={type}
+      onClick={handleClick}
+      defaultClassName="w-10"
+      disabled={isLoading}
+    >
       <div className="flex items-center gap-1">
         {isLoading ? <Spinner size="sm" color="pink.500" /> : <Icon />}
         <div className="font-sans font-semibold text-lg">{likeCount}</div>

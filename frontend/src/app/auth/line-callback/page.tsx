@@ -1,6 +1,5 @@
 import LineVerification from "@/src/app/auth/line-callback/components/LineVerification";
 import ErrorPage from "@/src/components/errors/ErrorPage";
-import { captureException } from "@sentry/nextjs";
 
 type Props = {
   searchParams: Promise<{
@@ -18,8 +17,6 @@ export default async function LineCallbackPage({ searchParams }: Props) {
 
     return <LineVerification code={code} state={state} />;
   } catch (error) {
-    captureException(error);
-
     /* eslint-disable-next-line no-console */
     console.error("LINE callback page error:", error);
     return <ErrorPage message={error.message || "認証に失敗しました"} />;

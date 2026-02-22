@@ -27,7 +27,8 @@ export default function NotLoggedInModal({
       isOpen={isOpen}
       onClose={onClose}
       isCentered
-      size={["xs", "2xl"]}>
+      size={["xs", "2xl"]}
+    >
       <ModalOverlay />
       <ModalContent>
         <ModalHeader fontFamily="serif">未ログイン</ModalHeader>

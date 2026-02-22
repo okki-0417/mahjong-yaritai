@@ -21,7 +21,8 @@ export default function ProfileEditButton() {
         size="sm"
         colorScheme=""
         color="neutral.50"
-        _hover={{ bg: "secondary.300" }}>
+        _hover={{ bg: "secondary.300" }}
+      >
         <FiEdit size={22} color="white" />
       </Button>
 

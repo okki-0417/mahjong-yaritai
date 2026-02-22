@@ -4,7 +4,9 @@ import { z } from "zod";
 const Session = z
   .object({ is_logged_in: z.boolean(), user_id: z.number().int().nullable() })
   .passthrough();
-const createLineCallback_Body = z.object({ code: z.string(), state: z.string() }).passthrough();
+const createLineCallback_Body = z
+  .object({ code: z.string(), state: z.string() })
+  .passthrough();
 
 export const schemas = {
   Session,

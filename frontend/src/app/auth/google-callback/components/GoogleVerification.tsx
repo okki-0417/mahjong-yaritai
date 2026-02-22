@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import * as Sentry from "@sentry/nextjs";
 import { apiClient } from "@/src/lib/api/client";
 import ErrorPage from "@/src/components/errors/ErrorPage";
 import Fallback from "@/src/components/fallbacks/Fallback";
@@ -35,7 +34,6 @@ export default function GoogleVerification({ code }: Props) {
           throw new Error("正常に認証できませんでした。");
         }
       } catch (error) {
-        Sentry.captureException(error);
         setErrorMessage(error.message || "認証に失敗しました");
       }
     };

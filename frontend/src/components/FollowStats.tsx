@@ -14,7 +14,8 @@ type Props = {
 };
 
 export function FollowStats({ followingCount, followersCount }: Props) {
-  const [modalContext, setModalContext] = useState<FollowStatsModalContext>("followings");
+  const [modalContext, setModalContext] =
+    useState<FollowStatsModalContext>("followings");
 
   const {
     isOpen: isFollowStatsModalOpen,
@@ -39,7 +40,8 @@ export function FollowStats({ followingCount, followersCount }: Props) {
           onClick={() => handleFollowStatsModalOpen("followings")}
           bg="secondary.300"
           colorScheme=""
-          _hover={{ bg: "secondary.100" }}>
+          _hover={{ bg: "secondary.100" }}
+        >
           <HStack>
             <IoMdPerson size={20} color="white" />
             <Text fontSize="sm">フォロー：{followingCount}</Text>
@@ -51,7 +53,8 @@ export function FollowStats({ followingCount, followersCount }: Props) {
           bg="secondary.300"
           colorScheme=""
           _hover={{ bg: "secondary.100" }}
-          color="white">
+          color="white"
+        >
           <HStack>
             <IoMdPerson size={20} color="white" />
             <Text fontSize="sm">フォロワー：{followersCount}</Text>

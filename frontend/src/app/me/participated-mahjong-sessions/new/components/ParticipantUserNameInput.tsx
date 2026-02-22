@@ -10,7 +10,9 @@ type Props = {
   participantUserIndex: number;
 };
 
-export default function ParticipantUserNameInput({ participantUserIndex }: Props) {
+export default function ParticipantUserNameInput({
+  participantUserIndex,
+}: Props) {
   const { setValue, watch } = useMahjongSessionForm();
   const { onClose } = useParticipantUsersModal();
   const currentName = watch(`participantUsers.${participantUserIndex}.name`);
@@ -39,7 +41,11 @@ export default function ParticipantUserNameInput({ participantUserIndex }: Props
   return (
     <form onSubmit={handleSubmit}>
       <HStack>
-        <Input value={name} onChange={e => setName(e.target.value)} placeholder="参加者名を入力" />
+        <Input
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          placeholder="参加者名を入力"
+        />
         <Button type="submit" colorScheme="blue">
           <FaCheck />
         </Button>

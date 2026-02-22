@@ -36,27 +36,27 @@ export default function UserForm() {
   const router = useRouter();
   const { updateSession } = useGetSession();
 
-  const [createUser] = useMutation<CreateUserMutation, CreateUserMutationVariables>(
-    CreateUserDocument,
-    {
-      onCompleted: async () => {
-        await updateSession();
+  const [createUser] = useMutation<
+    CreateUserMutation,
+    CreateUserMutationVariables
+  >(CreateUserDocument, {
+    onCompleted: async () => {
+      await updateSession();
 
-        toast({
-          status: "success",
-          title: "ユーザーを作成しました",
-        });
-        router.push("/me");
-      },
-      onError: error => {
-        toast({
-          status: "error",
-          title: "ユーザーの作成に失敗しました",
-          description: error.message,
-        });
-      },
+      toast({
+        status: "success",
+        title: "ユーザーを作成しました",
+      });
+      router.push("/me");
     },
-  );
+    onError: (error) => {
+      toast({
+        status: "error",
+        title: "ユーザーの作成に失敗しました",
+        description: error.message,
+      });
+    },
+  });
 
   const {
     register,
@@ -65,7 +65,7 @@ export default function UserForm() {
     formState: { errors, isSubmitting },
   } = useForm<UserFormData>();
 
-  const onSubmit: SubmitHandler<UserFormData> = async formData => {
+  const onSubmit: SubmitHandler<UserFormData> = async (formData) => {
     await createUser({
       variables: {
         input: {
@@ -121,11 +121,11 @@ export default function UserForm() {
               <Input
                 type="file"
                 accept="image/png, image/jpeg, image/webp"
-                ref={element => {
+                ref={(element) => {
                   ref(element);
                   imageInputRef.current = element;
                 }}
-                onChange={event => {
+                onChange={(event) => {
                   const file = handleFileChange(event);
                   onChange(file);
                 }}

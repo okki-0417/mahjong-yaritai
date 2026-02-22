@@ -1,4 +1,11 @@
-import { RefObject, useCallback, useEffect, useMemo, useRef, useTransition } from "react";
+import {
+  RefObject,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useTransition,
+} from "react";
 
 type ReturnType = {
   targetRef: RefObject<HTMLDivElement>;
@@ -24,7 +31,10 @@ export default function useInfiniteScroll({ callback }: Props): ReturnType {
     [callback, isPending],
   );
 
-  const observer = useMemo(() => new IntersectionObserver(handleEntry), [handleEntry]);
+  const observer = useMemo(
+    () => new IntersectionObserver(handleEntry),
+    [handleEntry],
+  );
 
   useEffect(() => {
     if (!targetRef.current) return null;

@@ -1,7 +1,13 @@
 "use client";
 
 import { WhatToDiscardProblem } from "@/src/generated/graphql";
-import { createContext, Dispatch, ReactNode, SetStateAction, useState } from "react";
+import {
+  createContext,
+  Dispatch,
+  ReactNode,
+  SetStateAction,
+  useState,
+} from "react";
 
 type PageInfo = {
   hasNextPage: boolean;
@@ -34,7 +40,9 @@ export default function ProblemsContextProvider({
   const [pageInfo, setPageInfo] = useState(initialPageInfo);
 
   return (
-    <ProblemsContext.Provider value={{ problems, setProblems, pageInfo, setPageInfo }}>
+    <ProblemsContext.Provider
+      value={{ problems, setProblems, pageInfo, setPageInfo }}
+    >
       {children}
     </ProblemsContext.Provider>
   );

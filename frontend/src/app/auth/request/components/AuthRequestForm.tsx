@@ -25,6 +25,7 @@ export default function AuthRequestForm() {
 
   const [requestAuth] = useMutation(RequestAuthDocument, {
     onCompleted: () => {
+      console.error("あいうえお");
       toast({
         status: "success",
         title: "認証リクエストを送信しました",
@@ -32,7 +33,7 @@ export default function AuthRequestForm() {
       });
       router.push("/auth/verification");
     },
-    onError: error => {
+    onError: (error) => {
       toast({
         status: "error",
         title: "認証リクエストに失敗しました",
@@ -47,7 +48,10 @@ export default function AuthRequestForm() {
     formState: { errors, isSubmitting },
   } = useForm<AuthRequestFormType>();
 
-  const onSubmit: SubmitHandler<AuthRequestFormType> = async (formData: AuthRequestFormType) => {
+  const onSubmit: SubmitHandler<AuthRequestFormType> = async (
+    formData: AuthRequestFormType,
+  ) => {
+    console.error(formData);
     await requestAuth({
       variables: {
         input: {
@@ -77,11 +81,19 @@ export default function AuthRequestForm() {
           </FormControl>
 
           <Text fontSize="sm">
-            <Link href="/terms" className="text-blue-200 underline" target="_blank">
+            <Link
+              href="/terms"
+              className="text-blue-200 underline"
+              target="_blank"
+            >
               利用規約
             </Link>
             と
-            <Link href="/privacy" className="text-blue-200 underline" target="_blank">
+            <Link
+              href="/privacy"
+              className="text-blue-200 underline"
+              target="_blank"
+            >
               プライバシーポリシー
             </Link>
             に同意の上、ログイン/登録を行ってください。

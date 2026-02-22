@@ -2,7 +2,13 @@
 
 import SocialLoginButton from "@/src/app/auth/request/components/SocialLoginButton";
 import { apiClient } from "@/src/lib/api/client";
-import { ListItem, Text, UnorderedList, useToast, VStack } from "@chakra-ui/react";
+import {
+  ListItem,
+  Text,
+  UnorderedList,
+  useToast,
+  VStack,
+} from "@chakra-ui/react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
@@ -10,7 +16,8 @@ export default function SocialLoginSection() {
   const router = useRouter();
   const toast = useToast();
 
-  const handleGoogleLogin = () => router.push(process.env.NEXT_PUBLIC_GOOGLE_LOGIN_URL);
+  const handleGoogleLogin = () =>
+    router.push(process.env.NEXT_PUBLIC_GOOGLE_LOGIN_URL);
 
   const handleLineLogin = async () => {
     try {
@@ -38,7 +45,11 @@ export default function SocialLoginSection() {
           利用規約
         </Link>
         と
-        <Link href="/privacy" className="text-blue-200 underline" target="_blank">
+        <Link
+          href="/privacy"
+          className="text-blue-200 underline"
+          target="_blank"
+        >
           プライバシーポリシー
         </Link>
         に同意の上、ログイン/登録を行ってください。

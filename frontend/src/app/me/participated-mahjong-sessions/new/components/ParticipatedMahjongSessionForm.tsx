@@ -38,24 +38,36 @@ import { GameSessionFormType } from "@/src/app/me/participated-mahjong-sessions/
 import { FaCheck } from "react-icons/fa6";
 import { RiResetLeftFill } from "react-icons/ri";
 
-const isValidResult = (result: { resultPoints: number | null; ranking: number | null }) =>
+const isValidResult = (result: {
+  resultPoints: number | null;
+  ranking: number | null;
+}) =>
   typeof result.resultPoints === "number" &&
   !Number.isNaN(result.resultPoints) &&
   typeof result.ranking === "number" &&
   !Number.isNaN(result.ranking);
 
 export default function ParticipatedMahjongSessionForm() {
-  const { handleSubmit, gameFields, participantUserFields, formState, watch, reset } =
-    useMahjongSessionForm();
+  const {
+    handleSubmit,
+    gameFields,
+    participantUserFields,
+    formState,
+    watch,
+    reset,
+  } = useMahjongSessionForm();
   const [isPending, startTransition] = useTransition();
   const toast = useToast();
 
-  const { clearDraft, resetAll, isResetting } = useMahjongSessionDraft({ watch, reset });
+  const { clearDraft, resetAll, isResetting } = useMahjongSessionDraft({
+    watch,
+    reset,
+  });
   useBeforeUnloadWarning({ isDirty: formState.isDirty });
 
-  const onSubmit: SubmitHandler<GameSessionFormType> = formData => {
-    const filteredGames = formData.games.map(game => ({
-      results: game.results.filter(isValidResult).map(result => ({
+  const onSubmit: SubmitHandler<GameSessionFormType> = (formData) => {
+    const filteredGames = formData.games.map((game) => ({
+      results: game.results.filter(isValidResult).map((result) => ({
         resultPoints: result.resultPoints as number,
         ranking: result.ranking as number,
       })),
@@ -66,7 +78,7 @@ export default function ParticipatedMahjongSessionForm() {
         rate: formData.rate,
         chipAmount: formData.chipAmount,
         createdDate: formData.createdDate,
-        participantUsers: formData.participantUsers.map(user => ({
+        participantUsers: formData.participantUsers.map((user) => ({
           userId: user.userId,
           name: user.name,
           avatarUrl: user.avatarUrl,
@@ -109,7 +121,8 @@ export default function ParticipatedMahjongSessionForm() {
             borderLeftRadius={["sm", "md"]}
             bg="neutral.100"
             boxShadow="lg"
-            overflow="hidden">
+            overflow="hidden"
+          >
             <Thead as="div" position="relative">
               <Tr as={HStack} gap="0" align="stretch">
                 <Th
@@ -129,7 +142,10 @@ export default function ParticipatedMahjongSessionForm() {
               align="stretch"
               spacing="0"
               position="relative"
-              divider={<Divider borderColor="secondary.50" borderBottomWidth="1.5px" />}>
+              divider={
+                <Divider borderColor="secondary.50" borderBottomWidth="1.5px" />
+              }
+            >
               {gameFields.map((gameField, gameIndex) => (
                 <GameFormControl key={gameField.id} gameIndex={gameIndex} />
               ))}
@@ -146,7 +162,8 @@ export default function ParticipatedMahjongSessionForm() {
                   borderBottom=""
                   borderRightWidth="1.5px"
                   color="primary.500"
-                  fontSize={["xs", "sm"]}>
+                  fontSize={["xs", "sm"]}
+                >
                   <Text>合計</Text>
                 </Th>
                 <TotalPointsFormControls />
@@ -161,7 +178,8 @@ export default function ParticipatedMahjongSessionForm() {
                   borderBottom=""
                   borderColor="secondary.50"
                   color="primary.500"
-                  borderRightWidth="1.5px">
+                  borderRightWidth="1.5px"
+                >
                   <Text fontSize={["xs", "sm"]}>
                     平均
                     <br />
@@ -180,7 +198,8 @@ export default function ParticipatedMahjongSessionForm() {
                   borderBottom=""
                   borderColor="secondary.50"
                   color="primary.500"
-                  borderRightWidth="1.5px">
+                  borderRightWidth="1.5px"
+                >
                   <Text fontSize={["xs", "sm"]}>収支</Text>
                 </Th>
                 <TotalProfitsFormControls />
@@ -200,7 +219,8 @@ export default function ParticipatedMahjongSessionForm() {
             color="white"
             _hover={{ bg: "yellow.400", color: "primary.500" }}
             isLoading={isResetting}
-            onClick={resetAll}>
+            onClick={resetAll}
+          >
             リセット
           </Button>
 
@@ -209,7 +229,8 @@ export default function ParticipatedMahjongSessionForm() {
             leftIcon={<FaCheck />}
             type="submit"
             colorScheme="pink"
-            isLoading={isPending}>
+            isLoading={isPending}
+          >
             保存
           </Button>
         </HStack>

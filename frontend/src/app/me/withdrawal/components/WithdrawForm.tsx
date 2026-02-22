@@ -3,7 +3,10 @@
 import { Box, Button, useToast } from "@chakra-ui/react";
 import { useRouter } from "next/navigation";
 import { useMutation } from "@apollo/client/react";
-import { WithdrawUserDocument, WithdrawUserMutation } from "@/src/generated/graphql";
+import {
+  WithdrawUserDocument,
+  WithdrawUserMutation,
+} from "@/src/generated/graphql";
 import Link from "next/link";
 import useGetSession from "@/src/hooks/useGetSession";
 import { useForm } from "react-hook-form";
@@ -13,25 +16,28 @@ export default function WithdrawForm() {
   const toast = useToast();
   const { updateSession } = useGetSession();
 
-  const [withdrawUser] = useMutation<WithdrawUserMutation>(WithdrawUserDocument, {
-    onCompleted: async () => {
-      await updateSession();
+  const [withdrawUser] = useMutation<WithdrawUserMutation>(
+    WithdrawUserDocument,
+    {
+      onCompleted: async () => {
+        await updateSession();
 
-      toast({
-        title: "退会が完了しました",
-        description: "ご利用ありがとうございました。",
-        status: "success",
-      });
-      router.push("/");
+        toast({
+          title: "退会が完了しました",
+          description: "ご利用ありがとうございました。",
+          status: "success",
+        });
+        router.push("/");
+      },
+      onError: (error) => {
+        toast({
+          title: "退会に失敗しました",
+          description: error.message,
+          status: "error",
+        });
+      },
     },
-    onError: error => {
-      toast({
-        title: "退会に失敗しました",
-        description: error.message,
-        status: "error",
-      });
-    },
-  });
+  );
 
   const {
     handleSubmit,

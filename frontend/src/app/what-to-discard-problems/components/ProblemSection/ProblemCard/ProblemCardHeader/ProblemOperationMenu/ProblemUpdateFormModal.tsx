@@ -36,7 +36,10 @@ export default function ProblemUpdateFormModal({
         <ModalCloseButton onClick={onClose} />
 
         <ModalBody>
-          <ProblemUpdateForm problem={problem} onProblemUpdated={onProblemUpdated} />
+          <ProblemUpdateForm
+            problem={problem}
+            onProblemUpdated={onProblemUpdated}
+          />
         </ModalBody>
 
         <ModalFooter />

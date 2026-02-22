@@ -1,6 +1,11 @@
 import ParticipatedMahjongSessionForm from "@/src/app/me/participated-mahjong-sessions/new/components/ParticipatedMahjongSessionForm";
 import MahjongSessionFormContextProvider from "@/src/app/me/participated-mahjong-sessions/new/contexts/MahjongSessionFormContextProvider";
-import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, Container } from "@chakra-ui/react";
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  Container,
+} from "@chakra-ui/react";
 import Link from "next/link";
 
 export const dynamic = "force-dynamic";

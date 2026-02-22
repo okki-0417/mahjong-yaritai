@@ -1,5 +1,7 @@
 .env
 spec/log.txt
+log/
+tmp/
 storage/
 node_modules
 config/master.key

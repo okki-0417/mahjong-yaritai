@@ -1,4 +1,8 @@
-mutation CreateComment($whatToDiscardProblemId: ID!, $content: String!, $parentCommentId: ID) {
+mutation CreateComment(
+  $whatToDiscardProblemId: ID!
+  $content: String!
+  $parentCommentId: ID
+) {
   createWhatToDiscardProblemComment(
     input: {
       whatToDiscardProblemId: $whatToDiscardProblemId

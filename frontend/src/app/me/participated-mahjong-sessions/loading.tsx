@@ -17,7 +17,13 @@ import { FaPlus } from "react-icons/fa6";
 function MahjongSessionCardSkeleton() {
   return (
     <Card>
-      <CardBody py={["3", "3"]} px={["3", "6"]} bg="neutral.100" borderRadius="md" boxShadow="base">
+      <CardBody
+        py={["3", "3"]}
+        px={["3", "6"]}
+        bg="neutral.100"
+        borderRadius="md"
+        boxShadow="base"
+      >
         {/* 日付 */}
         <Skeleton height="24px" width="180px" mb="2" />
 

@@ -1,5 +1,13 @@
 import { ParticipatedMahjongSessionsQuery } from "@/src/generated/graphql";
-import { Card, CardBody, HStack, ListItem, SimpleGrid, Text, Wrap } from "@chakra-ui/react";
+import {
+  Card,
+  CardBody,
+  HStack,
+  ListItem,
+  SimpleGrid,
+  Text,
+  Wrap,
+} from "@chakra-ui/react";
 import Link from "next/link";
 
 type Props = {
@@ -28,7 +36,8 @@ export default function MahjongSessionCard({ mahjongSession }: Props) {
               color="primary.500"
               transition="all 0.1s"
               borderRadius="md"
-              boxShadow="base">
+              boxShadow="base"
+            >
               <Text fontSize="xl">{mahjongSession.name}</Text>
 
               <SimpleGrid columns={2} alignItems="baseline">
@@ -39,7 +48,12 @@ export default function MahjongSessionCard({ mahjongSession }: Props) {
                   <Text
                     fontSize="2xl"
                     fontWeight="bold"
-                    color={mahjongSession.myTotalProfits >= 0 ? "blue.600" : "red.400"}>
+                    color={
+                      mahjongSession.myTotalProfits >= 0
+                        ? "blue.600"
+                        : "red.400"
+                    }
+                  >
                     {signedMyTotalProfits}
                   </Text>
                   <Text fontSize="xs">pt</Text>
@@ -98,7 +112,8 @@ export default function MahjongSessionCard({ mahjongSession }: Props) {
                 </Text>
                 <Wrap>
                   {(() => {
-                    const participantNames = mahjongSession.participantUsers.map(user => user.name);
+                    const participantNames =
+                      mahjongSession.participantUsers.map((user) => user.name);
                     let namesToShow: string[] = [];
                     let hiddenNames: string[] = [];
                     if (participantNames.length > 4) {

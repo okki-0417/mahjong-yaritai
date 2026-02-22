@@ -1,5 +1,10 @@
 import VotedWhatToDiscardProblemsSection from "@/src/app/me/what-to-discard-problems/voted/components/VotedWhatToDiscardProblemsSection";
-import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, Container } from "@chakra-ui/react";
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  Container,
+} from "@chakra-ui/react";
 import Link from "next/link";
 import { Suspense } from "react";
 

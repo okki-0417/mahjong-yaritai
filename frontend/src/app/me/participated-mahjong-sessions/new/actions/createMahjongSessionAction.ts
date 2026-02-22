@@ -1,6 +1,9 @@
 "use server";
 
-import { CreateMahjongSessionDocument, CreateMahjongSessionInput } from "@/src/generated/graphql";
+import {
+  CreateMahjongSessionDocument,
+  CreateMahjongSessionInput,
+} from "@/src/generated/graphql";
 import { getClient } from "@/src/lib/apollo/server";
 
 export type CreateMahjongSessionActionResponse = {
@@ -12,7 +15,9 @@ type Props = CreateMahjongSessionInput;
 
 type ReturnType = Promise<CreateMahjongSessionActionResponse>;
 
-export default async function createMahjongSessionAction(input: Props): ReturnType {
+export default async function createMahjongSessionAction(
+  input: Props,
+): ReturnType {
   const client = getClient();
 
   try {

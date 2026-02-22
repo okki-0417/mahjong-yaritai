@@ -20,21 +20,24 @@ type Props = {
   onProblemUpdated: (updatedProblem: WhatToDiscardProblem) => void;
 };
 
-export default function ProblemUpdateForm({ problem, onProblemUpdated }: Props) {
+export default function ProblemUpdateForm({
+  problem,
+  onProblemUpdated,
+}: Props) {
   const toast = useToast();
 
   const [updateProblem] = useMutation<
     UpdateWhatToDiscardProblemMutation,
     UpdateWhatToDiscardProblemMutationVariables
   >(UpdateWhatToDiscardProblemDocument, {
-    onCompleted: data => {
+    onCompleted: (data) => {
       onProblemUpdated(data.updateWhatToDiscardProblem.whatToDiscardProblem);
       toast({
         title: "何切る問題を更新しました",
         status: "success",
       });
     },
-    onError: error => {
+    onError: (error) => {
       toast({
         title: "何切る問題の更新に失敗しました",
         status: "error",
@@ -45,7 +48,7 @@ export default function ProblemUpdateForm({ problem, onProblemUpdated }: Props) 
 
   const { BaseForm } = useProblemForm(problem);
 
-  const onSubmit: SubmitHandler<ProblemUpdateFormInputs> = async formData => {
+  const onSubmit: SubmitHandler<ProblemUpdateFormInputs> = async (formData) => {
     const isConfirmed = confirm("これで更新しますか？");
     if (!isConfirmed) return;
 

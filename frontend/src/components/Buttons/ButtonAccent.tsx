@@ -22,7 +22,8 @@ export default function ButtonAccent({
         } else {
           return null;
         }
-      }}>
+      }}
+    >
       {children}
     </PopButton>
   );

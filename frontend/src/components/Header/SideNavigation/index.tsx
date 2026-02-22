@@ -41,14 +41,25 @@ export default function SideNavigation() {
 
   return (
     <>
-      <Button onClick={onOpen} position="absolute" insetY="3" right="4" zIndex="60" colorScheme="">
+      <Button
+        onClick={onOpen}
+        position="absolute"
+        insetY="3"
+        right="4"
+        zIndex="60"
+        colorScheme=""
+      >
         <GiHamburgerMenu size={30} />
       </Button>
 
       <Drawer placement="right" isOpen={isOpen} onClose={onClose}>
         <DrawerOverlay />
 
-        <DrawerContent className="*:bg-primary-light" fontFamily="serif" color="white">
+        <DrawerContent
+          className="*:bg-primary-light"
+          fontFamily="serif"
+          color="white"
+        >
           <DrawerCloseButton onClick={onClose} color="white" size="lg" />
 
           <DrawerHeader />
@@ -78,7 +89,13 @@ export default function SideNavigation() {
 
           <DrawerFooter pl="0">
             <UnorderedList listStyleType="none" w="full">
-              <VStack borderTop="1px" pt="2" alignItems="stretch" w="full" gap="1">
+              <VStack
+                borderTop="1px"
+                pt="2"
+                alignItems="stretch"
+                w="full"
+                gap="1"
+              >
                 <NavigationItem
                   href="/privacy"
                   icon={<MdOutlinePrivacyTip size={20} color="white" />}

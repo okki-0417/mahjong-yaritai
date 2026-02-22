@@ -1,6 +1,9 @@
 "use server";
 
-import type { PageInfo, ParticipatedMahjongSessionsQuery } from "@/src/generated/graphql";
+import type {
+  PageInfo,
+  ParticipatedMahjongSessionsQuery,
+} from "@/src/generated/graphql";
 import { ParticipatedMahjongSessionsDocument } from "@/src/generated/graphql";
 import { getClient } from "@/src/lib/apollo/server";
 
@@ -32,10 +35,14 @@ export default async function fetchParticipatedMahjongSessions({
   });
 
   if (error) {
-    throw new Error(error.message || "参加した麻雀セッションの取得に失敗しました");
+    throw new Error(
+      error.message || "参加した麻雀セッションの取得に失敗しました",
+    );
   }
 
-  const mahjongSessions = data.participatedMahjongSessions.edges.map(edge => edge.node);
+  const mahjongSessions = data.participatedMahjongSessions.edges.map(
+    (edge) => edge.node,
+  );
 
   return {
     mahjongSessions,

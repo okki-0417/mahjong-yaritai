@@ -9,7 +9,9 @@ type Props = {
   participantUserIndex: number;
 };
 
-export default function RemoveParticipantUserButton({ participantUserIndex }: Props) {
+export default function RemoveParticipantUserButton({
+  participantUserIndex,
+}: Props) {
   const { removeParticipantUser, participantUserFields, gameFields, setValue } =
     useMahjongSessionForm();
   const { onClose } = useParticipantUsersModal();
@@ -19,7 +21,9 @@ export default function RemoveParticipantUserButton({ participantUserIndex }: Pr
 
     // 各ゲームの結果から削除された参加者のデータを削除
     gameFields.forEach((gameField, gameIndex) => {
-      const newResults = gameField.results.filter((_, index) => index !== participantUserIndex);
+      const newResults = gameField.results.filter(
+        (_, index) => index !== participantUserIndex,
+      );
       setValue(`games.${gameIndex}.results`, newResults);
     });
 
@@ -36,7 +40,8 @@ export default function RemoveParticipantUserButton({ participantUserIndex }: Pr
       colorScheme="red"
       variant="outline"
       size="sm"
-      leftIcon={<FaUser />}>
+      leftIcon={<FaUser />}
+    >
       削除
     </Button>
   );

@@ -1,4 +1,9 @@
-query CommentReplies($parentCommentId: ID!, $problemId: ID!, $first: Int, $after: String) {
+query CommentReplies(
+  $parentCommentId: ID!
+  $problemId: ID!
+  $first: Int
+  $after: String
+) {
   whatToDiscardProblemCommentReplies(
     parentCommentId: $parentCommentId
     problemId: $problemId

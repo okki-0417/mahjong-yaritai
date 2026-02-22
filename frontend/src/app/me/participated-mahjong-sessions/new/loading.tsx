@@ -44,7 +44,13 @@ export default function Loading() {
         </Box>
 
         {/* テーブル */}
-        <Box mt="4" bg="neutral.100" borderRadius={["sm", "md"]} boxShadow="lg" overflow="hidden">
+        <Box
+          mt="4"
+          bg="neutral.100"
+          borderRadius={["sm", "md"]}
+          boxShadow="lg"
+          overflow="hidden"
+        >
           {/* ヘッダー（参加者アバター） */}
           <HStack p="4" justify="center" gap="4">
             {[...Array(4)].map((_, i) => (

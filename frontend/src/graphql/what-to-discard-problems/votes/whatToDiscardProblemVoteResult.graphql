@@ -1,5 +1,7 @@
 query WhatToDiscardProblemVoteResult($whatToDiscardProblemId: ID!) {
-  whatToDiscardProblemVoteResults(whatToDiscardProblemId: $whatToDiscardProblemId) {
+  whatToDiscardProblemVoteResults(
+    whatToDiscardProblemId: $whatToDiscardProblemId
+  ) {
     tileId
     count
     percentage

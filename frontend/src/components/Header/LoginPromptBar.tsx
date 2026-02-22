@@ -1,6 +1,13 @@
 "use client";
 
-import { Box, HStack, Text, CloseButton, Button, VStack } from "@chakra-ui/react";
+import {
+  Box,
+  HStack,
+  Text,
+  CloseButton,
+  Button,
+  VStack,
+} from "@chakra-ui/react";
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import { usePathname } from "next/navigation";
@@ -40,7 +47,8 @@ export default function LoginPromptBar() {
       bg="neutral.100"
       color="primary.500"
       position="relative"
-      boxShadow="sm">
+      boxShadow="sm"
+    >
       <HStack justifyContent="center" position="relative">
         <Button as={Link} href="/auth/request" colorScheme="pink" size="sm">
           ログイン / 新規登録
@@ -48,7 +56,12 @@ export default function LoginPromptBar() {
         <Text fontSize="sm">でさらに便利に使えます</Text>
       </HStack>
       <VStack position="absolute" right="0" insetY="0" justifyContent="center">
-        <CloseButton size="sm" color="primary.500" onClick={handleDismiss} aria-label="閉じる" />
+        <CloseButton
+          size="sm"
+          color="primary.500"
+          onClick={handleDismiss}
+          aria-label="閉じる"
+        />
       </VStack>
     </Box>
   );

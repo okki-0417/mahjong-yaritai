@@ -2,7 +2,11 @@
 
 import { createContext, ReactNode, useEffect, useState } from "react";
 import { useQuery } from "@apollo/client/react";
-import { CurrentSessionDocument, CurrentSessionQuery, Session } from "@/src/generated/graphql";
+import {
+  CurrentSessionDocument,
+  CurrentSessionQuery,
+  Session,
+} from "@/src/generated/graphql";
 
 type SessionContextType = {
   session: CurrentSessionQuery["currentSession"] | null;
@@ -30,6 +34,8 @@ export function SessionProvider({ children }: { children: ReactNode }) {
   };
 
   return (
-    <SessionContext.Provider value={{ session, updateSession }}>{children}</SessionContext.Provider>
+    <SessionContext.Provider value={{ session, updateSession }}>
+      {children}
+    </SessionContext.Provider>
   );
 }

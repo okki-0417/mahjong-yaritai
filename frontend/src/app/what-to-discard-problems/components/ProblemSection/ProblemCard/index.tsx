@@ -5,7 +5,15 @@ import {
   WhatToDiscardProblemVoteResult,
   WhatToDiscardProblemVoteResultDocument,
 } from "@/src/generated/graphql";
-import { Box, HStack, Text, useDisclosure, useToast, VStack, Wrap } from "@chakra-ui/react";
+import {
+  Box,
+  HStack,
+  Text,
+  useDisclosure,
+  useToast,
+  VStack,
+  Wrap,
+} from "@chakra-ui/react";
 import { Fragment, useState } from "react";
 import VoteButton from "@/src/app/what-to-discard-problems/components/votes/VoteButton";
 import TileImage from "@/src/components/TileImage";
@@ -25,8 +33,12 @@ type Props = {
 
 export default function ProblemCard({ problem }: Props) {
   const [votesCount, setVotesCount] = useState(problem.votesCount);
-  const [voteResults, setVoteResults] = useState<WhatToDiscardProblemVoteResult[]>([]);
-  const [myVoteTileId, setMyVoteTileId] = useState<string | null>(problem.myVoteTileId);
+  const [voteResults, setVoteResults] = useState<
+    WhatToDiscardProblemVoteResult[]
+  >([]);
+  const [myVoteTileId, setMyVoteTileId] = useState<string | null>(
+    problem.myVoteTileId,
+  );
 
   const toast = useToast();
 
@@ -95,7 +107,13 @@ export default function ProblemCard({ problem }: Props) {
     <Box className="md:max-w-2xl w-screen px-1">
       <Text fontSize="sm">{new Date(problem.createdAt).toLocaleString()}</Text>
 
-      <VStack borderRadius="md" shadow="md" alignItems="stretch" gap="0" overflow="hidden">
+      <VStack
+        borderRadius="md"
+        shadow="md"
+        alignItems="stretch"
+        gap="0"
+        overflow="hidden"
+      >
         <Box pt="2" px={["2", "4"]} pb="3" className="bg-mj-mat">
           <ProblemCardHeader problem={problem} />
 
@@ -162,10 +180,18 @@ export default function ProblemCard({ problem }: Props) {
               </HStack>
             </Box>
 
-            {problem.round && <Text fontSize={["sm", "md"]}>{problem.round}局</Text>}
-            {problem.turn && <Text fontSize={["sm", "md"]}>{problem.turn}巡目</Text>}
-            {problem.wind && <Text fontSize={["sm", "md"]}>{problem.wind}家</Text>}
-            {problem.points && <Text fontSize={["sm", "md"]}>{problem.points}点持ち</Text>}
+            {problem.round && (
+              <Text fontSize={["sm", "md"]}>{problem.round}局</Text>
+            )}
+            {problem.turn && (
+              <Text fontSize={["sm", "md"]}>{problem.turn}巡目</Text>
+            )}
+            {problem.wind && (
+              <Text fontSize={["sm", "md"]}>{problem.wind}家</Text>
+            )}
+            {problem.points && (
+              <Text fontSize={["sm", "md"]}>{problem.points}点持ち</Text>
+            )}
           </Wrap>
 
           {problem.description && (
@@ -175,7 +201,8 @@ export default function ProblemCard({ problem }: Props) {
                 className="line-clamp-2"
                 cursor="pointer"
                 position="relative"
-                onClick={onDescriptionOpen}>
+                onClick={onDescriptionOpen}
+              >
                 <Text fontSize={["xs", "sm"]}>{problem.description}</Text>
                 <div className="absolute inset-0 bg-gradient-to-b from-transparent to-mj-mat z-10" />
               </Box>
@@ -193,7 +220,8 @@ export default function ProblemCard({ problem }: Props) {
           px={["2", "4"]}
           py={["1", "2"]}
           color="gray.700"
-          className="rounded-b-md bg-neutral">
+          className="rounded-b-md bg-neutral"
+        >
           <ProblemLikeSection
             initialIsLiked={problem.isLikedByMe}
             initialLikesCount={problem.likesCount}

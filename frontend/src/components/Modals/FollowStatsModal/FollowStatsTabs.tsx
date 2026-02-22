@@ -2,9 +2,20 @@
 
 import FollowStatsList from "@/src/components/Modals/FollowStatsModal/FollowStatsList";
 import LoadingFollows from "@/src/components/Modals/FollowStatsModal/LoadingFollows";
-import { FollowersDocument, FollowingDocument, User } from "@/src/generated/graphql";
+import {
+  FollowersDocument,
+  FollowingDocument,
+  User,
+} from "@/src/generated/graphql";
 import { useLazyQuery } from "@apollo/client/react";
-import { Tab, TabList, TabPanel, TabPanels, Tabs, useToast } from "@chakra-ui/react";
+import {
+  Tab,
+  TabList,
+  TabPanel,
+  TabPanels,
+  Tabs,
+  useToast,
+} from "@chakra-ui/react";
 import { useCallback, useEffect, useState } from "react";
 
 type Followings = User[];
@@ -19,8 +30,10 @@ export default function FollowStatsTabs({ defaultIndex }: Props) {
   const [followings, setFollowings] = useState<Followings>([]);
   const [followers, setFollowers] = useState<Followers>([]);
 
-  const [getFollowings, { loading: followingsLoading }] = useLazyQuery(FollowingDocument);
-  const [getFollowers, { loading: followersLoading }] = useLazyQuery(FollowersDocument);
+  const [getFollowings, { loading: followingsLoading }] =
+    useLazyQuery(FollowingDocument);
+  const [getFollowers, { loading: followersLoading }] =
+    useLazyQuery(FollowersDocument);
 
   const toast = useToast();
 
@@ -37,7 +50,7 @@ export default function FollowStatsTabs({ defaultIndex }: Props) {
     }
 
     if (data) {
-      const followingsData = data.followings.edges.map(edge => edge.node);
+      const followingsData = data.followings.edges.map((edge) => edge.node);
       setFollowings(followingsData);
     }
   }, [getFollowings, toast]);
@@ -55,7 +68,7 @@ export default function FollowStatsTabs({ defaultIndex }: Props) {
     }
 
     if (data) {
-      const followersData = data.followers.edges.map(edge => edge.node);
+      const followersData = data.followers.edges.map((edge) => edge.node);
       setFollowers(followersData);
     }
   }, [getFollowers, toast]);
@@ -81,10 +94,18 @@ export default function FollowStatsTabs({ defaultIndex }: Props) {
 
       <TabPanels>
         <TabPanel>
-          {followingsLoading ? <LoadingFollows /> : <FollowStatsList users={followings} />}
+          {followingsLoading ? (
+            <LoadingFollows />
+          ) : (
+            <FollowStatsList users={followings} />
+          )}
         </TabPanel>
         <TabPanel>
-          {followersLoading ? <LoadingFollows /> : <FollowStatsList users={followers} />}
+          {followersLoading ? (
+            <LoadingFollows />
+          ) : (
+            <FollowStatsList users={followers} />
+          )}
         </TabPanel>
       </TabPanels>
     </Tabs>

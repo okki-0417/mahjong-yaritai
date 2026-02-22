@@ -17,7 +17,7 @@ services:
       context: ./api
       dockerfile: Dockerfile
     env_file:
-      - ./api/.env
+      - ./api/.env.local
     environment:
       REDIS_HOST: redis
       REDIS_PORT: 6379
@@ -38,7 +38,7 @@ services:
     environment:
       REDIS_URL: redis://redis:6379
     env_file:
-      - ./api/.env
+      - ./api/.env.local
     volumes:
       - ./api:/rails
     depends_on:

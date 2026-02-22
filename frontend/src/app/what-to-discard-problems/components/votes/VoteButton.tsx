@@ -37,15 +37,16 @@ export default function VoteButton({
   const toast = useToast();
 
   const [createVote] = useMutation(CreateWhatToDiscardProblemVoteDocument, {
-    onCompleted: data => {
+    onCompleted: (data) => {
       toast({
-        title: data.createWhatToDiscardProblemVote.vote.tile.name + "に投票しました",
+        title:
+          data.createWhatToDiscardProblemVote.vote.tile.name + "に投票しました",
         status: "success",
       });
 
       onCreate();
     },
-    onError: error => {
+    onError: (error) => {
       toast({
         title: "投票に失敗しました",
         description: error.message,
@@ -65,7 +66,7 @@ export default function VoteButton({
 
       onDelete();
     },
-    onError: error => {
+    onError: (error) => {
       toast({
         title: "投票の取り消しに失敗しました",
         description: error.message,
@@ -110,7 +111,11 @@ export default function VoteButton({
   return (
     <>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <PopButton type="submit" disabled={isSubmitting} className="aspect-tile relative">
+        <PopButton
+          type="submit"
+          disabled={isSubmitting}
+          className="aspect-tile relative"
+        >
           <TileImage tileId={tileId} isShiny={tileId == doraId} />
 
           <Box
@@ -123,7 +128,10 @@ export default function VoteButton({
         </PopButton>
       </form>
 
-      <NotLoggedInModal isOpen={isNotLoggedInModalOpen} onClose={onNotLoggedInModalClose} />
+      <NotLoggedInModal
+        isOpen={isNotLoggedInModalOpen}
+        onClose={onNotLoggedInModalClose}
+      />
     </>
   );
 }

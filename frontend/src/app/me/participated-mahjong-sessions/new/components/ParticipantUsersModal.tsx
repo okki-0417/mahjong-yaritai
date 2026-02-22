@@ -21,23 +21,40 @@ type Props = {
   participantUserIndex: number;
 };
 
-export default function ParticipantUsersModal({ isOpen, onClose, participantUserIndex }: Props) {
+export default function ParticipantUsersModal({
+  isOpen,
+  onClose,
+  participantUserIndex,
+}: Props) {
   return (
-    <Modal isOpen={isOpen} onClose={onClose} size="md" isCentered scrollBehavior="inside">
+    <Modal
+      isOpen={isOpen}
+      onClose={onClose}
+      size="md"
+      isCentered
+      scrollBehavior="inside"
+    >
       <ModalOverlay />
       <ModalContent fontFamily="PT Serif, serif" h="80vh">
         <ModalCloseButton />
         <ModalHeader>
           <VStack align="stretch">
             <Text>参加者を編集</Text>
-            <ParticipantUserNameInput participantUserIndex={participantUserIndex} />
+            <ParticipantUserNameInput
+              participantUserIndex={participantUserIndex}
+            />
           </VStack>
         </ModalHeader>
         <ModalBody h="full">
-          <ParticipantUserSelection participantUserIndex={participantUserIndex} onClose={onClose} />
+          <ParticipantUserSelection
+            participantUserIndex={participantUserIndex}
+            onClose={onClose}
+          />
         </ModalBody>
         <ModalFooter>
-          <RemoveParticipantUserButton participantUserIndex={participantUserIndex} />
+          <RemoveParticipantUserButton
+            participantUserIndex={participantUserIndex}
+          />
         </ModalFooter>
       </ModalContent>
     </Modal>

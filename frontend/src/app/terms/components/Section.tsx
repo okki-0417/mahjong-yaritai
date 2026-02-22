@@ -13,7 +13,11 @@ interface SectionProps {
   subsections?: SubsectionData[];
 }
 
-export default function Section({ title, description, subsections }: SectionProps) {
+export default function Section({
+  title,
+  description,
+  subsections,
+}: SectionProps) {
   return (
     <Box>
       <Text fontSize={["lg", "xl"]} fontWeight="bold" mb="4">

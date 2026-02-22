@@ -1,6 +1,10 @@
 "use server";
 
-import { MutualFollowersDocument, MutualFollowersQuery, PageInfo } from "@/src/generated/graphql";
+import {
+  MutualFollowersDocument,
+  MutualFollowersQuery,
+  PageInfo,
+} from "@/src/generated/graphql";
 import { getClient } from "@/src/lib/apollo/server";
 
 type Props = {
@@ -26,7 +30,7 @@ export default async function fetchMutualFollowersAction({
     throw new Error(error.message || "相互フォロワーの取得に失敗しました");
   }
 
-  const mutualFollowers = data.mutualFollowers.edges.map(edge => edge.node);
+  const mutualFollowers = data.mutualFollowers.edges.map((edge) => edge.node);
 
   return {
     mutualFollowersData: mutualFollowers,

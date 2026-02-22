@@ -1,4 +1,8 @@
-import { ApolloClient, InMemoryCache } from "@apollo/client";
+import {
+  ApolloClient,
+  InMemoryCache,
+  NormalizedCacheObject,
+} from "@apollo/client";
 import { HttpLink } from "@apollo/client/link/http";
 import { SetContextLink } from "@apollo/client/link/context";
 import { cookies } from "next/headers";
@@ -8,7 +12,7 @@ const httpLink = new HttpLink({
   uri: `${API_BASE_URL}/graphql` || "http://localhost:3001/graphql",
 });
 
-const authLink = new SetContextLink(async prevContext => {
+const authLink = new SetContextLink(async (prevContext) => {
   const cookieStore = await cookies();
   const cookieHeader = cookieStore
     .getAll()

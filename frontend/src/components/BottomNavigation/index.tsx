@@ -18,13 +18,18 @@ export default function BottomNavigation() {
       zIndex="50"
       display={{ base: "block", md: "none" }}
       bg="primary.500"
-      pb="env(safe-area-inset-bottom)">
+      pb="env(safe-area-inset-bottom)"
+    >
       <HStack justify="space-around" pt="2" pb="1">
         {isLoggedIn && (
           <Link href="/me">
             <VStack spacing="0.5" color="white">
               <MdPerson size={24} />
-              <Text fontSize="xs" fontFamily="PT serif, serif" fontWeight="bold">
+              <Text
+                fontSize="xs"
+                fontFamily="PT serif, serif"
+                fontWeight="bold"
+              >
                 マイページ
               </Text>
             </VStack>

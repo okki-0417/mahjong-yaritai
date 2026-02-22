@@ -1,4 +1,10 @@
-import { Container, Skeleton, SkeletonText, SkeletonCircle, HStack } from "@chakra-ui/react";
+import {
+  Container,
+  Skeleton,
+  SkeletonText,
+  SkeletonCircle,
+  HStack,
+} from "@chakra-ui/react";
 
 export default function UserProfileSkeleton() {
   return (
@@ -9,7 +15,13 @@ export default function UserProfileSkeleton() {
 
       <Skeleton height="32px" width="200px" mx="auto" mt="4" />
 
-      <SkeletonText w="full" noOfLines={3} spacing="4" skeletonHeight="20px" mt="4" />
+      <SkeletonText
+        w="full"
+        noOfLines={3}
+        spacing="4"
+        skeletonHeight="20px"
+        mt="4"
+      />
     </Container>
   );
 }

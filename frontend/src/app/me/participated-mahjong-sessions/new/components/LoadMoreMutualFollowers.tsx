@@ -6,7 +6,6 @@ import fetchMutualFollowersAction, {
 import { PageInfo } from "@/src/generated/graphql";
 import useInfiniteScroll from "@/src/hooks/useInfiniteScroll";
 import { useToast } from "@chakra-ui/react";
-import { captureException } from "@sentry/nextjs";
 import { Dispatch, SetStateAction } from "react";
 
 type Props = {
@@ -14,7 +13,9 @@ type Props = {
   setMutualFollowers: Dispatch<
     SetStateAction<FetchMutualFollowersActionResponse["mutualFollowersData"]>
   >;
-  setPageInfo: Dispatch<SetStateAction<FetchMutualFollowersActionResponse["pageInfoData"] | null>>;
+  setPageInfo: Dispatch<
+    SetStateAction<FetchMutualFollowersActionResponse["pageInfoData"] | null>
+  >;
 };
 
 export default function LoadMoreMutualFollowers({
@@ -30,22 +31,25 @@ export default function LoadMoreMutualFollowers({
     }
 
     try {
-      const { mutualFollowersData, pageInfoData } = await fetchMutualFollowersAction({
-        pageInfo,
-      });
-      setMutualFollowers(prev => [...prev, ...mutualFollowersData]);
+      const { mutualFollowersData, pageInfoData } =
+        await fetchMutualFollowersAction({
+          pageInfo,
+        });
+      setMutualFollowers((prev) => [...prev, ...mutualFollowersData]);
       setPageInfo(pageInfoData);
     } catch (error) {
       toast({
         title: "相互フォロワーの取得に失敗しました",
         status: "error",
-        description: error instanceof Error ? error.message : "不明なエラーが発生しました",
+        description:
+          error instanceof Error ? error.message : "不明なエラーが発生しました",
       });
-      captureException(error);
     }
   };
 
-  const { targetRef, isPending } = useInfiniteScroll({ callback: loadMoreMutualFollowers });
+  const { targetRef, isPending } = useInfiniteScroll({
+    callback: loadMoreMutualFollowers,
+  });
 
   return <div ref={targetRef}>{isPending && <div>Loading more...</div>}</div>;
 }

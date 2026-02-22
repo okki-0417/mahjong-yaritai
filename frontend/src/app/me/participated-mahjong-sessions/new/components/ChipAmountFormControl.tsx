@@ -9,7 +9,12 @@ export default function ChipAmountFormControl() {
   const handleChipAmountInput = useNumberInput({ min: 0, max: 99999 });
 
   return (
-    <HStack as={FormControl} gap="1" w="fit-content" isInvalid={Boolean(errors.chipAmount)}>
+    <HStack
+      as={FormControl}
+      gap="1"
+      w="fit-content"
+      isInvalid={Boolean(errors.chipAmount)}
+    >
       <FormLabel m="0" htmlFor="chipAmount" fontSize={["sm", "md"]}>
         チップ
       </FormLabel>

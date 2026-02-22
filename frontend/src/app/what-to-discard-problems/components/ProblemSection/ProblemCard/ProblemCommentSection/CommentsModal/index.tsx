@@ -52,7 +52,13 @@ export default function CommentsModal({
   };
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} isCentered size="xl" scrollBehavior="inside">
+    <Modal
+      isOpen={isOpen}
+      onClose={onClose}
+      isCentered
+      size="xl"
+      scrollBehavior="inside"
+    >
       <ModalOverlay />
 
       <ModalContent overflow="hidden">
@@ -66,7 +72,7 @@ export default function CommentsModal({
           <Box minH={30} ref={commentsTopRef}>
             {parentComments.length > 0 ? (
               <VStack divider={<StackDivider />} gap="0">
-                {parentComments.map(parentComment => {
+                {parentComments.map((parentComment) => {
                   return (
                     <ParentCommentCard
                       key={parentComment.id}
@@ -86,13 +92,18 @@ export default function CommentsModal({
           </Box>
         </ModalBody>
 
-        <ModalFooter className="bg-neutral" boxShadow="0px -1px 10px 10px rgba(150,150,150,0.1)">
+        <ModalFooter
+          className="bg-neutral"
+          boxShadow="0px -1px 10px 10px rgba(150,150,150,0.1)"
+        >
           <VStack w="full" gap="1">
             <CommentForm
               problemId={problemId}
               replyingToComment={replyingToComment}
               onReplyCancel={onReplyCancel}
-              onCommentCreate={(comment: Comment) => wrappedOnCommentCreate(comment)}
+              onCommentCreate={(comment: Comment) =>
+                wrappedOnCommentCreate(comment)
+              }
             />
           </VStack>
         </ModalFooter>

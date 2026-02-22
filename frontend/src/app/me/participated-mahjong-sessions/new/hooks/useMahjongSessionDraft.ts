@@ -41,7 +41,9 @@ export default function useMahjongSessionDraft({ watch, reset }: Props) {
 
     const draft = localStorage.getItem(DRAFT_STORAGE_KEY);
     if (draft) {
-      const shouldRestore = window.confirm("前回の入力内容があります。復元しますか？");
+      const shouldRestore = window.confirm(
+        "前回の入力内容があります。復元しますか？",
+      );
       if (shouldRestore) {
         try {
           const parsed = JSON.parse(draft) as GameSessionFormType;
@@ -62,7 +64,9 @@ export default function useMahjongSessionDraft({ watch, reset }: Props) {
     const { createdDate: _, ...dataWithoutDate } = data;
     /* eslint-disable-next-line no-unused-vars */
     const { createdDate: __, ...defaultWithoutDate } = DEFAULT_FORM_VALUES;
-    return JSON.stringify(dataWithoutDate) === JSON.stringify(defaultWithoutDate);
+    return (
+      JSON.stringify(dataWithoutDate) === JSON.stringify(defaultWithoutDate)
+    );
   }, []);
 
   // フォーム変更時に自動保存（debounce付き）

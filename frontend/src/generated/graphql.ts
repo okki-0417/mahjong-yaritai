@@ -2,15 +2,26 @@
 import { TypedDocumentNode as DocumentNode } from "@graphql-typed-document-node/core";
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = T | null | undefined;
-export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
-export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
-export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
-export type MakeEmpty<T extends { [key: string]: unknown }, K extends keyof T> = {
+export type Exact<T extends { [key: string]: unknown }> = {
+  [K in keyof T]: T[K];
+};
+export type MakeOptional<T, K extends keyof T> = Omit<T, K> & {
+  [SubKey in K]?: Maybe<T[SubKey]>;
+};
+export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & {
+  [SubKey in K]: Maybe<T[SubKey]>;
+};
+export type MakeEmpty<
+  T extends { [key: string]: unknown },
+  K extends keyof T,
+> = {
   [_ in K]?: never;
 };
 export type Incremental<T> =
   | T
-  | { [P in keyof T]?: P extends " $fragmentName" | "__typename" ? T[P] : never };
+  | {
+      [P in keyof T]?: P extends " $fragmentName" | "__typename" ? T[P] : never;
+    };
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
   ID: { input: string; output: string };
@@ -900,7 +911,12 @@ export type CreateFollowMutation = {
   __typename?: "Mutation";
   createFollow?: {
     __typename?: "CreateFollowPayload";
-    follow: { __typename?: "Follow"; id: string; followerId: string; followeeId: string };
+    follow: {
+      __typename?: "Follow";
+      id: string;
+      followerId: string;
+      followeeId: string;
+    };
   } | null;
 };
 
@@ -994,7 +1010,12 @@ export type MutualFollowersQuery = {
     __typename?: "UserConnection";
     edges?: Array<{
       __typename?: "UserEdge";
-      node?: { __typename?: "User"; id: string; name: string; avatarUrl?: string | null } | null;
+      node?: {
+        __typename?: "User";
+        id: string;
+        name: string;
+        avatarUrl?: string | null;
+      } | null;
     } | null> | null;
     pageInfo: {
       __typename?: "PageInfo";
@@ -1055,7 +1076,12 @@ export type ParticipatedMahjongSessionQuery = {
     name: string;
     createdAt: any;
     updatedAt: any;
-    creatorUser: { __typename?: "User"; id: string; name: string; avatarUrl?: string | null };
+    creatorUser: {
+      __typename?: "User";
+      id: string;
+      name: string;
+      avatarUrl?: string | null;
+    };
     mahjongScoringSetting: {
       __typename?: "MahjongScoringSetting";
       id: string;
@@ -1072,7 +1098,12 @@ export type ParticipatedMahjongSessionQuery = {
       averageRanking: number;
       totalPoints: number;
       totalProfits: number;
-      user?: { __typename?: "User"; id: string; name: string; avatarUrl?: string | null } | null;
+      user?: {
+        __typename?: "User";
+        id: string;
+        name: string;
+        avatarUrl?: string | null;
+      } | null;
     }>;
     mahjongGames: Array<{
       __typename?: "MahjongGame";
@@ -1120,7 +1151,11 @@ export type ParticipatedMahjongSessionsQuery = {
           umaRuleLabel: string;
           okaRuleLabel: string;
         };
-        participantUsers: Array<{ __typename?: "User"; id: string; name: string }>;
+        participantUsers: Array<{
+          __typename?: "User";
+          id: string;
+          name: string;
+        }>;
       } | null;
     } | null> | null;
     pageInfo: {
@@ -1319,7 +1354,10 @@ export type WithdrawUserMutationVariables = Exact<{ [key: string]: never }>;
 
 export type WithdrawUserMutation = {
   __typename?: "Mutation";
-  withdrawUser?: { __typename?: "WithdrawUserPayload"; success: boolean } | null;
+  withdrawUser?: {
+    __typename?: "WithdrawUserPayload";
+    success: boolean;
+  } | null;
 };
 
 export type WithdrawalSummaryQueryVariables = Exact<{ [key: string]: never }>;
@@ -1556,7 +1594,9 @@ export type DeleteWhatToDiscardProblemMutation = {
 };
 
 export type LikedWhatToDiscardProblemIdsQueryVariables = Exact<{
-  whatToDiscardProblemIds: Array<Scalars["ID"]["input"]> | Scalars["ID"]["input"];
+  whatToDiscardProblemIds:
+    | Array<Scalars["ID"]["input"]>
+    | Scalars["ID"]["input"];
 }>;
 
 export type LikedWhatToDiscardProblemIdsQuery = {
@@ -1651,12 +1691,18 @@ export type UpdateWhatToDiscardProblemMutation = {
 };
 
 export type VotedTileIdsQueryVariables = Exact<{
-  whatToDiscardProblemIds: Array<Scalars["ID"]["input"]> | Scalars["ID"]["input"];
+  whatToDiscardProblemIds:
+    | Array<Scalars["ID"]["input"]>
+    | Scalars["ID"]["input"];
 }>;
 
 export type VotedTileIdsQuery = {
   __typename?: "Query";
-  votedTileIds: Array<{ __typename?: "VotedTile"; tileId: string; whatToDiscardProblemId: string }>;
+  votedTileIds: Array<{
+    __typename?: "VotedTile";
+    tileId: string;
+    whatToDiscardProblemId: string;
+  }>;
 };
 
 export type CreateWhatToDiscardProblemVoteMutationVariables = Exact<{
@@ -1855,13 +1901,34 @@ export const CurrentSessionDocument = {
                       { kind: "Field", name: { kind: "Name", value: "id" } },
                       { kind: "Field", name: { kind: "Name", value: "name" } },
                       { kind: "Field", name: { kind: "Name", value: "email" } },
-                      { kind: "Field", name: { kind: "Name", value: "profileText" } },
-                      { kind: "Field", name: { kind: "Name", value: "avatarUrl" } },
-                      { kind: "Field", name: { kind: "Name", value: "isFollowing" } },
-                      { kind: "Field", name: { kind: "Name", value: "followingCount" } },
-                      { kind: "Field", name: { kind: "Name", value: "followersCount" } },
-                      { kind: "Field", name: { kind: "Name", value: "createdAt" } },
-                      { kind: "Field", name: { kind: "Name", value: "updatedAt" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "profileText" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "avatarUrl" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "isFollowing" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "followingCount" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "followersCount" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "createdAt" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "updatedAt" },
+                      },
                     ],
                   },
                 },
@@ -1895,7 +1962,9 @@ export const LogoutUserDocument = {
             ],
             selectionSet: {
               kind: "SelectionSet",
-              selections: [{ kind: "Field", name: { kind: "Name", value: "success" } }],
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "success" } },
+              ],
             },
           },
         ],
@@ -1913,10 +1982,16 @@ export const RequestAuthDocument = {
       variableDefinitions: [
         {
           kind: "VariableDefinition",
-          variable: { kind: "Variable", name: { kind: "Name", value: "input" } },
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "input" },
+          },
           type: {
             kind: "NonNullType",
-            type: { kind: "NamedType", name: { kind: "Name", value: "RequestAuthInput" } },
+            type: {
+              kind: "NamedType",
+              name: { kind: "Name", value: "RequestAuthInput" },
+            },
           },
         },
       ],
@@ -1930,12 +2005,17 @@ export const RequestAuthDocument = {
               {
                 kind: "Argument",
                 name: { kind: "Name", value: "input" },
-                value: { kind: "Variable", name: { kind: "Name", value: "input" } },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "input" },
+                },
               },
             ],
             selectionSet: {
               kind: "SelectionSet",
-              selections: [{ kind: "Field", name: { kind: "Name", value: "success" } }],
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "success" } },
+              ],
             },
           },
         ],
@@ -1953,10 +2033,16 @@ export const VerifyAuthDocument = {
       variableDefinitions: [
         {
           kind: "VariableDefinition",
-          variable: { kind: "Variable", name: { kind: "Name", value: "input" } },
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "input" },
+          },
           type: {
             kind: "NonNullType",
-            type: { kind: "NamedType", name: { kind: "Name", value: "VerifyAuthInput" } },
+            type: {
+              kind: "NamedType",
+              name: { kind: "Name", value: "VerifyAuthInput" },
+            },
           },
         },
       ],
@@ -1970,7 +2056,10 @@ export const VerifyAuthDocument = {
               {
                 kind: "Argument",
                 name: { kind: "Name", value: "input" },
-                value: { kind: "Variable", name: { kind: "Name", value: "input" } },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "input" },
+                },
               },
             ],
             selectionSet: {
@@ -1985,12 +2074,30 @@ export const VerifyAuthDocument = {
                       { kind: "Field", name: { kind: "Name", value: "id" } },
                       { kind: "Field", name: { kind: "Name", value: "name" } },
                       { kind: "Field", name: { kind: "Name", value: "email" } },
-                      { kind: "Field", name: { kind: "Name", value: "profileText" } },
-                      { kind: "Field", name: { kind: "Name", value: "avatarUrl" } },
-                      { kind: "Field", name: { kind: "Name", value: "followingCount" } },
-                      { kind: "Field", name: { kind: "Name", value: "followersCount" } },
-                      { kind: "Field", name: { kind: "Name", value: "createdAt" } },
-                      { kind: "Field", name: { kind: "Name", value: "updatedAt" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "profileText" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "avatarUrl" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "followingCount" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "followersCount" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "createdAt" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "updatedAt" },
+                      },
                     ],
                   },
                 },
@@ -2012,7 +2119,10 @@ export const CreateFollowDocument = {
       variableDefinitions: [
         {
           kind: "VariableDefinition",
-          variable: { kind: "Variable", name: { kind: "Name", value: "userId" } },
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "userId" },
+          },
           type: {
             kind: "NonNullType",
             type: { kind: "NamedType", name: { kind: "Name", value: "ID" } },
@@ -2035,7 +2145,10 @@ export const CreateFollowDocument = {
                     {
                       kind: "ObjectField",
                       name: { kind: "Name", value: "userId" },
-                      value: { kind: "Variable", name: { kind: "Name", value: "userId" } },
+                      value: {
+                        kind: "Variable",
+                        name: { kind: "Name", value: "userId" },
+                      },
                     },
                   ],
                 },
@@ -2051,8 +2164,14 @@ export const CreateFollowDocument = {
                     kind: "SelectionSet",
                     selections: [
                       { kind: "Field", name: { kind: "Name", value: "id" } },
-                      { kind: "Field", name: { kind: "Name", value: "followerId" } },
-                      { kind: "Field", name: { kind: "Name", value: "followeeId" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "followerId" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "followeeId" },
+                      },
                     ],
                   },
                 },
@@ -2063,7 +2182,10 @@ export const CreateFollowDocument = {
       },
     },
   ],
-} as unknown as DocumentNode<CreateFollowMutation, CreateFollowMutationVariables>;
+} as unknown as DocumentNode<
+  CreateFollowMutation,
+  CreateFollowMutationVariables
+>;
 export const DeleteFollowDocument = {
   kind: "Document",
   definitions: [
@@ -2074,7 +2196,10 @@ export const DeleteFollowDocument = {
       variableDefinitions: [
         {
           kind: "VariableDefinition",
-          variable: { kind: "Variable", name: { kind: "Name", value: "userId" } },
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "userId" },
+          },
           type: {
             kind: "NonNullType",
             type: { kind: "NamedType", name: { kind: "Name", value: "ID" } },
@@ -2097,7 +2222,10 @@ export const DeleteFollowDocument = {
                     {
                       kind: "ObjectField",
                       name: { kind: "Name", value: "userId" },
-                      value: { kind: "Variable", name: { kind: "Name", value: "userId" } },
+                      value: {
+                        kind: "Variable",
+                        name: { kind: "Name", value: "userId" },
+                      },
                     },
                   ],
                 },
@@ -2105,14 +2233,19 @@ export const DeleteFollowDocument = {
             ],
             selectionSet: {
               kind: "SelectionSet",
-              selections: [{ kind: "Field", name: { kind: "Name", value: "id" } }],
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "id" } },
+              ],
             },
           },
         ],
       },
     },
   ],
-} as unknown as DocumentNode<DeleteFollowMutation, DeleteFollowMutationVariables>;
+} as unknown as DocumentNode<
+  DeleteFollowMutation,
+  DeleteFollowMutationVariables
+>;
 export const FollowingDocument = {
   kind: "Document",
   definitions: [
@@ -2123,12 +2256,18 @@ export const FollowingDocument = {
       variableDefinitions: [
         {
           kind: "VariableDefinition",
-          variable: { kind: "Variable", name: { kind: "Name", value: "first" } },
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "first" },
+          },
           type: { kind: "NamedType", name: { kind: "Name", value: "Int" } },
         },
         {
           kind: "VariableDefinition",
-          variable: { kind: "Variable", name: { kind: "Name", value: "after" } },
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "after" },
+          },
           type: { kind: "NamedType", name: { kind: "Name", value: "String" } },
         },
       ],
@@ -2142,12 +2281,18 @@ export const FollowingDocument = {
               {
                 kind: "Argument",
                 name: { kind: "Name", value: "first" },
-                value: { kind: "Variable", name: { kind: "Name", value: "first" } },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "first" },
+                },
               },
               {
                 kind: "Argument",
                 name: { kind: "Name", value: "after" },
-                value: { kind: "Variable", name: { kind: "Name", value: "after" } },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "after" },
+                },
               },
             ],
             selectionSet: {
@@ -2165,16 +2310,46 @@ export const FollowingDocument = {
                         selectionSet: {
                           kind: "SelectionSet",
                           selections: [
-                            { kind: "Field", name: { kind: "Name", value: "id" } },
-                            { kind: "Field", name: { kind: "Name", value: "name" } },
-                            { kind: "Field", name: { kind: "Name", value: "email" } },
-                            { kind: "Field", name: { kind: "Name", value: "profileText" } },
-                            { kind: "Field", name: { kind: "Name", value: "avatarUrl" } },
-                            { kind: "Field", name: { kind: "Name", value: "isFollowing" } },
-                            { kind: "Field", name: { kind: "Name", value: "followingCount" } },
-                            { kind: "Field", name: { kind: "Name", value: "followersCount" } },
-                            { kind: "Field", name: { kind: "Name", value: "createdAt" } },
-                            { kind: "Field", name: { kind: "Name", value: "updatedAt" } },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "id" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "name" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "email" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "profileText" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "avatarUrl" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "isFollowing" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "followingCount" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "followersCount" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "createdAt" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "updatedAt" },
+                            },
                           ],
                         },
                       },
@@ -2187,10 +2362,22 @@ export const FollowingDocument = {
                   selectionSet: {
                     kind: "SelectionSet",
                     selections: [
-                      { kind: "Field", name: { kind: "Name", value: "hasNextPage" } },
-                      { kind: "Field", name: { kind: "Name", value: "hasPreviousPage" } },
-                      { kind: "Field", name: { kind: "Name", value: "startCursor" } },
-                      { kind: "Field", name: { kind: "Name", value: "endCursor" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "hasNextPage" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "hasPreviousPage" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "startCursor" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "endCursor" },
+                      },
                     ],
                   },
                 },
@@ -2212,12 +2399,18 @@ export const FollowersDocument = {
       variableDefinitions: [
         {
           kind: "VariableDefinition",
-          variable: { kind: "Variable", name: { kind: "Name", value: "first" } },
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "first" },
+          },
           type: { kind: "NamedType", name: { kind: "Name", value: "Int" } },
         },
         {
           kind: "VariableDefinition",
-          variable: { kind: "Variable", name: { kind: "Name", value: "after" } },
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "after" },
+          },
           type: { kind: "NamedType", name: { kind: "Name", value: "String" } },
         },
       ],
@@ -2231,12 +2424,18 @@ export const FollowersDocument = {
               {
                 kind: "Argument",
                 name: { kind: "Name", value: "first" },
-                value: { kind: "Variable", name: { kind: "Name", value: "first" } },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "first" },
+                },
               },
               {
                 kind: "Argument",
                 name: { kind: "Name", value: "after" },
-                value: { kind: "Variable", name: { kind: "Name", value: "after" } },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "after" },
+                },
               },
             ],
             selectionSet: {
@@ -2254,16 +2453,46 @@ export const FollowersDocument = {
                         selectionSet: {
                           kind: "SelectionSet",
                           selections: [
-                            { kind: "Field", name: { kind: "Name", value: "id" } },
-                            { kind: "Field", name: { kind: "Name", value: "name" } },
-                            { kind: "Field", name: { kind: "Name", value: "email" } },
-                            { kind: "Field", name: { kind: "Name", value: "profileText" } },
-                            { kind: "Field", name: { kind: "Name", value: "avatarUrl" } },
-                            { kind: "Field", name: { kind: "Name", value: "isFollowing" } },
-                            { kind: "Field", name: { kind: "Name", value: "followingCount" } },
-                            { kind: "Field", name: { kind: "Name", value: "followersCount" } },
-                            { kind: "Field", name: { kind: "Name", value: "createdAt" } },
-                            { kind: "Field", name: { kind: "Name", value: "updatedAt" } },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "id" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "name" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "email" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "profileText" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "avatarUrl" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "isFollowing" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "followingCount" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "followersCount" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "createdAt" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "updatedAt" },
+                            },
                           ],
                         },
                       },
@@ -2276,10 +2505,22 @@ export const FollowersDocument = {
                   selectionSet: {
                     kind: "SelectionSet",
                     selections: [
-                      { kind: "Field", name: { kind: "Name", value: "hasNextPage" } },
-                      { kind: "Field", name: { kind: "Name", value: "hasPreviousPage" } },
-                      { kind: "Field", name: { kind: "Name", value: "startCursor" } },
-                      { kind: "Field", name: { kind: "Name", value: "endCursor" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "hasNextPage" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "hasPreviousPage" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "startCursor" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "endCursor" },
+                      },
                     ],
                   },
                 },
@@ -2301,12 +2542,18 @@ export const MutualFollowersDocument = {
       variableDefinitions: [
         {
           kind: "VariableDefinition",
-          variable: { kind: "Variable", name: { kind: "Name", value: "first" } },
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "first" },
+          },
           type: { kind: "NamedType", name: { kind: "Name", value: "Int" } },
         },
         {
           kind: "VariableDefinition",
-          variable: { kind: "Variable", name: { kind: "Name", value: "after" } },
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "after" },
+          },
           type: { kind: "NamedType", name: { kind: "Name", value: "String" } },
         },
       ],
@@ -2320,12 +2567,18 @@ export const MutualFollowersDocument = {
               {
                 kind: "Argument",
                 name: { kind: "Name", value: "first" },
-                value: { kind: "Variable", name: { kind: "Name", value: "first" } },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "first" },
+                },
               },
               {
                 kind: "Argument",
                 name: { kind: "Name", value: "after" },
-                value: { kind: "Variable", name: { kind: "Name", value: "after" } },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "after" },
+                },
               },
             ],
             selectionSet: {
@@ -2343,9 +2596,18 @@ export const MutualFollowersDocument = {
                         selectionSet: {
                           kind: "SelectionSet",
                           selections: [
-                            { kind: "Field", name: { kind: "Name", value: "id" } },
-                            { kind: "Field", name: { kind: "Name", value: "name" } },
-                            { kind: "Field", name: { kind: "Name", value: "avatarUrl" } },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "id" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "name" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "avatarUrl" },
+                            },
                           ],
                         },
                       },
@@ -2358,9 +2620,18 @@ export const MutualFollowersDocument = {
                   selectionSet: {
                     kind: "SelectionSet",
                     selections: [
-                      { kind: "Field", name: { kind: "Name", value: "hasNextPage" } },
-                      { kind: "Field", name: { kind: "Name", value: "hasPreviousPage" } },
-                      { kind: "Field", name: { kind: "Name", value: "endCursor" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "hasNextPage" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "hasPreviousPage" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "endCursor" },
+                      },
                     ],
                   },
                 },
@@ -2371,7 +2642,10 @@ export const MutualFollowersDocument = {
       },
     },
   ],
-} as unknown as DocumentNode<MutualFollowersQuery, MutualFollowersQueryVariables>;
+} as unknown as DocumentNode<
+  MutualFollowersQuery,
+  MutualFollowersQueryVariables
+>;
 export const CreateMahjongSessionDocument = {
   kind: "Document",
   definitions: [
@@ -2382,10 +2656,16 @@ export const CreateMahjongSessionDocument = {
       variableDefinitions: [
         {
           kind: "VariableDefinition",
-          variable: { kind: "Variable", name: { kind: "Name", value: "input" } },
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "input" },
+          },
           type: {
             kind: "NonNullType",
-            type: { kind: "NamedType", name: { kind: "Name", value: "CreateMahjongSessionInput" } },
+            type: {
+              kind: "NamedType",
+              name: { kind: "Name", value: "CreateMahjongSessionInput" },
+            },
           },
         },
       ],
@@ -2399,7 +2679,10 @@ export const CreateMahjongSessionDocument = {
               {
                 kind: "Argument",
                 name: { kind: "Name", value: "input" },
-                value: { kind: "Variable", name: { kind: "Name", value: "input" } },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "input" },
+                },
               },
             ],
             selectionSet: {
@@ -2419,9 +2702,18 @@ export const CreateMahjongSessionDocument = {
                         selectionSet: {
                           kind: "SelectionSet",
                           selections: [
-                            { kind: "Field", name: { kind: "Name", value: "id" } },
-                            { kind: "Field", name: { kind: "Name", value: "rate" } },
-                            { kind: "Field", name: { kind: "Name", value: "chipAmount" } },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "id" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "rate" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "chipAmount" },
+                            },
                           ],
                         },
                       },
@@ -2431,9 +2723,18 @@ export const CreateMahjongSessionDocument = {
                         selectionSet: {
                           kind: "SelectionSet",
                           selections: [
-                            { kind: "Field", name: { kind: "Name", value: "id" } },
-                            { kind: "Field", name: { kind: "Name", value: "name" } },
-                            { kind: "Field", name: { kind: "Name", value: "userId" } },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "id" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "name" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "userId" },
+                            },
                           ],
                         },
                       },
@@ -2443,16 +2744,31 @@ export const CreateMahjongSessionDocument = {
                         selectionSet: {
                           kind: "SelectionSet",
                           selections: [
-                            { kind: "Field", name: { kind: "Name", value: "id" } },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "id" },
+                            },
                             {
                               kind: "Field",
                               name: { kind: "Name", value: "mahjongResults" },
                               selectionSet: {
                                 kind: "SelectionSet",
                                 selections: [
-                                  { kind: "Field", name: { kind: "Name", value: "id" } },
-                                  { kind: "Field", name: { kind: "Name", value: "ranking" } },
-                                  { kind: "Field", name: { kind: "Name", value: "resultPoints" } },
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "id" },
+                                  },
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "ranking" },
+                                  },
+                                  {
+                                    kind: "Field",
+                                    name: {
+                                      kind: "Name",
+                                      value: "resultPoints",
+                                    },
+                                  },
                                 ],
                               },
                             },
@@ -2469,7 +2785,10 @@ export const CreateMahjongSessionDocument = {
       },
     },
   ],
-} as unknown as DocumentNode<CreateMahjongSessionMutation, CreateMahjongSessionMutationVariables>;
+} as unknown as DocumentNode<
+  CreateMahjongSessionMutation,
+  CreateMahjongSessionMutationVariables
+>;
 export const ParticipatedMahjongSessionDocument = {
   kind: "Document",
   definitions: [
@@ -2497,7 +2816,10 @@ export const ParticipatedMahjongSessionDocument = {
               {
                 kind: "Argument",
                 name: { kind: "Name", value: "id" },
-                value: { kind: "Variable", name: { kind: "Name", value: "id" } },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "id" },
+                },
               },
             ],
             selectionSet: {
@@ -2513,7 +2835,10 @@ export const ParticipatedMahjongSessionDocument = {
                     selections: [
                       { kind: "Field", name: { kind: "Name", value: "id" } },
                       { kind: "Field", name: { kind: "Name", value: "name" } },
-                      { kind: "Field", name: { kind: "Name", value: "avatarUrl" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "avatarUrl" },
+                      },
                     ],
                   },
                 },
@@ -2525,9 +2850,18 @@ export const ParticipatedMahjongSessionDocument = {
                     selections: [
                       { kind: "Field", name: { kind: "Name", value: "id" } },
                       { kind: "Field", name: { kind: "Name", value: "rate" } },
-                      { kind: "Field", name: { kind: "Name", value: "chipAmount" } },
-                      { kind: "Field", name: { kind: "Name", value: "umaRuleLabel" } },
-                      { kind: "Field", name: { kind: "Name", value: "okaRuleLabel" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "chipAmount" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "umaRuleLabel" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "okaRuleLabel" },
+                      },
                     ],
                   },
                 },
@@ -2538,20 +2872,41 @@ export const ParticipatedMahjongSessionDocument = {
                     kind: "SelectionSet",
                     selections: [
                       { kind: "Field", name: { kind: "Name", value: "id" } },
-                      { kind: "Field", name: { kind: "Name", value: "userId" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "userId" },
+                      },
                       { kind: "Field", name: { kind: "Name", value: "name" } },
-                      { kind: "Field", name: { kind: "Name", value: "averageRanking" } },
-                      { kind: "Field", name: { kind: "Name", value: "totalPoints" } },
-                      { kind: "Field", name: { kind: "Name", value: "totalProfits" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "averageRanking" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "totalPoints" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "totalProfits" },
+                      },
                       {
                         kind: "Field",
                         name: { kind: "Name", value: "user" },
                         selectionSet: {
                           kind: "SelectionSet",
                           selections: [
-                            { kind: "Field", name: { kind: "Name", value: "id" } },
-                            { kind: "Field", name: { kind: "Name", value: "name" } },
-                            { kind: "Field", name: { kind: "Name", value: "avatarUrl" } },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "id" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "name" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "avatarUrl" },
+                            },
                           ],
                         },
                       },
@@ -2571,13 +2926,28 @@ export const ParticipatedMahjongSessionDocument = {
                         selectionSet: {
                           kind: "SelectionSet",
                           selections: [
-                            { kind: "Field", name: { kind: "Name", value: "id" } },
-                            { kind: "Field", name: { kind: "Name", value: "ranking" } },
-                            { kind: "Field", name: { kind: "Name", value: "score" } },
-                            { kind: "Field", name: { kind: "Name", value: "resultPoints" } },
                             {
                               kind: "Field",
-                              name: { kind: "Name", value: "mahjongParticipantId" },
+                              name: { kind: "Name", value: "id" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "ranking" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "score" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "resultPoints" },
+                            },
+                            {
+                              kind: "Field",
+                              name: {
+                                kind: "Name",
+                                value: "mahjongParticipantId",
+                              },
                             },
                           ],
                         },
@@ -2608,12 +2978,18 @@ export const ParticipatedMahjongSessionsDocument = {
       variableDefinitions: [
         {
           kind: "VariableDefinition",
-          variable: { kind: "Variable", name: { kind: "Name", value: "after" } },
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "after" },
+          },
           type: { kind: "NamedType", name: { kind: "Name", value: "String" } },
         },
         {
           kind: "VariableDefinition",
-          variable: { kind: "Variable", name: { kind: "Name", value: "first" } },
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "first" },
+          },
           type: { kind: "NamedType", name: { kind: "Name", value: "Int" } },
         },
       ],
@@ -2627,12 +3003,18 @@ export const ParticipatedMahjongSessionsDocument = {
               {
                 kind: "Argument",
                 name: { kind: "Name", value: "after" },
-                value: { kind: "Variable", name: { kind: "Name", value: "after" } },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "after" },
+                },
               },
               {
                 kind: "Argument",
                 name: { kind: "Name", value: "first" },
-                value: { kind: "Variable", name: { kind: "Name", value: "first" } },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "first" },
+                },
               },
             ],
             selectionSet: {
@@ -2650,34 +3032,82 @@ export const ParticipatedMahjongSessionsDocument = {
                         selectionSet: {
                           kind: "SelectionSet",
                           selections: [
-                            { kind: "Field", name: { kind: "Name", value: "id" } },
-                            { kind: "Field", name: { kind: "Name", value: "name" } },
-                            { kind: "Field", name: { kind: "Name", value: "totalGameFee" } },
-                            { kind: "Field", name: { kind: "Name", value: "myTotalPoints" } },
-                            { kind: "Field", name: { kind: "Name", value: "myAverageRanking" } },
-                            { kind: "Field", name: { kind: "Name", value: "myTotalProfits" } },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "id" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "name" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "totalGameFee" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "myTotalPoints" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "myAverageRanking" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "myTotalProfits" },
+                            },
                             {
                               kind: "Field",
                               name: { kind: "Name", value: "creatorUser" },
                               selectionSet: {
                                 kind: "SelectionSet",
                                 selections: [
-                                  { kind: "Field", name: { kind: "Name", value: "id" } },
-                                  { kind: "Field", name: { kind: "Name", value: "name" } },
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "id" },
+                                  },
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "name" },
+                                  },
                                 ],
                               },
                             },
                             {
                               kind: "Field",
-                              name: { kind: "Name", value: "mahjongScoringSetting" },
+                              name: {
+                                kind: "Name",
+                                value: "mahjongScoringSetting",
+                              },
                               selectionSet: {
                                 kind: "SelectionSet",
                                 selections: [
-                                  { kind: "Field", name: { kind: "Name", value: "id" } },
-                                  { kind: "Field", name: { kind: "Name", value: "rate" } },
-                                  { kind: "Field", name: { kind: "Name", value: "chipAmount" } },
-                                  { kind: "Field", name: { kind: "Name", value: "umaRuleLabel" } },
-                                  { kind: "Field", name: { kind: "Name", value: "okaRuleLabel" } },
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "id" },
+                                  },
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "rate" },
+                                  },
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "chipAmount" },
+                                  },
+                                  {
+                                    kind: "Field",
+                                    name: {
+                                      kind: "Name",
+                                      value: "umaRuleLabel",
+                                    },
+                                  },
+                                  {
+                                    kind: "Field",
+                                    name: {
+                                      kind: "Name",
+                                      value: "okaRuleLabel",
+                                    },
+                                  },
                                 ],
                               },
                             },
@@ -2687,17 +3117,32 @@ export const ParticipatedMahjongSessionsDocument = {
                               selectionSet: {
                                 kind: "SelectionSet",
                                 selections: [
-                                  { kind: "Field", name: { kind: "Name", value: "id" } },
-                                  { kind: "Field", name: { kind: "Name", value: "name" } },
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "id" },
+                                  },
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "name" },
+                                  },
                                 ],
                               },
                             },
-                            { kind: "Field", name: { kind: "Name", value: "createdAt" } },
-                            { kind: "Field", name: { kind: "Name", value: "updatedAt" } },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "createdAt" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "updatedAt" },
+                            },
                           ],
                         },
                       },
-                      { kind: "Field", name: { kind: "Name", value: "cursor" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "cursor" },
+                      },
                     ],
                   },
                 },
@@ -2707,10 +3152,22 @@ export const ParticipatedMahjongSessionsDocument = {
                   selectionSet: {
                     kind: "SelectionSet",
                     selections: [
-                      { kind: "Field", name: { kind: "Name", value: "hasNextPage" } },
-                      { kind: "Field", name: { kind: "Name", value: "hasPreviousPage" } },
-                      { kind: "Field", name: { kind: "Name", value: "startCursor" } },
-                      { kind: "Field", name: { kind: "Name", value: "endCursor" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "hasNextPage" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "hasPreviousPage" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "startCursor" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "endCursor" },
+                      },
                     ],
                   },
                 },
@@ -2735,12 +3192,18 @@ export const VotedWhatToDiscardProblemsDocument = {
       variableDefinitions: [
         {
           kind: "VariableDefinition",
-          variable: { kind: "Variable", name: { kind: "Name", value: "after" } },
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "after" },
+          },
           type: { kind: "NamedType", name: { kind: "Name", value: "String" } },
         },
         {
           kind: "VariableDefinition",
-          variable: { kind: "Variable", name: { kind: "Name", value: "first" } },
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "first" },
+          },
           type: { kind: "NamedType", name: { kind: "Name", value: "Int" } },
         },
       ],
@@ -2754,12 +3217,18 @@ export const VotedWhatToDiscardProblemsDocument = {
               {
                 kind: "Argument",
                 name: { kind: "Name", value: "after" },
-                value: { kind: "Variable", name: { kind: "Name", value: "after" } },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "after" },
+                },
               },
               {
                 kind: "Argument",
                 name: { kind: "Name", value: "first" },
-                value: { kind: "Variable", name: { kind: "Name", value: "first" } },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "first" },
+                },
               },
             ],
             selectionSet: {
@@ -2777,62 +3246,182 @@ export const VotedWhatToDiscardProblemsDocument = {
                         selectionSet: {
                           kind: "SelectionSet",
                           selections: [
-                            { kind: "Field", name: { kind: "Name", value: "id" } },
-                            { kind: "Field", name: { kind: "Name", value: "round" } },
-                            { kind: "Field", name: { kind: "Name", value: "turn" } },
-                            { kind: "Field", name: { kind: "Name", value: "wind" } },
-                            { kind: "Field", name: { kind: "Name", value: "points" } },
-                            { kind: "Field", name: { kind: "Name", value: "description" } },
-                            { kind: "Field", name: { kind: "Name", value: "votesCount" } },
-                            { kind: "Field", name: { kind: "Name", value: "commentsCount" } },
-                            { kind: "Field", name: { kind: "Name", value: "likesCount" } },
-                            { kind: "Field", name: { kind: "Name", value: "doraId" } },
-                            { kind: "Field", name: { kind: "Name", value: "hand1Id" } },
-                            { kind: "Field", name: { kind: "Name", value: "hand2Id" } },
-                            { kind: "Field", name: { kind: "Name", value: "hand3Id" } },
-                            { kind: "Field", name: { kind: "Name", value: "hand4Id" } },
-                            { kind: "Field", name: { kind: "Name", value: "hand5Id" } },
-                            { kind: "Field", name: { kind: "Name", value: "hand6Id" } },
-                            { kind: "Field", name: { kind: "Name", value: "hand7Id" } },
-                            { kind: "Field", name: { kind: "Name", value: "hand8Id" } },
-                            { kind: "Field", name: { kind: "Name", value: "hand9Id" } },
-                            { kind: "Field", name: { kind: "Name", value: "hand10Id" } },
-                            { kind: "Field", name: { kind: "Name", value: "hand11Id" } },
-                            { kind: "Field", name: { kind: "Name", value: "hand12Id" } },
-                            { kind: "Field", name: { kind: "Name", value: "hand13Id" } },
-                            { kind: "Field", name: { kind: "Name", value: "tsumoId" } },
-                            { kind: "Field", name: { kind: "Name", value: "createdAt" } },
-                            { kind: "Field", name: { kind: "Name", value: "updatedAt" } },
-                            { kind: "Field", name: { kind: "Name", value: "isLikedByMe" } },
-                            { kind: "Field", name: { kind: "Name", value: "myVoteTileId" } },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "id" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "round" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "turn" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "wind" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "points" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "description" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "votesCount" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "commentsCount" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "likesCount" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "doraId" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "hand1Id" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "hand2Id" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "hand3Id" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "hand4Id" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "hand5Id" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "hand6Id" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "hand7Id" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "hand8Id" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "hand9Id" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "hand10Id" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "hand11Id" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "hand12Id" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "hand13Id" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "tsumoId" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "createdAt" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "updatedAt" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "isLikedByMe" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "myVoteTileId" },
+                            },
                             {
                               kind: "Field",
                               name: { kind: "Name", value: "user" },
                               selectionSet: {
                                 kind: "SelectionSet",
                                 selections: [
-                                  { kind: "Field", name: { kind: "Name", value: "id" } },
-                                  { kind: "Field", name: { kind: "Name", value: "name" } },
-                                  { kind: "Field", name: { kind: "Name", value: "profileText" } },
-                                  { kind: "Field", name: { kind: "Name", value: "avatarUrl" } },
-                                  { kind: "Field", name: { kind: "Name", value: "isFollowing" } },
                                   {
                                     kind: "Field",
-                                    name: { kind: "Name", value: "followingCount" },
+                                    name: { kind: "Name", value: "id" },
                                   },
                                   {
                                     kind: "Field",
-                                    name: { kind: "Name", value: "followersCount" },
+                                    name: { kind: "Name", value: "name" },
                                   },
-                                  { kind: "Field", name: { kind: "Name", value: "createdAt" } },
-                                  { kind: "Field", name: { kind: "Name", value: "updatedAt" } },
+                                  {
+                                    kind: "Field",
+                                    name: {
+                                      kind: "Name",
+                                      value: "profileText",
+                                    },
+                                  },
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "avatarUrl" },
+                                  },
+                                  {
+                                    kind: "Field",
+                                    name: {
+                                      kind: "Name",
+                                      value: "isFollowing",
+                                    },
+                                  },
+                                  {
+                                    kind: "Field",
+                                    name: {
+                                      kind: "Name",
+                                      value: "followingCount",
+                                    },
+                                  },
+                                  {
+                                    kind: "Field",
+                                    name: {
+                                      kind: "Name",
+                                      value: "followersCount",
+                                    },
+                                  },
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "createdAt" },
+                                  },
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "updatedAt" },
+                                  },
                                 ],
                               },
                             },
                           ],
                         },
                       },
-                      { kind: "Field", name: { kind: "Name", value: "cursor" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "cursor" },
+                      },
                     ],
                   },
                 },
@@ -2842,10 +3431,22 @@ export const VotedWhatToDiscardProblemsDocument = {
                   selectionSet: {
                     kind: "SelectionSet",
                     selections: [
-                      { kind: "Field", name: { kind: "Name", value: "hasNextPage" } },
-                      { kind: "Field", name: { kind: "Name", value: "hasPreviousPage" } },
-                      { kind: "Field", name: { kind: "Name", value: "startCursor" } },
-                      { kind: "Field", name: { kind: "Name", value: "endCursor" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "hasNextPage" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "hasPreviousPage" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "startCursor" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "endCursor" },
+                      },
                     ],
                   },
                 },
@@ -2870,10 +3471,16 @@ export const CreateUserDocument = {
       variableDefinitions: [
         {
           kind: "VariableDefinition",
-          variable: { kind: "Variable", name: { kind: "Name", value: "input" } },
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "input" },
+          },
           type: {
             kind: "NonNullType",
-            type: { kind: "NamedType", name: { kind: "Name", value: "CreateUserInput" } },
+            type: {
+              kind: "NamedType",
+              name: { kind: "Name", value: "CreateUserInput" },
+            },
           },
         },
       ],
@@ -2887,7 +3494,10 @@ export const CreateUserDocument = {
               {
                 kind: "Argument",
                 name: { kind: "Name", value: "input" },
-                value: { kind: "Variable", name: { kind: "Name", value: "input" } },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "input" },
+                },
               },
             ],
             selectionSet: {
@@ -2902,13 +3512,34 @@ export const CreateUserDocument = {
                       { kind: "Field", name: { kind: "Name", value: "id" } },
                       { kind: "Field", name: { kind: "Name", value: "name" } },
                       { kind: "Field", name: { kind: "Name", value: "email" } },
-                      { kind: "Field", name: { kind: "Name", value: "profileText" } },
-                      { kind: "Field", name: { kind: "Name", value: "avatarUrl" } },
-                      { kind: "Field", name: { kind: "Name", value: "isFollowing" } },
-                      { kind: "Field", name: { kind: "Name", value: "followingCount" } },
-                      { kind: "Field", name: { kind: "Name", value: "followersCount" } },
-                      { kind: "Field", name: { kind: "Name", value: "createdAt" } },
-                      { kind: "Field", name: { kind: "Name", value: "updatedAt" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "profileText" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "avatarUrl" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "isFollowing" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "followingCount" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "followersCount" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "createdAt" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "updatedAt" },
+                      },
                     ],
                   },
                 },
@@ -2946,13 +3577,34 @@ export const CurrentUserProfileDocument = {
                       { kind: "Field", name: { kind: "Name", value: "id" } },
                       { kind: "Field", name: { kind: "Name", value: "name" } },
                       { kind: "Field", name: { kind: "Name", value: "email" } },
-                      { kind: "Field", name: { kind: "Name", value: "profileText" } },
-                      { kind: "Field", name: { kind: "Name", value: "avatarUrl" } },
-                      { kind: "Field", name: { kind: "Name", value: "isFollowing" } },
-                      { kind: "Field", name: { kind: "Name", value: "followingCount" } },
-                      { kind: "Field", name: { kind: "Name", value: "followersCount" } },
-                      { kind: "Field", name: { kind: "Name", value: "createdAt" } },
-                      { kind: "Field", name: { kind: "Name", value: "updatedAt" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "profileText" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "avatarUrl" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "isFollowing" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "followingCount" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "followersCount" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "createdAt" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "updatedAt" },
+                      },
                     ],
                   },
                 },
@@ -2963,7 +3615,10 @@ export const CurrentUserProfileDocument = {
       },
     },
   ],
-} as unknown as DocumentNode<CurrentUserProfileQuery, CurrentUserProfileQueryVariables>;
+} as unknown as DocumentNode<
+  CurrentUserProfileQuery,
+  CurrentUserProfileQueryVariables
+>;
 export const UpdateUserDocument = {
   kind: "Document",
   definitions: [
@@ -2974,10 +3629,16 @@ export const UpdateUserDocument = {
       variableDefinitions: [
         {
           kind: "VariableDefinition",
-          variable: { kind: "Variable", name: { kind: "Name", value: "input" } },
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "input" },
+          },
           type: {
             kind: "NonNullType",
-            type: { kind: "NamedType", name: { kind: "Name", value: "UpdateUserInput" } },
+            type: {
+              kind: "NamedType",
+              name: { kind: "Name", value: "UpdateUserInput" },
+            },
           },
         },
       ],
@@ -2991,7 +3652,10 @@ export const UpdateUserDocument = {
               {
                 kind: "Argument",
                 name: { kind: "Name", value: "input" },
-                value: { kind: "Variable", name: { kind: "Name", value: "input" } },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "input" },
+                },
               },
             ],
             selectionSet: {
@@ -3006,13 +3670,34 @@ export const UpdateUserDocument = {
                       { kind: "Field", name: { kind: "Name", value: "id" } },
                       { kind: "Field", name: { kind: "Name", value: "name" } },
                       { kind: "Field", name: { kind: "Name", value: "email" } },
-                      { kind: "Field", name: { kind: "Name", value: "profileText" } },
-                      { kind: "Field", name: { kind: "Name", value: "avatarUrl" } },
-                      { kind: "Field", name: { kind: "Name", value: "isFollowing" } },
-                      { kind: "Field", name: { kind: "Name", value: "followingCount" } },
-                      { kind: "Field", name: { kind: "Name", value: "followersCount" } },
-                      { kind: "Field", name: { kind: "Name", value: "createdAt" } },
-                      { kind: "Field", name: { kind: "Name", value: "updatedAt" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "profileText" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "avatarUrl" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "isFollowing" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "followingCount" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "followersCount" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "createdAt" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "updatedAt" },
+                      },
                     ],
                   },
                 },
@@ -3034,10 +3719,16 @@ export const UpdateUserProfileDocument = {
       variableDefinitions: [
         {
           kind: "VariableDefinition",
-          variable: { kind: "Variable", name: { kind: "Name", value: "input" } },
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "input" },
+          },
           type: {
             kind: "NonNullType",
-            type: { kind: "NamedType", name: { kind: "Name", value: "UpdateUserInput" } },
+            type: {
+              kind: "NamedType",
+              name: { kind: "Name", value: "UpdateUserInput" },
+            },
           },
         },
       ],
@@ -3051,7 +3742,10 @@ export const UpdateUserProfileDocument = {
               {
                 kind: "Argument",
                 name: { kind: "Name", value: "input" },
-                value: { kind: "Variable", name: { kind: "Name", value: "input" } },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "input" },
+                },
               },
             ],
             selectionSet: {
@@ -3066,13 +3760,34 @@ export const UpdateUserProfileDocument = {
                       { kind: "Field", name: { kind: "Name", value: "id" } },
                       { kind: "Field", name: { kind: "Name", value: "name" } },
                       { kind: "Field", name: { kind: "Name", value: "email" } },
-                      { kind: "Field", name: { kind: "Name", value: "profileText" } },
-                      { kind: "Field", name: { kind: "Name", value: "avatarUrl" } },
-                      { kind: "Field", name: { kind: "Name", value: "isFollowing" } },
-                      { kind: "Field", name: { kind: "Name", value: "followingCount" } },
-                      { kind: "Field", name: { kind: "Name", value: "followersCount" } },
-                      { kind: "Field", name: { kind: "Name", value: "createdAt" } },
-                      { kind: "Field", name: { kind: "Name", value: "updatedAt" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "profileText" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "avatarUrl" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "isFollowing" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "followingCount" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "followersCount" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "createdAt" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "updatedAt" },
+                      },
                     ],
                   },
                 },
@@ -3083,7 +3798,10 @@ export const UpdateUserProfileDocument = {
       },
     },
   ],
-} as unknown as DocumentNode<UpdateUserProfileMutation, UpdateUserProfileMutationVariables>;
+} as unknown as DocumentNode<
+  UpdateUserProfileMutation,
+  UpdateUserProfileMutationVariables
+>;
 export const UserProfileDocument = {
   kind: "Document",
   definitions: [
@@ -3094,7 +3812,10 @@ export const UserProfileDocument = {
       variableDefinitions: [
         {
           kind: "VariableDefinition",
-          variable: { kind: "Variable", name: { kind: "Name", value: "userId" } },
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "userId" },
+          },
           type: {
             kind: "NonNullType",
             type: { kind: "NamedType", name: { kind: "Name", value: "ID" } },
@@ -3111,7 +3832,10 @@ export const UserProfileDocument = {
               {
                 kind: "Argument",
                 name: { kind: "Name", value: "id" },
-                value: { kind: "Variable", name: { kind: "Name", value: "userId" } },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "userId" },
+                },
               },
             ],
             selectionSet: {
@@ -3123,8 +3847,14 @@ export const UserProfileDocument = {
                 { kind: "Field", name: { kind: "Name", value: "profileText" } },
                 { kind: "Field", name: { kind: "Name", value: "avatarUrl" } },
                 { kind: "Field", name: { kind: "Name", value: "isFollowing" } },
-                { kind: "Field", name: { kind: "Name", value: "followingCount" } },
-                { kind: "Field", name: { kind: "Name", value: "followersCount" } },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "followingCount" },
+                },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "followersCount" },
+                },
                 { kind: "Field", name: { kind: "Name", value: "createdAt" } },
                 { kind: "Field", name: { kind: "Name", value: "updatedAt" } },
               ],
@@ -3157,14 +3887,19 @@ export const WithdrawUserDocument = {
             ],
             selectionSet: {
               kind: "SelectionSet",
-              selections: [{ kind: "Field", name: { kind: "Name", value: "success" } }],
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "success" } },
+              ],
             },
           },
         ],
       },
     },
   ],
-} as unknown as DocumentNode<WithdrawUserMutation, WithdrawUserMutationVariables>;
+} as unknown as DocumentNode<
+  WithdrawUserMutation,
+  WithdrawUserMutationVariables
+>;
 export const WithdrawalSummaryDocument = {
   kind: "Document",
   definitions: [
@@ -3191,13 +3926,34 @@ export const WithdrawalSummaryDocument = {
                       { kind: "Field", name: { kind: "Name", value: "id" } },
                       { kind: "Field", name: { kind: "Name", value: "name" } },
                       { kind: "Field", name: { kind: "Name", value: "email" } },
-                      { kind: "Field", name: { kind: "Name", value: "profileText" } },
-                      { kind: "Field", name: { kind: "Name", value: "avatarUrl" } },
-                      { kind: "Field", name: { kind: "Name", value: "isFollowing" } },
-                      { kind: "Field", name: { kind: "Name", value: "followingCount" } },
-                      { kind: "Field", name: { kind: "Name", value: "followersCount" } },
-                      { kind: "Field", name: { kind: "Name", value: "createdAt" } },
-                      { kind: "Field", name: { kind: "Name", value: "updatedAt" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "profileText" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "avatarUrl" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "isFollowing" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "followingCount" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "followersCount" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "createdAt" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "updatedAt" },
+                      },
                     ],
                   },
                 },
@@ -3208,7 +3964,10 @@ export const WithdrawalSummaryDocument = {
       },
     },
   ],
-} as unknown as DocumentNode<WithdrawalSummaryQuery, WithdrawalSummaryQueryVariables>;
+} as unknown as DocumentNode<
+  WithdrawalSummaryQuery,
+  WithdrawalSummaryQueryVariables
+>;
 export const CommentRepliesDocument = {
   kind: "Document",
   definitions: [
@@ -3219,7 +3978,10 @@ export const CommentRepliesDocument = {
       variableDefinitions: [
         {
           kind: "VariableDefinition",
-          variable: { kind: "Variable", name: { kind: "Name", value: "parentCommentId" } },
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "parentCommentId" },
+          },
           type: {
             kind: "NonNullType",
             type: { kind: "NamedType", name: { kind: "Name", value: "ID" } },
@@ -3227,7 +3989,10 @@ export const CommentRepliesDocument = {
         },
         {
           kind: "VariableDefinition",
-          variable: { kind: "Variable", name: { kind: "Name", value: "problemId" } },
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "problemId" },
+          },
           type: {
             kind: "NonNullType",
             type: { kind: "NamedType", name: { kind: "Name", value: "ID" } },
@@ -3235,12 +4000,18 @@ export const CommentRepliesDocument = {
         },
         {
           kind: "VariableDefinition",
-          variable: { kind: "Variable", name: { kind: "Name", value: "first" } },
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "first" },
+          },
           type: { kind: "NamedType", name: { kind: "Name", value: "Int" } },
         },
         {
           kind: "VariableDefinition",
-          variable: { kind: "Variable", name: { kind: "Name", value: "after" } },
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "after" },
+          },
           type: { kind: "NamedType", name: { kind: "Name", value: "String" } },
         },
       ],
@@ -3254,22 +4025,34 @@ export const CommentRepliesDocument = {
               {
                 kind: "Argument",
                 name: { kind: "Name", value: "parentCommentId" },
-                value: { kind: "Variable", name: { kind: "Name", value: "parentCommentId" } },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "parentCommentId" },
+                },
               },
               {
                 kind: "Argument",
                 name: { kind: "Name", value: "problemId" },
-                value: { kind: "Variable", name: { kind: "Name", value: "problemId" } },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "problemId" },
+                },
               },
               {
                 kind: "Argument",
                 name: { kind: "Name", value: "first" },
-                value: { kind: "Variable", name: { kind: "Name", value: "first" } },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "first" },
+                },
               },
               {
                 kind: "Argument",
                 name: { kind: "Name", value: "after" },
-                value: { kind: "Variable", name: { kind: "Name", value: "after" } },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "after" },
+                },
               },
             ],
             selectionSet: {
@@ -3287,42 +4070,102 @@ export const CommentRepliesDocument = {
                         selectionSet: {
                           kind: "SelectionSet",
                           selections: [
-                            { kind: "Field", name: { kind: "Name", value: "id" } },
-                            { kind: "Field", name: { kind: "Name", value: "content" } },
-                            { kind: "Field", name: { kind: "Name", value: "userId" } },
-                            { kind: "Field", name: { kind: "Name", value: "parentCommentId" } },
-                            { kind: "Field", name: { kind: "Name", value: "repliesCount" } },
-                            { kind: "Field", name: { kind: "Name", value: "createdAt" } },
-                            { kind: "Field", name: { kind: "Name", value: "updatedAt" } },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "id" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "content" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "userId" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "parentCommentId" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "repliesCount" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "createdAt" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "updatedAt" },
+                            },
                             {
                               kind: "Field",
                               name: { kind: "Name", value: "user" },
                               selectionSet: {
                                 kind: "SelectionSet",
                                 selections: [
-                                  { kind: "Field", name: { kind: "Name", value: "id" } },
-                                  { kind: "Field", name: { kind: "Name", value: "name" } },
-                                  { kind: "Field", name: { kind: "Name", value: "email" } },
-                                  { kind: "Field", name: { kind: "Name", value: "profileText" } },
-                                  { kind: "Field", name: { kind: "Name", value: "avatarUrl" } },
-                                  { kind: "Field", name: { kind: "Name", value: "isFollowing" } },
                                   {
                                     kind: "Field",
-                                    name: { kind: "Name", value: "followingCount" },
+                                    name: { kind: "Name", value: "id" },
                                   },
                                   {
                                     kind: "Field",
-                                    name: { kind: "Name", value: "followersCount" },
+                                    name: { kind: "Name", value: "name" },
                                   },
-                                  { kind: "Field", name: { kind: "Name", value: "createdAt" } },
-                                  { kind: "Field", name: { kind: "Name", value: "updatedAt" } },
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "email" },
+                                  },
+                                  {
+                                    kind: "Field",
+                                    name: {
+                                      kind: "Name",
+                                      value: "profileText",
+                                    },
+                                  },
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "avatarUrl" },
+                                  },
+                                  {
+                                    kind: "Field",
+                                    name: {
+                                      kind: "Name",
+                                      value: "isFollowing",
+                                    },
+                                  },
+                                  {
+                                    kind: "Field",
+                                    name: {
+                                      kind: "Name",
+                                      value: "followingCount",
+                                    },
+                                  },
+                                  {
+                                    kind: "Field",
+                                    name: {
+                                      kind: "Name",
+                                      value: "followersCount",
+                                    },
+                                  },
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "createdAt" },
+                                  },
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "updatedAt" },
+                                  },
                                 ],
                               },
                             },
                           ],
                         },
                       },
-                      { kind: "Field", name: { kind: "Name", value: "cursor" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "cursor" },
+                      },
                     ],
                   },
                 },
@@ -3332,10 +4175,22 @@ export const CommentRepliesDocument = {
                   selectionSet: {
                     kind: "SelectionSet",
                     selections: [
-                      { kind: "Field", name: { kind: "Name", value: "hasNextPage" } },
-                      { kind: "Field", name: { kind: "Name", value: "hasPreviousPage" } },
-                      { kind: "Field", name: { kind: "Name", value: "startCursor" } },
-                      { kind: "Field", name: { kind: "Name", value: "endCursor" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "hasNextPage" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "hasPreviousPage" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "startCursor" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "endCursor" },
+                      },
                     ],
                   },
                 },
@@ -3357,7 +4212,10 @@ export const CreateCommentDocument = {
       variableDefinitions: [
         {
           kind: "VariableDefinition",
-          variable: { kind: "Variable", name: { kind: "Name", value: "whatToDiscardProblemId" } },
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "whatToDiscardProblemId" },
+          },
           type: {
             kind: "NonNullType",
             type: { kind: "NamedType", name: { kind: "Name", value: "ID" } },
@@ -3365,15 +4223,24 @@ export const CreateCommentDocument = {
         },
         {
           kind: "VariableDefinition",
-          variable: { kind: "Variable", name: { kind: "Name", value: "content" } },
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "content" },
+          },
           type: {
             kind: "NonNullType",
-            type: { kind: "NamedType", name: { kind: "Name", value: "String" } },
+            type: {
+              kind: "NamedType",
+              name: { kind: "Name", value: "String" },
+            },
           },
         },
         {
           kind: "VariableDefinition",
-          variable: { kind: "Variable", name: { kind: "Name", value: "parentCommentId" } },
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "parentCommentId" },
+          },
           type: { kind: "NamedType", name: { kind: "Name", value: "ID" } },
         },
       ],
@@ -3401,12 +4268,18 @@ export const CreateCommentDocument = {
                     {
                       kind: "ObjectField",
                       name: { kind: "Name", value: "content" },
-                      value: { kind: "Variable", name: { kind: "Name", value: "content" } },
+                      value: {
+                        kind: "Variable",
+                        name: { kind: "Name", value: "content" },
+                      },
                     },
                     {
                       kind: "ObjectField",
                       name: { kind: "Name", value: "parentCommentId" },
-                      value: { kind: "Variable", name: { kind: "Name", value: "parentCommentId" } },
+                      value: {
+                        kind: "Variable",
+                        name: { kind: "Name", value: "parentCommentId" },
+                      },
                     },
                   ],
                 },
@@ -3422,28 +4295,76 @@ export const CreateCommentDocument = {
                     kind: "SelectionSet",
                     selections: [
                       { kind: "Field", name: { kind: "Name", value: "id" } },
-                      { kind: "Field", name: { kind: "Name", value: "content" } },
-                      { kind: "Field", name: { kind: "Name", value: "userId" } },
-                      { kind: "Field", name: { kind: "Name", value: "parentCommentId" } },
-                      { kind: "Field", name: { kind: "Name", value: "repliesCount" } },
-                      { kind: "Field", name: { kind: "Name", value: "createdAt" } },
-                      { kind: "Field", name: { kind: "Name", value: "updatedAt" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "content" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "userId" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "parentCommentId" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "repliesCount" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "createdAt" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "updatedAt" },
+                      },
                       {
                         kind: "Field",
                         name: { kind: "Name", value: "user" },
                         selectionSet: {
                           kind: "SelectionSet",
                           selections: [
-                            { kind: "Field", name: { kind: "Name", value: "id" } },
-                            { kind: "Field", name: { kind: "Name", value: "name" } },
-                            { kind: "Field", name: { kind: "Name", value: "email" } },
-                            { kind: "Field", name: { kind: "Name", value: "profileText" } },
-                            { kind: "Field", name: { kind: "Name", value: "avatarUrl" } },
-                            { kind: "Field", name: { kind: "Name", value: "isFollowing" } },
-                            { kind: "Field", name: { kind: "Name", value: "followingCount" } },
-                            { kind: "Field", name: { kind: "Name", value: "followersCount" } },
-                            { kind: "Field", name: { kind: "Name", value: "createdAt" } },
-                            { kind: "Field", name: { kind: "Name", value: "updatedAt" } },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "id" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "name" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "email" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "profileText" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "avatarUrl" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "isFollowing" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "followingCount" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "followersCount" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "createdAt" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "updatedAt" },
+                            },
                           ],
                         },
                       },
@@ -3457,7 +4378,10 @@ export const CreateCommentDocument = {
       },
     },
   ],
-} as unknown as DocumentNode<CreateCommentMutation, CreateCommentMutationVariables>;
+} as unknown as DocumentNode<
+  CreateCommentMutation,
+  CreateCommentMutationVariables
+>;
 export const DeleteCommentDocument = {
   kind: "Document",
   definitions: [
@@ -3468,7 +4392,10 @@ export const DeleteCommentDocument = {
       variableDefinitions: [
         {
           kind: "VariableDefinition",
-          variable: { kind: "Variable", name: { kind: "Name", value: "commentId" } },
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "commentId" },
+          },
           type: {
             kind: "NonNullType",
             type: { kind: "NamedType", name: { kind: "Name", value: "ID" } },
@@ -3491,7 +4418,10 @@ export const DeleteCommentDocument = {
                     {
                       kind: "ObjectField",
                       name: { kind: "Name", value: "commentId" },
-                      value: { kind: "Variable", name: { kind: "Name", value: "commentId" } },
+                      value: {
+                        kind: "Variable",
+                        name: { kind: "Name", value: "commentId" },
+                      },
                     },
                   ],
                 },
@@ -3499,14 +4429,19 @@ export const DeleteCommentDocument = {
             ],
             selectionSet: {
               kind: "SelectionSet",
-              selections: [{ kind: "Field", name: { kind: "Name", value: "id" } }],
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "id" } },
+              ],
             },
           },
         ],
       },
     },
   ],
-} as unknown as DocumentNode<DeleteCommentMutation, DeleteCommentMutationVariables>;
+} as unknown as DocumentNode<
+  DeleteCommentMutation,
+  DeleteCommentMutationVariables
+>;
 export const ParentCommentsDocument = {
   kind: "Document",
   definitions: [
@@ -3517,7 +4452,10 @@ export const ParentCommentsDocument = {
       variableDefinitions: [
         {
           kind: "VariableDefinition",
-          variable: { kind: "Variable", name: { kind: "Name", value: "whatToDiscardProblemId" } },
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "whatToDiscardProblemId" },
+          },
           type: {
             kind: "NonNullType",
             type: { kind: "NamedType", name: { kind: "Name", value: "ID" } },
@@ -3525,12 +4463,18 @@ export const ParentCommentsDocument = {
         },
         {
           kind: "VariableDefinition",
-          variable: { kind: "Variable", name: { kind: "Name", value: "first" } },
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "first" },
+          },
           type: { kind: "NamedType", name: { kind: "Name", value: "Int" } },
         },
         {
           kind: "VariableDefinition",
-          variable: { kind: "Variable", name: { kind: "Name", value: "after" } },
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "after" },
+          },
           type: { kind: "NamedType", name: { kind: "Name", value: "String" } },
         },
       ],
@@ -3552,12 +4496,18 @@ export const ParentCommentsDocument = {
               {
                 kind: "Argument",
                 name: { kind: "Name", value: "first" },
-                value: { kind: "Variable", name: { kind: "Name", value: "first" } },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "first" },
+                },
               },
               {
                 kind: "Argument",
                 name: { kind: "Name", value: "after" },
-                value: { kind: "Variable", name: { kind: "Name", value: "after" } },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "after" },
+                },
               },
             ],
             selectionSet: {
@@ -3575,42 +4525,102 @@ export const ParentCommentsDocument = {
                         selectionSet: {
                           kind: "SelectionSet",
                           selections: [
-                            { kind: "Field", name: { kind: "Name", value: "id" } },
-                            { kind: "Field", name: { kind: "Name", value: "content" } },
-                            { kind: "Field", name: { kind: "Name", value: "userId" } },
-                            { kind: "Field", name: { kind: "Name", value: "parentCommentId" } },
-                            { kind: "Field", name: { kind: "Name", value: "repliesCount" } },
-                            { kind: "Field", name: { kind: "Name", value: "createdAt" } },
-                            { kind: "Field", name: { kind: "Name", value: "updatedAt" } },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "id" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "content" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "userId" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "parentCommentId" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "repliesCount" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "createdAt" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "updatedAt" },
+                            },
                             {
                               kind: "Field",
                               name: { kind: "Name", value: "user" },
                               selectionSet: {
                                 kind: "SelectionSet",
                                 selections: [
-                                  { kind: "Field", name: { kind: "Name", value: "id" } },
-                                  { kind: "Field", name: { kind: "Name", value: "name" } },
-                                  { kind: "Field", name: { kind: "Name", value: "email" } },
-                                  { kind: "Field", name: { kind: "Name", value: "profileText" } },
-                                  { kind: "Field", name: { kind: "Name", value: "avatarUrl" } },
-                                  { kind: "Field", name: { kind: "Name", value: "isFollowing" } },
                                   {
                                     kind: "Field",
-                                    name: { kind: "Name", value: "followingCount" },
+                                    name: { kind: "Name", value: "id" },
                                   },
                                   {
                                     kind: "Field",
-                                    name: { kind: "Name", value: "followersCount" },
+                                    name: { kind: "Name", value: "name" },
                                   },
-                                  { kind: "Field", name: { kind: "Name", value: "createdAt" } },
-                                  { kind: "Field", name: { kind: "Name", value: "updatedAt" } },
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "email" },
+                                  },
+                                  {
+                                    kind: "Field",
+                                    name: {
+                                      kind: "Name",
+                                      value: "profileText",
+                                    },
+                                  },
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "avatarUrl" },
+                                  },
+                                  {
+                                    kind: "Field",
+                                    name: {
+                                      kind: "Name",
+                                      value: "isFollowing",
+                                    },
+                                  },
+                                  {
+                                    kind: "Field",
+                                    name: {
+                                      kind: "Name",
+                                      value: "followingCount",
+                                    },
+                                  },
+                                  {
+                                    kind: "Field",
+                                    name: {
+                                      kind: "Name",
+                                      value: "followersCount",
+                                    },
+                                  },
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "createdAt" },
+                                  },
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "updatedAt" },
+                                  },
                                 ],
                               },
                             },
                           ],
                         },
                       },
-                      { kind: "Field", name: { kind: "Name", value: "cursor" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "cursor" },
+                      },
                     ],
                   },
                 },
@@ -3620,10 +4630,22 @@ export const ParentCommentsDocument = {
                   selectionSet: {
                     kind: "SelectionSet",
                     selections: [
-                      { kind: "Field", name: { kind: "Name", value: "hasNextPage" } },
-                      { kind: "Field", name: { kind: "Name", value: "hasPreviousPage" } },
-                      { kind: "Field", name: { kind: "Name", value: "startCursor" } },
-                      { kind: "Field", name: { kind: "Name", value: "endCursor" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "hasNextPage" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "hasPreviousPage" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "startCursor" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "endCursor" },
+                      },
                     ],
                   },
                 },
@@ -3645,7 +4667,10 @@ export const CreateWhatToDiscardProblemDocument = {
       variableDefinitions: [
         {
           kind: "VariableDefinition",
-          variable: { kind: "Variable", name: { kind: "Name", value: "input" } },
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "input" },
+          },
           type: {
             kind: "NonNullType",
             type: {
@@ -3665,7 +4690,10 @@ export const CreateWhatToDiscardProblemDocument = {
               {
                 kind: "Argument",
                 name: { kind: "Name", value: "input" },
-                value: { kind: "Variable", name: { kind: "Name", value: "input" } },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "input" },
+                },
               },
             ],
             selectionSet: {
@@ -3681,46 +4709,148 @@ export const CreateWhatToDiscardProblemDocument = {
                       { kind: "Field", name: { kind: "Name", value: "round" } },
                       { kind: "Field", name: { kind: "Name", value: "turn" } },
                       { kind: "Field", name: { kind: "Name", value: "wind" } },
-                      { kind: "Field", name: { kind: "Name", value: "points" } },
-                      { kind: "Field", name: { kind: "Name", value: "description" } },
-                      { kind: "Field", name: { kind: "Name", value: "votesCount" } },
-                      { kind: "Field", name: { kind: "Name", value: "commentsCount" } },
-                      { kind: "Field", name: { kind: "Name", value: "likesCount" } },
-                      { kind: "Field", name: { kind: "Name", value: "doraId" } },
-                      { kind: "Field", name: { kind: "Name", value: "hand1Id" } },
-                      { kind: "Field", name: { kind: "Name", value: "hand2Id" } },
-                      { kind: "Field", name: { kind: "Name", value: "hand3Id" } },
-                      { kind: "Field", name: { kind: "Name", value: "hand4Id" } },
-                      { kind: "Field", name: { kind: "Name", value: "hand5Id" } },
-                      { kind: "Field", name: { kind: "Name", value: "hand6Id" } },
-                      { kind: "Field", name: { kind: "Name", value: "hand7Id" } },
-                      { kind: "Field", name: { kind: "Name", value: "hand8Id" } },
-                      { kind: "Field", name: { kind: "Name", value: "hand9Id" } },
-                      { kind: "Field", name: { kind: "Name", value: "hand10Id" } },
-                      { kind: "Field", name: { kind: "Name", value: "hand11Id" } },
-                      { kind: "Field", name: { kind: "Name", value: "hand12Id" } },
-                      { kind: "Field", name: { kind: "Name", value: "hand13Id" } },
-                      { kind: "Field", name: { kind: "Name", value: "tsumoId" } },
-                      { kind: "Field", name: { kind: "Name", value: "isLikedByMe" } },
-                      { kind: "Field", name: { kind: "Name", value: "myVoteTileId" } },
-                      { kind: "Field", name: { kind: "Name", value: "createdAt" } },
-                      { kind: "Field", name: { kind: "Name", value: "updatedAt" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "points" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "description" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "votesCount" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "commentsCount" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "likesCount" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "doraId" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "hand1Id" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "hand2Id" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "hand3Id" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "hand4Id" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "hand5Id" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "hand6Id" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "hand7Id" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "hand8Id" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "hand9Id" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "hand10Id" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "hand11Id" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "hand12Id" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "hand13Id" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "tsumoId" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "isLikedByMe" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "myVoteTileId" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "createdAt" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "updatedAt" },
+                      },
                       {
                         kind: "Field",
                         name: { kind: "Name", value: "user" },
                         selectionSet: {
                           kind: "SelectionSet",
                           selections: [
-                            { kind: "Field", name: { kind: "Name", value: "id" } },
-                            { kind: "Field", name: { kind: "Name", value: "name" } },
-                            { kind: "Field", name: { kind: "Name", value: "email" } },
-                            { kind: "Field", name: { kind: "Name", value: "profileText" } },
-                            { kind: "Field", name: { kind: "Name", value: "avatarUrl" } },
-                            { kind: "Field", name: { kind: "Name", value: "isFollowing" } },
-                            { kind: "Field", name: { kind: "Name", value: "followingCount" } },
-                            { kind: "Field", name: { kind: "Name", value: "followersCount" } },
-                            { kind: "Field", name: { kind: "Name", value: "createdAt" } },
-                            { kind: "Field", name: { kind: "Name", value: "updatedAt" } },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "id" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "name" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "email" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "profileText" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "avatarUrl" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "isFollowing" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "followingCount" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "followersCount" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "createdAt" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "updatedAt" },
+                            },
                           ],
                         },
                       },
@@ -3748,7 +4878,10 @@ export const DeleteWhatToDiscardProblemDocument = {
       variableDefinitions: [
         {
           kind: "VariableDefinition",
-          variable: { kind: "Variable", name: { kind: "Name", value: "input" } },
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "input" },
+          },
           type: {
             kind: "NonNullType",
             type: {
@@ -3768,12 +4901,17 @@ export const DeleteWhatToDiscardProblemDocument = {
               {
                 kind: "Argument",
                 name: { kind: "Name", value: "input" },
-                value: { kind: "Variable", name: { kind: "Name", value: "input" } },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "input" },
+                },
               },
             ],
             selectionSet: {
               kind: "SelectionSet",
-              selections: [{ kind: "Field", name: { kind: "Name", value: "id" } }],
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "id" } },
+              ],
             },
           },
         ],
@@ -3794,14 +4932,20 @@ export const LikedWhatToDiscardProblemIdsDocument = {
       variableDefinitions: [
         {
           kind: "VariableDefinition",
-          variable: { kind: "Variable", name: { kind: "Name", value: "whatToDiscardProblemIds" } },
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "whatToDiscardProblemIds" },
+          },
           type: {
             kind: "NonNullType",
             type: {
               kind: "ListType",
               type: {
                 kind: "NonNullType",
-                type: { kind: "NamedType", name: { kind: "Name", value: "ID" } },
+                type: {
+                  kind: "NamedType",
+                  name: { kind: "Name", value: "ID" },
+                },
               },
             },
           },
@@ -3842,7 +4986,10 @@ export const CreateWhatToDiscardProblemLikeDocument = {
       variableDefinitions: [
         {
           kind: "VariableDefinition",
-          variable: { kind: "Variable", name: { kind: "Name", value: "problemId" } },
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "problemId" },
+          },
           type: {
             kind: "NonNullType",
             type: { kind: "NamedType", name: { kind: "Name", value: "ID" } },
@@ -3865,7 +5012,10 @@ export const CreateWhatToDiscardProblemLikeDocument = {
                     {
                       kind: "ObjectField",
                       name: { kind: "Name", value: "problemId" },
-                      value: { kind: "Variable", name: { kind: "Name", value: "problemId" } },
+                      value: {
+                        kind: "Variable",
+                        name: { kind: "Name", value: "problemId" },
+                      },
                     },
                   ],
                 },
@@ -3881,10 +5031,22 @@ export const CreateWhatToDiscardProblemLikeDocument = {
                     kind: "SelectionSet",
                     selections: [
                       { kind: "Field", name: { kind: "Name", value: "id" } },
-                      { kind: "Field", name: { kind: "Name", value: "userId" } },
-                      { kind: "Field", name: { kind: "Name", value: "likableId" } },
-                      { kind: "Field", name: { kind: "Name", value: "likableType" } },
-                      { kind: "Field", name: { kind: "Name", value: "createdAt" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "userId" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "likableId" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "likableType" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "createdAt" },
+                      },
                     ],
                   },
                 },
@@ -3909,7 +5071,10 @@ export const DeleteWhatToDiscardProblemLikeDocument = {
       variableDefinitions: [
         {
           kind: "VariableDefinition",
-          variable: { kind: "Variable", name: { kind: "Name", value: "whatToDiscardProblemId" } },
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "whatToDiscardProblemId" },
+          },
           type: {
             kind: "NonNullType",
             type: { kind: "NamedType", name: { kind: "Name", value: "ID" } },
@@ -3943,7 +5108,9 @@ export const DeleteWhatToDiscardProblemLikeDocument = {
             ],
             selectionSet: {
               kind: "SelectionSet",
-              selections: [{ kind: "Field", name: { kind: "Name", value: "id" } }],
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "id" } },
+              ],
             },
           },
         ],
@@ -3964,7 +5131,10 @@ export const UpdateWhatToDiscardProblemDocument = {
       variableDefinitions: [
         {
           kind: "VariableDefinition",
-          variable: { kind: "Variable", name: { kind: "Name", value: "input" } },
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "input" },
+          },
           type: {
             kind: "NonNullType",
             type: {
@@ -3984,7 +5154,10 @@ export const UpdateWhatToDiscardProblemDocument = {
               {
                 kind: "Argument",
                 name: { kind: "Name", value: "input" },
-                value: { kind: "Variable", name: { kind: "Name", value: "input" } },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "input" },
+                },
               },
             ],
             selectionSet: {
@@ -4000,46 +5173,148 @@ export const UpdateWhatToDiscardProblemDocument = {
                       { kind: "Field", name: { kind: "Name", value: "round" } },
                       { kind: "Field", name: { kind: "Name", value: "turn" } },
                       { kind: "Field", name: { kind: "Name", value: "wind" } },
-                      { kind: "Field", name: { kind: "Name", value: "points" } },
-                      { kind: "Field", name: { kind: "Name", value: "description" } },
-                      { kind: "Field", name: { kind: "Name", value: "votesCount" } },
-                      { kind: "Field", name: { kind: "Name", value: "commentsCount" } },
-                      { kind: "Field", name: { kind: "Name", value: "likesCount" } },
-                      { kind: "Field", name: { kind: "Name", value: "doraId" } },
-                      { kind: "Field", name: { kind: "Name", value: "hand1Id" } },
-                      { kind: "Field", name: { kind: "Name", value: "hand2Id" } },
-                      { kind: "Field", name: { kind: "Name", value: "hand3Id" } },
-                      { kind: "Field", name: { kind: "Name", value: "hand4Id" } },
-                      { kind: "Field", name: { kind: "Name", value: "hand5Id" } },
-                      { kind: "Field", name: { kind: "Name", value: "hand6Id" } },
-                      { kind: "Field", name: { kind: "Name", value: "hand7Id" } },
-                      { kind: "Field", name: { kind: "Name", value: "hand8Id" } },
-                      { kind: "Field", name: { kind: "Name", value: "hand9Id" } },
-                      { kind: "Field", name: { kind: "Name", value: "hand10Id" } },
-                      { kind: "Field", name: { kind: "Name", value: "hand11Id" } },
-                      { kind: "Field", name: { kind: "Name", value: "hand12Id" } },
-                      { kind: "Field", name: { kind: "Name", value: "hand13Id" } },
-                      { kind: "Field", name: { kind: "Name", value: "tsumoId" } },
-                      { kind: "Field", name: { kind: "Name", value: "isLikedByMe" } },
-                      { kind: "Field", name: { kind: "Name", value: "myVoteTileId" } },
-                      { kind: "Field", name: { kind: "Name", value: "createdAt" } },
-                      { kind: "Field", name: { kind: "Name", value: "updatedAt" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "points" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "description" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "votesCount" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "commentsCount" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "likesCount" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "doraId" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "hand1Id" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "hand2Id" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "hand3Id" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "hand4Id" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "hand5Id" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "hand6Id" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "hand7Id" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "hand8Id" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "hand9Id" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "hand10Id" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "hand11Id" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "hand12Id" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "hand13Id" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "tsumoId" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "isLikedByMe" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "myVoteTileId" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "createdAt" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "updatedAt" },
+                      },
                       {
                         kind: "Field",
                         name: { kind: "Name", value: "user" },
                         selectionSet: {
                           kind: "SelectionSet",
                           selections: [
-                            { kind: "Field", name: { kind: "Name", value: "id" } },
-                            { kind: "Field", name: { kind: "Name", value: "name" } },
-                            { kind: "Field", name: { kind: "Name", value: "email" } },
-                            { kind: "Field", name: { kind: "Name", value: "profileText" } },
-                            { kind: "Field", name: { kind: "Name", value: "avatarUrl" } },
-                            { kind: "Field", name: { kind: "Name", value: "isFollowing" } },
-                            { kind: "Field", name: { kind: "Name", value: "followingCount" } },
-                            { kind: "Field", name: { kind: "Name", value: "followersCount" } },
-                            { kind: "Field", name: { kind: "Name", value: "createdAt" } },
-                            { kind: "Field", name: { kind: "Name", value: "updatedAt" } },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "id" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "name" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "email" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "profileText" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "avatarUrl" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "isFollowing" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "followingCount" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "followersCount" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "createdAt" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "updatedAt" },
+                            },
                           ],
                         },
                       },
@@ -4067,14 +5342,20 @@ export const VotedTileIdsDocument = {
       variableDefinitions: [
         {
           kind: "VariableDefinition",
-          variable: { kind: "Variable", name: { kind: "Name", value: "whatToDiscardProblemIds" } },
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "whatToDiscardProblemIds" },
+          },
           type: {
             kind: "NonNullType",
             type: {
               kind: "ListType",
               type: {
                 kind: "NonNullType",
-                type: { kind: "NamedType", name: { kind: "Name", value: "ID" } },
+                type: {
+                  kind: "NamedType",
+                  name: { kind: "Name", value: "ID" },
+                },
               },
             },
           },
@@ -4100,7 +5381,10 @@ export const VotedTileIdsDocument = {
               kind: "SelectionSet",
               selections: [
                 { kind: "Field", name: { kind: "Name", value: "tileId" } },
-                { kind: "Field", name: { kind: "Name", value: "whatToDiscardProblemId" } },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "whatToDiscardProblemId" },
+                },
               ],
             },
           },
@@ -4119,7 +5403,10 @@ export const CreateWhatToDiscardProblemVoteDocument = {
       variableDefinitions: [
         {
           kind: "VariableDefinition",
-          variable: { kind: "Variable", name: { kind: "Name", value: "problemId" } },
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "problemId" },
+          },
           type: {
             kind: "NonNullType",
             type: { kind: "NamedType", name: { kind: "Name", value: "ID" } },
@@ -4127,7 +5414,10 @@ export const CreateWhatToDiscardProblemVoteDocument = {
         },
         {
           kind: "VariableDefinition",
-          variable: { kind: "Variable", name: { kind: "Name", value: "tileId" } },
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "tileId" },
+          },
           type: {
             kind: "NonNullType",
             type: { kind: "NamedType", name: { kind: "Name", value: "ID" } },
@@ -4150,12 +5440,18 @@ export const CreateWhatToDiscardProblemVoteDocument = {
                     {
                       kind: "ObjectField",
                       name: { kind: "Name", value: "problemId" },
-                      value: { kind: "Variable", name: { kind: "Name", value: "problemId" } },
+                      value: {
+                        kind: "Variable",
+                        name: { kind: "Name", value: "problemId" },
+                      },
                     },
                     {
                       kind: "ObjectField",
                       name: { kind: "Name", value: "tileId" },
-                      value: { kind: "Variable", name: { kind: "Name", value: "tileId" } },
+                      value: {
+                        kind: "Variable",
+                        name: { kind: "Name", value: "tileId" },
+                      },
                     },
                   ],
                 },
@@ -4171,21 +5467,51 @@ export const CreateWhatToDiscardProblemVoteDocument = {
                     kind: "SelectionSet",
                     selections: [
                       { kind: "Field", name: { kind: "Name", value: "id" } },
-                      { kind: "Field", name: { kind: "Name", value: "tileId" } },
-                      { kind: "Field", name: { kind: "Name", value: "whatToDiscardProblemId" } },
-                      { kind: "Field", name: { kind: "Name", value: "userId" } },
-                      { kind: "Field", name: { kind: "Name", value: "createdAt" } },
-                      { kind: "Field", name: { kind: "Name", value: "updatedAt" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "tileId" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "whatToDiscardProblemId" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "userId" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "createdAt" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "updatedAt" },
+                      },
                       {
                         kind: "Field",
                         name: { kind: "Name", value: "tile" },
                         selectionSet: {
                           kind: "SelectionSet",
                           selections: [
-                            { kind: "Field", name: { kind: "Name", value: "id" } },
-                            { kind: "Field", name: { kind: "Name", value: "suit" } },
-                            { kind: "Field", name: { kind: "Name", value: "name" } },
-                            { kind: "Field", name: { kind: "Name", value: "ordinalNumberInSuit" } },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "id" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "suit" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "name" },
+                            },
+                            {
+                              kind: "Field",
+                              name: {
+                                kind: "Name",
+                                value: "ordinalNumberInSuit",
+                              },
+                            },
                           ],
                         },
                       },
@@ -4213,7 +5539,10 @@ export const DeleteWhatToDiscardProblemVoteDocument = {
       variableDefinitions: [
         {
           kind: "VariableDefinition",
-          variable: { kind: "Variable", name: { kind: "Name", value: "whatToDiscardProblemId" } },
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "whatToDiscardProblemId" },
+          },
           type: {
             kind: "NonNullType",
             type: { kind: "NamedType", name: { kind: "Name", value: "ID" } },
@@ -4247,7 +5576,9 @@ export const DeleteWhatToDiscardProblemVoteDocument = {
             ],
             selectionSet: {
               kind: "SelectionSet",
-              selections: [{ kind: "Field", name: { kind: "Name", value: "id" } }],
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "id" } },
+              ],
             },
           },
         ],
@@ -4268,7 +5599,10 @@ export const WhatToDiscardProblemVoteResultDocument = {
       variableDefinitions: [
         {
           kind: "VariableDefinition",
-          variable: { kind: "Variable", name: { kind: "Name", value: "whatToDiscardProblemId" } },
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "whatToDiscardProblemId" },
+          },
           type: {
             kind: "NonNullType",
             type: { kind: "NamedType", name: { kind: "Name", value: "ID" } },
@@ -4335,7 +5669,10 @@ export const WhatToDiscardProblemDocument = {
               {
                 kind: "Argument",
                 name: { kind: "Name", value: "id" },
-                value: { kind: "Variable", name: { kind: "Name", value: "id" } },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "id" },
+                },
               },
             ],
             selectionSet: {
@@ -4348,7 +5685,10 @@ export const WhatToDiscardProblemDocument = {
                 { kind: "Field", name: { kind: "Name", value: "points" } },
                 { kind: "Field", name: { kind: "Name", value: "description" } },
                 { kind: "Field", name: { kind: "Name", value: "votesCount" } },
-                { kind: "Field", name: { kind: "Name", value: "commentsCount" } },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "commentsCount" },
+                },
                 { kind: "Field", name: { kind: "Name", value: "likesCount" } },
                 { kind: "Field", name: { kind: "Name", value: "doraId" } },
                 { kind: "Field", name: { kind: "Name", value: "hand1Id" } },
@@ -4376,13 +5716,34 @@ export const WhatToDiscardProblemDocument = {
                       { kind: "Field", name: { kind: "Name", value: "id" } },
                       { kind: "Field", name: { kind: "Name", value: "name" } },
                       { kind: "Field", name: { kind: "Name", value: "email" } },
-                      { kind: "Field", name: { kind: "Name", value: "profileText" } },
-                      { kind: "Field", name: { kind: "Name", value: "avatarUrl" } },
-                      { kind: "Field", name: { kind: "Name", value: "isFollowing" } },
-                      { kind: "Field", name: { kind: "Name", value: "followingCount" } },
-                      { kind: "Field", name: { kind: "Name", value: "followersCount" } },
-                      { kind: "Field", name: { kind: "Name", value: "createdAt" } },
-                      { kind: "Field", name: { kind: "Name", value: "updatedAt" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "profileText" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "avatarUrl" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "isFollowing" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "followingCount" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "followersCount" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "createdAt" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "updatedAt" },
+                      },
                     ],
                   },
                 },
@@ -4393,7 +5754,10 @@ export const WhatToDiscardProblemDocument = {
       },
     },
   ],
-} as unknown as DocumentNode<WhatToDiscardProblemQuery, WhatToDiscardProblemQueryVariables>;
+} as unknown as DocumentNode<
+  WhatToDiscardProblemQuery,
+  WhatToDiscardProblemQueryVariables
+>;
 export const WhatToDiscardProblemsDocument = {
   kind: "Document",
   definitions: [
@@ -4404,12 +5768,18 @@ export const WhatToDiscardProblemsDocument = {
       variableDefinitions: [
         {
           kind: "VariableDefinition",
-          variable: { kind: "Variable", name: { kind: "Name", value: "first" } },
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "first" },
+          },
           type: { kind: "NamedType", name: { kind: "Name", value: "Int" } },
         },
         {
           kind: "VariableDefinition",
-          variable: { kind: "Variable", name: { kind: "Name", value: "after" } },
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "after" },
+          },
           type: { kind: "NamedType", name: { kind: "Name", value: "String" } },
         },
       ],
@@ -4423,12 +5793,18 @@ export const WhatToDiscardProblemsDocument = {
               {
                 kind: "Argument",
                 name: { kind: "Name", value: "first" },
-                value: { kind: "Variable", name: { kind: "Name", value: "first" } },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "first" },
+                },
               },
               {
                 kind: "Argument",
                 name: { kind: "Name", value: "after" },
-                value: { kind: "Variable", name: { kind: "Name", value: "after" } },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "after" },
+                },
               },
             ],
             selectionSet: {
@@ -4446,62 +5822,182 @@ export const WhatToDiscardProblemsDocument = {
                         selectionSet: {
                           kind: "SelectionSet",
                           selections: [
-                            { kind: "Field", name: { kind: "Name", value: "id" } },
-                            { kind: "Field", name: { kind: "Name", value: "round" } },
-                            { kind: "Field", name: { kind: "Name", value: "turn" } },
-                            { kind: "Field", name: { kind: "Name", value: "wind" } },
-                            { kind: "Field", name: { kind: "Name", value: "points" } },
-                            { kind: "Field", name: { kind: "Name", value: "description" } },
-                            { kind: "Field", name: { kind: "Name", value: "votesCount" } },
-                            { kind: "Field", name: { kind: "Name", value: "commentsCount" } },
-                            { kind: "Field", name: { kind: "Name", value: "likesCount" } },
-                            { kind: "Field", name: { kind: "Name", value: "doraId" } },
-                            { kind: "Field", name: { kind: "Name", value: "hand1Id" } },
-                            { kind: "Field", name: { kind: "Name", value: "hand2Id" } },
-                            { kind: "Field", name: { kind: "Name", value: "hand3Id" } },
-                            { kind: "Field", name: { kind: "Name", value: "hand4Id" } },
-                            { kind: "Field", name: { kind: "Name", value: "hand5Id" } },
-                            { kind: "Field", name: { kind: "Name", value: "hand6Id" } },
-                            { kind: "Field", name: { kind: "Name", value: "hand7Id" } },
-                            { kind: "Field", name: { kind: "Name", value: "hand8Id" } },
-                            { kind: "Field", name: { kind: "Name", value: "hand9Id" } },
-                            { kind: "Field", name: { kind: "Name", value: "hand10Id" } },
-                            { kind: "Field", name: { kind: "Name", value: "hand11Id" } },
-                            { kind: "Field", name: { kind: "Name", value: "hand12Id" } },
-                            { kind: "Field", name: { kind: "Name", value: "hand13Id" } },
-                            { kind: "Field", name: { kind: "Name", value: "tsumoId" } },
-                            { kind: "Field", name: { kind: "Name", value: "createdAt" } },
-                            { kind: "Field", name: { kind: "Name", value: "updatedAt" } },
-                            { kind: "Field", name: { kind: "Name", value: "isLikedByMe" } },
-                            { kind: "Field", name: { kind: "Name", value: "myVoteTileId" } },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "id" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "round" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "turn" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "wind" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "points" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "description" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "votesCount" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "commentsCount" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "likesCount" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "doraId" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "hand1Id" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "hand2Id" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "hand3Id" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "hand4Id" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "hand5Id" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "hand6Id" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "hand7Id" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "hand8Id" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "hand9Id" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "hand10Id" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "hand11Id" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "hand12Id" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "hand13Id" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "tsumoId" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "createdAt" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "updatedAt" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "isLikedByMe" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "myVoteTileId" },
+                            },
                             {
                               kind: "Field",
                               name: { kind: "Name", value: "user" },
                               selectionSet: {
                                 kind: "SelectionSet",
                                 selections: [
-                                  { kind: "Field", name: { kind: "Name", value: "id" } },
-                                  { kind: "Field", name: { kind: "Name", value: "name" } },
-                                  { kind: "Field", name: { kind: "Name", value: "profileText" } },
-                                  { kind: "Field", name: { kind: "Name", value: "avatarUrl" } },
-                                  { kind: "Field", name: { kind: "Name", value: "isFollowing" } },
                                   {
                                     kind: "Field",
-                                    name: { kind: "Name", value: "followingCount" },
+                                    name: { kind: "Name", value: "id" },
                                   },
                                   {
                                     kind: "Field",
-                                    name: { kind: "Name", value: "followersCount" },
+                                    name: { kind: "Name", value: "name" },
                                   },
-                                  { kind: "Field", name: { kind: "Name", value: "createdAt" } },
-                                  { kind: "Field", name: { kind: "Name", value: "updatedAt" } },
+                                  {
+                                    kind: "Field",
+                                    name: {
+                                      kind: "Name",
+                                      value: "profileText",
+                                    },
+                                  },
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "avatarUrl" },
+                                  },
+                                  {
+                                    kind: "Field",
+                                    name: {
+                                      kind: "Name",
+                                      value: "isFollowing",
+                                    },
+                                  },
+                                  {
+                                    kind: "Field",
+                                    name: {
+                                      kind: "Name",
+                                      value: "followingCount",
+                                    },
+                                  },
+                                  {
+                                    kind: "Field",
+                                    name: {
+                                      kind: "Name",
+                                      value: "followersCount",
+                                    },
+                                  },
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "createdAt" },
+                                  },
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "updatedAt" },
+                                  },
                                 ],
                               },
                             },
                           ],
                         },
                       },
-                      { kind: "Field", name: { kind: "Name", value: "cursor" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "cursor" },
+                      },
                     ],
                   },
                 },
@@ -4511,10 +6007,22 @@ export const WhatToDiscardProblemsDocument = {
                   selectionSet: {
                     kind: "SelectionSet",
                     selections: [
-                      { kind: "Field", name: { kind: "Name", value: "hasNextPage" } },
-                      { kind: "Field", name: { kind: "Name", value: "hasPreviousPage" } },
-                      { kind: "Field", name: { kind: "Name", value: "startCursor" } },
-                      { kind: "Field", name: { kind: "Name", value: "endCursor" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "hasNextPage" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "hasPreviousPage" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "startCursor" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "endCursor" },
+                      },
                     ],
                   },
                 },
@@ -4525,4 +6033,7 @@ export const WhatToDiscardProblemsDocument = {
       },
     },
   ],
-} as unknown as DocumentNode<WhatToDiscardProblemsQuery, WhatToDiscardProblemsQueryVariables>;
+} as unknown as DocumentNode<
+  WhatToDiscardProblemsQuery,
+  WhatToDiscardProblemsQueryVariables
+>;

@@ -14,7 +14,12 @@ export default function NavigationItem({ href, icon, text }: Props) {
     <ListItem>
       <Link href={href} className="w-full">
         <HStack className="py-3 px-4 rounded hover:bg-gray-600 transition-colors">
-          <Grid w="full" h="full" templateColumns="repeat(8, 1fr)" alignItems="center">
+          <Grid
+            w="full"
+            h="full"
+            templateColumns="repeat(8, 1fr)"
+            alignItems="center"
+          >
             <GridItem colSpan={1}>{icon}</GridItem>
             <GridItem colSpan={7} textAlign="left">
               <Text fontWeight="bold">{text}</Text>

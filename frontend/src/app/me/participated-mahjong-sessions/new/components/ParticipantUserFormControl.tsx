@@ -1,6 +1,13 @@
 "use client";
 
-import { Avatar, Box, Button, Input, VisuallyHiddenInput, VStack } from "@chakra-ui/react";
+import {
+  Avatar,
+  Box,
+  Button,
+  Input,
+  VisuallyHiddenInput,
+  VStack,
+} from "@chakra-ui/react";
 import { useMahjongSessionForm } from "@/src/app/me/participated-mahjong-sessions/new/contexts/MahjongSessionFormContextProvider";
 import { useParticipantUsersModal } from "@/src/app/me/participated-mahjong-sessions/new/contexts/ParticipantUsersModalContextProvider";
 
@@ -8,7 +15,9 @@ type Props = {
   participantUserIndex: number;
 };
 
-export default function ParticipantUserFormControl({ participantUserIndex }: Props) {
+export default function ParticipantUserFormControl({
+  participantUserIndex,
+}: Props) {
   const { register, watch } = useMahjongSessionForm();
   const participantUser = watch(`participantUsers.${participantUserIndex}`);
   const { openModal } = useParticipantUsersModal();
@@ -22,10 +31,14 @@ export default function ParticipantUserFormControl({ participantUserIndex }: Pro
   return (
     <Box position="relative">
       <VisuallyHiddenInput
-        {...register(`participantUsers.${participantUserIndex}.userId` as const)}
+        {...register(
+          `participantUsers.${participantUserIndex}.userId` as const,
+        )}
       />
       <VisuallyHiddenInput
-        {...register(`participantUsers.${participantUserIndex}.avatarUrl` as const)}
+        {...register(
+          `participantUsers.${participantUserIndex}.avatarUrl` as const,
+        )}
       />
       <Button
         minH="fit-content"
@@ -35,9 +48,14 @@ export default function ParticipantUserFormControl({ participantUserIndex }: Pro
         px="1px"
         py="2"
         bg={isEven ? "neutral.300" : "neutral.200"}
-        _hover={{ bg: isEven ? "neutral.400" : "neutral.300" }}>
+        _hover={{ bg: isEven ? "neutral.400" : "neutral.300" }}
+      >
         <VStack spacing="2" w="full" overflow="hidden">
-          <Avatar size={["sm", "md"]} name={participantUser.name} src={participantUser.avatarUrl} />
+          <Avatar
+            size={["sm", "md"]}
+            name={participantUser.name}
+            src={participantUser.avatarUrl}
+          />
           <Input
             readOnly
             fontSize={["sm", "md"]}
@@ -51,7 +69,9 @@ export default function ParticipantUserFormControl({ participantUserIndex }: Pro
             maxW="full"
             textTransform="none"
             textOverflow="ellipsis"
-            {...register(`participantUsers.${participantUserIndex}.name` as const)}
+            {...register(
+              `participantUsers.${participantUserIndex}.name` as const,
+            )}
           />
         </VStack>
       </Button>

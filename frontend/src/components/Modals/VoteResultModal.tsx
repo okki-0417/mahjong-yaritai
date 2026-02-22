@@ -38,8 +38,10 @@ export default function VoteResultModal({
   onVoteDelete,
   myVoteTileId,
 }: Props) {
-  const sortedVoteResults = [...voteResults].sort((a, b) => Number(a.tileId) - Number(b.tileId));
-  const mostVotedCount = Math.max(...voteResults.map(r => r.count), 0);
+  const sortedVoteResults = [...voteResults].sort(
+    (a, b) => Number(a.tileId) - Number(b.tileId),
+  );
+  const mostVotedCount = Math.max(...voteResults.map((r) => r.count), 0);
 
   return (
     <Modal isOpen={isOpen} onClose={onClose} size="2xl" isCentered>
@@ -52,7 +54,7 @@ export default function VoteResultModal({
 
         <ModalBody className="bg-mj-mat">
           <HStack spacing="1px" mt="3" justify="center" align="flex-end">
-            {sortedVoteResults.map(result => {
+            {sortedVoteResults.map((result) => {
               const tileId = result.tileId;
               const voteCount = result.count;
 
@@ -85,7 +87,9 @@ export default function VoteResultModal({
         </ModalBody>
 
         <ModalFooter>
-          <Text fontSize="sm">総投票数: {voteResults.reduce((sum, r) => sum + r.count, 0)}票</Text>
+          <Text fontSize="sm">
+            総投票数: {voteResults.reduce((sum, r) => sum + r.count, 0)}票
+          </Text>
         </ModalFooter>
       </ModalContent>
     </Modal>

@@ -16,7 +16,10 @@ function ParticipantUsersSectionContent() {
     <>
       <SimpleGrid columns={participantUserFields.length} w="full">
         {participantUserFields.map((participantUserField, index) => (
-          <ParticipantUserFormControl key={participantUserField.id} participantUserIndex={index} />
+          <ParticipantUserFormControl
+            key={participantUserField.id}
+            participantUserIndex={index}
+          />
         ))}
       </SimpleGrid>
 

@@ -71,7 +71,12 @@ export default function ParentCommentCard({
         <HStack alignItems="center" justifyContent="space-between">
           <Button colorScheme="" onClick={onUserModalOpen} p="0">
             <HStack>
-              <Circle size="8" overflow="hidden" border="1px" borderColor="gray.300">
+              <Circle
+                size="8"
+                overflow="hidden"
+                border="1px"
+                borderColor="gray.300"
+              >
                 <Img
                   src={comment.user.avatarUrl || "/no-image.webp"}
                   className="w-full h-full object-cover"
@@ -91,7 +96,12 @@ export default function ParentCommentCard({
         <Text mt="1">{comment.content}</Text>
 
         <HStack justifyContent="space-between" align="end" mt="1">
-          <Text fontFamily="sans-serif" fontSize="xs" className="text-secondary" flexShrink={0}>
+          <Text
+            fontFamily="sans-serif"
+            fontSize="xs"
+            className="text-secondary"
+            flexShrink={0}
+          >
             {new Date(comment.createdAt).toLocaleString()}
           </Text>
 
@@ -106,7 +116,12 @@ export default function ParentCommentCard({
             ) : (
               <HStack gap="1" mx="1">
                 <FaRegComment size={20} color="gray" />
-                <Text fontSize="md" fontWeight="semibold" fontFamily="sans-serif" color="gray">
+                <Text
+                  fontSize="md"
+                  fontWeight="semibold"
+                  fontFamily="sans-serif"
+                  color="gray"
+                >
                   {comment.repliesCount}
                 </Text>
               </HStack>
@@ -135,7 +150,8 @@ export default function ParentCommentCard({
               size="sm"
               fontSize="xs"
               onClick={() => setIsRepliesVisible(false)}
-              variant="ghost">
+              variant="ghost"
+            >
               <MdKeyboardArrowUp size={20} />
               <Text className="text-secondary">スレッドを閉じる</Text>
             </Button>
@@ -143,8 +159,15 @@ export default function ParentCommentCard({
         </Box>
       )}
 
-      <NotLoggedInModal isOpen={isNotLoggedInModalOpen} onClose={onNotLoggedInModalClose} />
-      <UserModal user={comment.user} isOpen={isUserModalOpen} onClose={onUserModalClose} />
+      <NotLoggedInModal
+        isOpen={isNotLoggedInModalOpen}
+        onClose={onNotLoggedInModalClose}
+      />
+      <UserModal
+        user={comment.user}
+        isOpen={isUserModalOpen}
+        onClose={onUserModalClose}
+      />
     </>
   );
 }

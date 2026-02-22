@@ -54,7 +54,8 @@ type Documents = {
 const documents: Documents = {
   "query CurrentSession {\n  currentSession {\n    isLoggedIn\n    user {\n      id\n      name\n      email\n      profileText\n      avatarUrl\n      isFollowing\n      followingCount\n      followersCount\n      createdAt\n      updatedAt\n    }\n  }\n}":
     types.CurrentSessionDocument,
-  "mutation LogoutUser {\n  logout(input: {}) {\n    success\n  }\n}": types.LogoutUserDocument,
+  "mutation LogoutUser {\n  logout(input: {}) {\n    success\n  }\n}":
+    types.LogoutUserDocument,
   "mutation RequestAuth($input: RequestAuthInput!) {\n  requestAuth(input: $input) {\n    success\n  }\n}":
     types.RequestAuthDocument,
   "mutation VerifyAuth($input: VerifyAuthInput!) {\n  verifyAuth(input: $input) {\n    user {\n      id\n      name\n      email\n      profileText\n      avatarUrl\n      followingCount\n      followersCount\n      createdAt\n      updatedAt\n    }\n  }\n}":

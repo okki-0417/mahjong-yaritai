@@ -23,7 +23,13 @@ export function FollowStatsModal({ isOpen, onClose, context }: Props) {
   const defaultIndex = context === "followings" ? 0 : 1;
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} size="lg" scrollBehavior="inside" isCentered>
+    <Modal
+      isOpen={isOpen}
+      onClose={onClose}
+      size="lg"
+      scrollBehavior="inside"
+      isCentered
+    >
       <ModalOverlay />
       <ModalContent minH="md" bg="gray.50" color="secondary.500">
         <ModalCloseButton />

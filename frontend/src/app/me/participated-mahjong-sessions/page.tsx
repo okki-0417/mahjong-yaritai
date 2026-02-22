@@ -35,7 +35,8 @@ export default function GameRecordsPage() {
             colorScheme="pink"
             leftIcon={<FaPlus />}
             as={Link}
-            href="/me/participated-mahjong-sessions/new">
+            href="/me/participated-mahjong-sessions/new"
+          >
             新しい戦績を追加する
           </Button>
         </HStack>

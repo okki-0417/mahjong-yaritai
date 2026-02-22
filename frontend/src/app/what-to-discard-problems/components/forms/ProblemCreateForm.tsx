@@ -26,14 +26,14 @@ export default function ProblemCreateForm({ onProblemCreated }: Props) {
     CreateWhatToDiscardProblemMutation,
     CreateWhatToDiscardProblemMutationVariables
   >(CreateWhatToDiscardProblemDocument, {
-    onCompleted: data => {
+    onCompleted: (data) => {
       onProblemCreated(data.createWhatToDiscardProblem.whatToDiscardProblem);
       toast({
         title: "何切る問題を作成しました",
         status: "success",
       });
     },
-    onError: error => {
+    onError: (error) => {
       toast({
         title: "何切る問題の作成に失敗しました",
         description: error.message,
@@ -44,7 +44,7 @@ export default function ProblemCreateForm({ onProblemCreated }: Props) {
 
   const { BaseForm } = useProblemForm();
 
-  const onSubmit: SubmitHandler<CreateProblemFormInputs> = async formData => {
+  const onSubmit: SubmitHandler<CreateProblemFormInputs> = async (formData) => {
     const isConfirmed = confirm("これで作成しますか？");
     if (!isConfirmed) return;
 

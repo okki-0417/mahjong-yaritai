@@ -20,7 +20,7 @@ export default function ProblemClientSection() {
         </div>
       </div>
       <div className="max-w-4xl mx-auto lg:col-span-2 flex flex-col gap-6">
-        {problems.map(problem => (
+        {problems.map((problem) => (
           <ProblemCard key={problem.id} problem={problem} />
         ))}
 

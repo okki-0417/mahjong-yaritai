@@ -9,14 +9,17 @@ export default function AddGameButton() {
 
   const handleAddGame = () => {
     appendGame({
-      results: participantUserFields.map(() => ({ resultPoints: null, ranking: null })),
+      results: participantUserFields.map(() => ({
+        resultPoints: null,
+        ranking: null,
+      })),
     });
   };
 
   const games = watch("games");
   const lastGame = games[games.length - 1];
   const isLastGameEmpty = lastGame?.results.every(
-    result => isNaN(result.resultPoints) || result.resultPoints === null,
+    (result) => isNaN(result.resultPoints) || result.resultPoints === null,
   );
 
   return (
@@ -27,7 +30,8 @@ export default function AddGameButton() {
       h={["fit-content", "5"]}
       align="center"
       gap="0"
-      isDisabled={isLastGameEmpty}>
+      isDisabled={isLastGameEmpty}
+    >
       <IoMdAdd size={16} />
       <Text as="span" fontSize="xs">
         ゲームを追加

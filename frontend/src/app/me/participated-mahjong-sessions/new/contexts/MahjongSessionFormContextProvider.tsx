@@ -50,15 +50,23 @@ type MahjongSessionFormContextType = {
   reset: UseFormReset<GameSessionFormType>;
   formState: FormState<GameSessionFormType>;
   errors: FieldErrors<GameSessionFormType>;
-  participantUserFields: FieldArrayWithId<GameSessionFormType, "participantUsers", "id">[];
-  appendParticipantUser: UseFieldArrayAppend<GameSessionFormType, "participantUsers">;
+  participantUserFields: FieldArrayWithId<
+    GameSessionFormType,
+    "participantUsers",
+    "id"
+  >[];
+  appendParticipantUser: UseFieldArrayAppend<
+    GameSessionFormType,
+    "participantUsers"
+  >;
   removeParticipantUser: UseFieldArrayRemove;
   gameFields: FieldArrayWithId<GameSessionFormType, "games", "id">[];
   appendGame: UseFieldArrayAppend<GameSessionFormType, "games">;
   removeGame: UseFieldArrayRemove;
 };
 
-const MahjongSessionFormContext = createContext<MahjongSessionFormContextType | null>(null);
+const MahjongSessionFormContext =
+  createContext<MahjongSessionFormContextType | null>(null);
 
 type Props = {
   children: ReactNode;
@@ -142,7 +150,9 @@ export default function MahjongSessionFormContextProvider({ children }: Props) {
 export function useMahjongSessionForm() {
   const context = useContext(MahjongSessionFormContext);
   if (!context) {
-    throw new Error("useMahjongSessionForm must be used within MahjongSessionFormContextProvider");
+    throw new Error(
+      "useMahjongSessionForm must be used within MahjongSessionFormContextProvider",
+    );
   }
   return context;
 }

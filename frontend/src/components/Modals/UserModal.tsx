@@ -16,7 +16,11 @@ import {
 import FollowButton from "@/src/components/FollowButton";
 import { useState, useEffect } from "react";
 import { useQuery } from "@apollo/client/react";
-import { User, UserProfileDocument, UserProfileQuery } from "@/src/generated/graphql";
+import {
+  User,
+  UserProfileDocument,
+  UserProfileQuery,
+} from "@/src/generated/graphql";
 import { canFollow } from "@/src/lib/utils/canFollow";
 
 type Props = {
@@ -48,7 +52,12 @@ export default function UserModal({
   }, [data, isFollowing]);
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} isCentered size={{ base: "sm", md: "md" }}>
+    <Modal
+      isOpen={isOpen}
+      onClose={onClose}
+      isCentered
+      size={{ base: "sm", md: "md" }}
+    >
       <ModalOverlay />
 
       <ModalContent fontFamily="serif">

@@ -11,7 +11,9 @@ type Props = {
   }>;
 };
 
-export default async function ParticipatedMahjongSessionPage({ params }: Props) {
+export default async function ParticipatedMahjongSessionPage({
+  params,
+}: Props) {
   const { id } = await params;
 
   return (

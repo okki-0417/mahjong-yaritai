@@ -2,7 +2,10 @@
 
 import { Button, useDisclosure, useToast } from "@chakra-ui/react";
 import { useMutation } from "@apollo/client/react";
-import { CreateFollowDocument, DeleteFollowDocument } from "@/src/generated/graphql";
+import {
+  CreateFollowDocument,
+  DeleteFollowDocument,
+} from "@/src/generated/graphql";
 import { useState } from "react";
 import NotLoggedInModal from "@/src/components/Modals/NotLoggedInModal";
 import { SubmitHandler, useForm } from "react-hook-form";
@@ -43,8 +46,12 @@ export default function FollowButton({
       onFollowChange?.(true);
       toast({ title: "フォローしました", status: "success" });
     },
-    onError: error => {
-      toast({ title: "フォローの操作に失敗しました", status: "error", description: error.message });
+    onError: (error) => {
+      toast({
+        title: "フォローの操作に失敗しました",
+        status: "error",
+        description: error.message,
+      });
     },
   });
   const [deleteFollow] = useMutation(DeleteFollowDocument, {
@@ -53,8 +60,12 @@ export default function FollowButton({
       onFollowChange?.(false);
       toast({ title: "フォローを解除しました", status: "success" });
     },
-    onError: error => {
-      toast({ title: "フォローの操作に失敗しました", status: "error", description: error.message });
+    onError: (error) => {
+      toast({
+        title: "フォローの操作に失敗しました",
+        status: "error",
+        description: error.message,
+      });
     },
   });
 
@@ -90,12 +101,16 @@ export default function FollowButton({
               isLoading={isSubmitting}
               colorScheme={isFollowing ? "gray" : "teal"}
               variant={variant}
-              size={size}>
+              size={size}
+            >
               {isFollowing ? "フォロー中" : "フォロー"}
             </Button>
           </form>
 
-          <NotLoggedInModal isOpen={isNotLoggedInModalOpen} onClose={onNotLoggedInModalClose} />
+          <NotLoggedInModal
+            isOpen={isNotLoggedInModalOpen}
+            onClose={onNotLoggedInModalClose}
+          />
         </>
       )}
     </>

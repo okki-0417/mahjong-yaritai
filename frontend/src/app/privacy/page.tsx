@@ -1,4 +1,12 @@
-import { Box, Container, Divider, Text, List, ListItem, VStack } from "@chakra-ui/react";
+import {
+  Box,
+  Container,
+  Divider,
+  Text,
+  List,
+  ListItem,
+  VStack,
+} from "@chakra-ui/react";
 import { Metadata } from "next";
 import privacyData from "./privacy-data.json";
 
@@ -8,7 +16,8 @@ export const metadata: Metadata = {
     "麻雀ヤリタイのプライバシーポリシー・個人情報の取扱いに関する基本方針をご確認いただけます。",
   openGraph: {
     title: "麻雀ヤリタイ - プライバシーポリシー",
-    description: "麻雀ヤリタイのプライバシーポリシー・個人情報の取扱いに関する基本方針",
+    description:
+      "麻雀ヤリタイのプライバシーポリシー・個人情報の取扱いに関する基本方針",
   },
 };
 

@@ -40,13 +40,23 @@ export default function UserProfile({ user, isMyProfile = false }: Props) {
           </Text>
         </Box>
 
-        <FollowStats followersCount={user.followersCount} followingCount={user.followingCount} />
+        <FollowStats
+          followersCount={user.followersCount}
+          followingCount={user.followingCount}
+        />
 
         {isMyProfile == false && (
-          <FollowButton userId={user.id} initialIsFollowing={user.isFollowing} />
+          <FollowButton
+            userId={user.id}
+            initialIsFollowing={user.isFollowing}
+          />
         )}
 
-        <Text fontSize={["md", "lg"]} whiteSpace="pre-wrap" wordBreak="break-word">
+        <Text
+          fontSize={["md", "lg"]}
+          whiteSpace="pre-wrap"
+          wordBreak="break-word"
+        >
           {user.profileText}
         </Text>
       </VStack>

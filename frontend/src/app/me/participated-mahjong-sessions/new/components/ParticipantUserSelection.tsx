@@ -8,8 +8,13 @@ import ParticipantUserCard from "@/src/app/me/participated-mahjong-sessions/new/
 import { useMahjongSessionForm } from "@/src/app/me/participated-mahjong-sessions/new/contexts/MahjongSessionFormContextProvider";
 import Fallback from "@/src/components/fallbacks/Fallback";
 import useGetSession from "@/src/hooks/useGetSession";
-import { Divider, Text, UnorderedList, useToast, VStack } from "@chakra-ui/react";
-import { captureException } from "@sentry/nextjs";
+import {
+  Divider,
+  Text,
+  UnorderedList,
+  useToast,
+  VStack,
+} from "@chakra-ui/react";
 import { useEffect, useState, useTransition } from "react";
 
 type Props = {
@@ -17,7 +22,10 @@ type Props = {
   onClose: () => void;
 };
 
-export default function ParticipantUserSelection({ participantUserIndex, onClose }: Props) {
+export default function ParticipantUserSelection({
+  participantUserIndex,
+  onClose,
+}: Props) {
   const [isPending, startTransition] = useTransition();
   const [mutualFollowers, setMutualFollowers] = useState<
     FetchMutualFollowersActionResponse["mutualFollowersData"]
@@ -34,25 +42,30 @@ export default function ParticipantUserSelection({ participantUserIndex, onClose
 
   // すでに追加されている参加者のuserIdを取得
   const addedUserIds = new Set(
-    participantUsers.map(p => p.userId).filter((id): id is string => id !== null),
+    participantUsers
+      .map((p) => p.userId)
+      .filter((id): id is string => id !== null),
   );
 
   useEffect(() => {
     const fetchMutualFollowers = () => {
       startTransition(async () => {
         try {
-          const { mutualFollowersData, pageInfoData } = await fetchMutualFollowersAction({
-            pageInfo: null,
-          });
+          const { mutualFollowersData, pageInfoData } =
+            await fetchMutualFollowersAction({
+              pageInfo: null,
+            });
           setMutualFollowers(mutualFollowersData);
           setPageInfo(pageInfoData);
         } catch (error) {
           toast({
             title: "相互フォロワーの取得に失敗しました",
             status: "error",
-            description: error instanceof Error ? error.message : "不明なエラーが発生しました",
+            description:
+              error instanceof Error
+                ? error.message
+                : "不明なエラーが発生しました",
           });
-          captureException(error);
         }
       });
     };
@@ -61,10 +74,14 @@ export default function ParticipantUserSelection({ participantUserIndex, onClose
   }, [toast]);
 
   // すでに追加されているユーザーを除外
-  const filteredMutualFollowers = mutualFollowers.filter(user => !addedUserIds.has(user.id));
+  const filteredMutualFollowers = mutualFollowers.filter(
+    (user) => !addedUserIds.has(user.id),
+  );
 
   // 自分がすでに追加されているかどうか
-  const isCurrentUserAdded = currentUser ? addedUserIds.has(currentUser.id) : false;
+  const isCurrentUserAdded = currentUser
+    ? addedUserIds.has(currentUser.id)
+    : false;
 
   return (
     <UnorderedList listStyleType="none" marginInlineStart="0">
@@ -96,7 +113,7 @@ export default function ParticipantUserSelection({ participantUserIndex, onClose
               相互フォロー
             </Text>
           )}
-          {filteredMutualFollowers.map(user => (
+          {filteredMutualFollowers.map((user) => (
             <ParticipantUserCard
               key={user.id}
               user={user}

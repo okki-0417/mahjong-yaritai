@@ -25,7 +25,6 @@ import {
   Tr,
   VStack,
 } from "@chakra-ui/react";
-import { captureException } from "@sentry/nextjs";
 import { isRedirectError } from "next/dist/client/components/redirect-error";
 import { redirect } from "next/navigation";
 
@@ -64,15 +63,20 @@ export default async function ParticipatedMahjongSessionSection({ id }: Props) {
               <BreadcrumbLink href="/me">マイページ</BreadcrumbLink>
             </BreadcrumbItem>
             <BreadcrumbItem>
-              <BreadcrumbLink href="/me/participated-mahjong-sessions">麻雀戦績</BreadcrumbLink>
+              <BreadcrumbLink href="/me/participated-mahjong-sessions">
+                麻雀戦績
+              </BreadcrumbLink>
             </BreadcrumbItem>
             <BreadcrumbItem>
               <BreadcrumbLink isCurrentPage>
-                {new Date(mahjongSession.createdAt).toLocaleDateString("ja-JP", {
-                  year: "numeric",
-                  month: "long",
-                  day: "numeric",
-                })}
+                {new Date(mahjongSession.createdAt).toLocaleDateString(
+                  "ja-JP",
+                  {
+                    year: "numeric",
+                    month: "long",
+                    day: "numeric",
+                  },
+                )}
               </BreadcrumbLink>
             </BreadcrumbItem>
           </Breadcrumb>
@@ -120,7 +124,8 @@ export default async function ParticipatedMahjongSessionSection({ id }: Props) {
             borderRadius={["sm", "md"]}
             bg="neutral.100"
             boxShadow="lg"
-            overflow="hidden">
+            overflow="hidden"
+          >
             <Thead as="div">
               <HStack gap="0" align="stretch">
                 <Th
@@ -132,8 +137,12 @@ export default async function ParticipatedMahjongSessionSection({ id }: Props) {
                   borderRightWidth="1.5px"
                 />
 
-                <SimpleGrid as="div" columns={mahjongSession.mahjongParticipants.length} w="full">
-                  {mahjongSession.mahjongParticipants.map(participant => (
+                <SimpleGrid
+                  as="div"
+                  columns={mahjongSession.mahjongParticipants.length}
+                  w="full"
+                >
+                  {mahjongSession.mahjongParticipants.map((participant) => (
                     <Th
                       as="div"
                       key={participant.id}
@@ -144,7 +153,8 @@ export default async function ParticipatedMahjongSessionSection({ id }: Props) {
                       w="full"
                       borderColor="secondary.50"
                       borderBottom=""
-                      _even={{ bg: "neutral.300" }}>
+                      _even={{ bg: "neutral.300" }}
+                    >
                       <VStack spacing="2" w="full">
                         <Avatar
                           size={["sm", "md"]}
@@ -160,7 +170,8 @@ export default async function ParticipatedMahjongSessionSection({ id }: Props) {
                           whiteSpace="nowrap"
                           w="full"
                           textTransform="none"
-                          textOverflow="ellipsis">
+                          textOverflow="ellipsis"
+                        >
                           {participant.name}
                         </Text>
                       </VStack>
@@ -176,9 +187,18 @@ export default async function ParticipatedMahjongSessionSection({ id }: Props) {
               as={VStack}
               align="stretch"
               spacing="0"
-              divider={<Divider borderColor="secondary.50" borderBottomWidth="1.5px" />}>
+              divider={
+                <Divider borderColor="secondary.50" borderBottomWidth="1.5px" />
+              }
+            >
               {mahjongSession.mahjongGames.map((game, gameIndex) => (
-                <Tr as={HStack} gap="0" key={game.id} align="stretch" borderBottom="0">
+                <Tr
+                  as={HStack}
+                  gap="0"
+                  key={game.id}
+                  align="stretch"
+                  borderBottom="0"
+                >
                   <Th
                     key={game.id}
                     as={VStack}
@@ -189,7 +209,8 @@ export default async function ParticipatedMahjongSessionSection({ id }: Props) {
                     borderBottom=""
                     color="primary.500"
                     borderColor="secondary.50"
-                    borderRightWidth="1.5px">
+                    borderRightWidth="1.5px"
+                  >
                     <Text>{gameIndex + 1}</Text>
                   </Th>
 
@@ -197,10 +218,12 @@ export default async function ParticipatedMahjongSessionSection({ id }: Props) {
                     as="div"
                     columns={mahjongSession.mahjongParticipants.length}
                     w="full"
-                    alignItems="stretch">
-                    {mahjongSession.mahjongParticipants.map(participant => {
+                    alignItems="stretch"
+                  >
+                    {mahjongSession.mahjongParticipants.map((participant) => {
                       const participantResult = game.mahjongResults.find(
-                        result => result.mahjongParticipantId === participant.id,
+                        (result) =>
+                          result.mahjongParticipantId === participant.id,
                       );
 
                       return (
@@ -211,7 +234,8 @@ export default async function ParticipatedMahjongSessionSection({ id }: Props) {
                           py="2"
                           borderBottom=""
                           justify="center"
-                          _even={{ bg: "neutral.300" }}>
+                          _even={{ bg: "neutral.300" }}
+                        >
                           <Text
                             fontWeight="bold"
                             fontSize={["xl", "2xl"]}
@@ -221,7 +245,8 @@ export default async function ParticipatedMahjongSessionSection({ id }: Props) {
                                 : participantResult?.resultPoints < 0
                                   ? "red.500"
                                   : "inherit"
-                            }>
+                            }
+                          >
                             {participantResult?.resultPoints}
                           </Text>
                         </Td>
@@ -244,12 +269,17 @@ export default async function ParticipatedMahjongSessionSection({ id }: Props) {
                   borderBottom=""
                   borderRightWidth="1.5px"
                   color="primary.500"
-                  fontSize={["xs", "sm"]}>
+                  fontSize={["xs", "sm"]}
+                >
                   <Text>合計</Text>
                 </Th>
 
-                <SimpleGrid as="div" columns={mahjongSession.mahjongParticipants.length} w="full">
-                  {mahjongSession.mahjongParticipants.map(participant => (
+                <SimpleGrid
+                  as="div"
+                  columns={mahjongSession.mahjongParticipants.length}
+                  w="full"
+                >
+                  {mahjongSession.mahjongParticipants.map((participant) => (
                     <Td
                       as={VStack}
                       key={participant.id}
@@ -257,7 +287,8 @@ export default async function ParticipatedMahjongSessionSection({ id }: Props) {
                       py="4"
                       w="full"
                       borderBottom=""
-                      _even={{ bg: "neutral.300" }}>
+                      _even={{ bg: "neutral.300" }}
+                    >
                       <Text
                         fontWeight="bold"
                         fontSize={["xl", "2xl"]}
@@ -267,7 +298,8 @@ export default async function ParticipatedMahjongSessionSection({ id }: Props) {
                             : participant.totalPoints < 0
                               ? "red.500"
                               : "inherit"
-                        }>
+                        }
+                      >
                         {participant.totalPoints}
                       </Text>
                     </Td>
@@ -286,7 +318,8 @@ export default async function ParticipatedMahjongSessionSection({ id }: Props) {
                   borderBottom=""
                   borderColor="secondary.50"
                   color="primary.500"
-                  borderRightWidth="1.5px">
+                  borderRightWidth="1.5px"
+                >
                   <Text fontSize={["xs", "sm"]}>
                     平均
                     <br />
@@ -294,8 +327,12 @@ export default async function ParticipatedMahjongSessionSection({ id }: Props) {
                   </Text>
                 </Th>
 
-                <SimpleGrid as="div" columns={mahjongSession.mahjongParticipants.length} w="full">
-                  {mahjongSession.mahjongParticipants.map(participant => (
+                <SimpleGrid
+                  as="div"
+                  columns={mahjongSession.mahjongParticipants.length}
+                  w="full"
+                >
+                  {mahjongSession.mahjongParticipants.map((participant) => (
                     <Td
                       as={VStack}
                       key={participant.id}
@@ -304,8 +341,11 @@ export default async function ParticipatedMahjongSessionSection({ id }: Props) {
                       py="4"
                       fontSize={["lg", "xl"]}
                       borderBottom=""
-                      _even={{ bg: "neutral.300" }}>
-                      <Text fontSize={["xl", "2xl"]}>{participant.averageRanking}</Text>
+                      _even={{ bg: "neutral.300" }}
+                    >
+                      <Text fontSize={["xl", "2xl"]}>
+                        {participant.averageRanking}
+                      </Text>
                     </Td>
                   ))}
                 </SimpleGrid>
@@ -322,19 +362,25 @@ export default async function ParticipatedMahjongSessionSection({ id }: Props) {
                   borderBottom=""
                   borderColor="secondary.50"
                   color="primary.500"
-                  borderRightWidth="1.5px">
+                  borderRightWidth="1.5px"
+                >
                   <Text fontSize={["xs", "sm"]}>収支</Text>
                 </Th>
 
-                <SimpleGrid as="div" columns={mahjongSession.mahjongParticipants.length} w="full">
-                  {mahjongSession.mahjongParticipants.map(participant => (
+                <SimpleGrid
+                  as="div"
+                  columns={mahjongSession.mahjongParticipants.length}
+                  w="full"
+                >
+                  {mahjongSession.mahjongParticipants.map((participant) => (
                     <Td
                       as={VStack}
                       key={participant.id}
                       px="1"
                       py="4"
                       borderBottom=""
-                      _even={{ bg: "neutral.300" }}>
+                      _even={{ bg: "neutral.300" }}
+                    >
                       <Text
                         fontSize={["xl", "2xl"]}
                         fontWeight="bold"
@@ -344,7 +390,8 @@ export default async function ParticipatedMahjongSessionSection({ id }: Props) {
                             : participant.totalProfits < 0
                               ? "red.500"
                               : "inherit"
-                        }>
+                        }
+                      >
                         {participant.totalProfits}
                       </Text>
                     </Td>
@@ -363,7 +410,6 @@ export default async function ParticipatedMahjongSessionSection({ id }: Props) {
 
     /* eslint-disable-next-line no-console */
     console.error("Error fetching participated mahjong sessions:", error);
-    captureException(error);
 
     return <ErrorPage message={error.message} />;
   }

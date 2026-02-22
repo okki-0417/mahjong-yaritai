@@ -14,7 +14,8 @@ export default function RateFormControl() {
       align="baseline"
       gap="1"
       isInvalid={Boolean(errors.rate)}
-      w="fit-content">
+      w="fit-content"
+    >
       <FormLabel m="0" htmlFor="rate" fontSize={["sm", "md"]}>
         レート
       </FormLabel>

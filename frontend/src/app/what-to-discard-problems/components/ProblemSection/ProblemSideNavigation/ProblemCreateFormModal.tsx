@@ -17,7 +17,11 @@ type Props = {
   onProblemCreated: (newProblem: WhatToDiscardProblem) => void;
 };
 
-export default function ProblemCreateFormModal({ isOpen, onClose, onProblemCreated }: Props) {
+export default function ProblemCreateFormModal({
+  isOpen,
+  onClose,
+  onProblemCreated,
+}: Props) {
   const onProblemCreatedWrapper = (newProblem: WhatToDiscardProblem) => {
     onProblemCreated(newProblem);
     onClose();
@@ -30,7 +34,8 @@ export default function ProblemCreateFormModal({ isOpen, onClose, onProblemCreat
       isOpen={isOpen}
       onClose={onClose}
       size="xl"
-      scrollBehavior="inside">
+      scrollBehavior="inside"
+    >
       <ModalOverlay />
 
       <ModalContent fontFamily="serif">

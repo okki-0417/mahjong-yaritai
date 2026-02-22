@@ -11,15 +11,20 @@ type ParticipantUsersModalContextType = {
   participantUserIndex: number | null;
 };
 
-const ParticipantUsersModalContext = createContext<ParticipantUsersModalContextType | null>(null);
+const ParticipantUsersModalContext =
+  createContext<ParticipantUsersModalContextType | null>(null);
 
 type Props = {
   children: ReactNode;
 };
 
-export default function ParticipantUsersModalContextProvider({ children }: Props) {
+export default function ParticipantUsersModalContextProvider({
+  children,
+}: Props) {
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const [participantUserIndex, setParticipantUserIndex] = useState<number | null>(null);
+  const [participantUserIndex, setParticipantUserIndex] = useState<
+    number | null
+  >(null);
 
   const openModal = (participantIndex: number) => {
     setParticipantUserIndex(participantIndex);

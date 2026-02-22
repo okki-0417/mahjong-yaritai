@@ -14,6 +14,21 @@ const config: CodegenConfig = {
         },
       },
     },
+    "./src/generated/hooks.ts": {
+      plugins: [
+        "typescript",
+        "typescript-operations",
+        "typescript-react-apollo",
+      ],
+      config: {
+        scalars: {
+          Upload: "File",
+        },
+        withHooks: true,
+        withHOC: false,
+        withComponent: false,
+      },
+    },
   },
 };
 

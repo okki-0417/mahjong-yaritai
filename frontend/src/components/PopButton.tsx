@@ -40,7 +40,8 @@ export default function PopButton({
       type={type}
       onClick={handleClick}
       className={`cursor-pointer ${defaultClassName} ${className} ${animate ? "pop" : ""} hover:scale-105 transition-all p-0`}
-      disabled={disabled}>
+      disabled={disabled}
+    >
       {isLoading ? <Spinner className="sm" /> : children || value}
     </button>
   );

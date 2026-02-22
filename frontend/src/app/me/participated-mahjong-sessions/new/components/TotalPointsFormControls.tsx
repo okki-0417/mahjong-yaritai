@@ -9,11 +9,13 @@ export default function TotalPointsFormControls() {
   const participantUsers = watch("participantUsers");
   const games = watch("games");
 
-  const totalPointsByParticipant = participantUsers.map((_, participantIndex) => {
-    return games.reduce((acc, game) => {
-      return acc + (game.results[participantIndex]?.resultPoints || 0);
-    }, 0);
-  });
+  const totalPointsByParticipant = participantUsers.map(
+    (_, participantIndex) => {
+      return games.reduce((acc, game) => {
+        return acc + (game.results[participantIndex]?.resultPoints || 0);
+      }, 0);
+    },
+  );
 
   return (
     <SimpleGrid as="div" columns={participantUsers.length} w="full">

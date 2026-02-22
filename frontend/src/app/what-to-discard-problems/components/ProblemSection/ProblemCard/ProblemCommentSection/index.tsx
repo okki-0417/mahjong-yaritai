@@ -2,7 +2,13 @@
 
 import { FaRegComment } from "react-icons/fa";
 import PopButton from "@/src/components/PopButton";
-import { HStack, Spinner, Text, useDisclosure, useToast } from "@chakra-ui/react";
+import {
+  HStack,
+  Spinner,
+  Text,
+  useDisclosure,
+  useToast,
+} from "@chakra-ui/react";
 import CommentsModal from "@/src/app/what-to-discard-problems/components/ProblemSection/ProblemCard/ProblemCommentSection/CommentsModal";
 import { Comment, ParentCommentsDocument } from "@/src/generated/graphql";
 import { Fragment, useState } from "react";
@@ -14,9 +20,14 @@ type Props = {
   problemId: string;
 };
 
-export default function ProblemCommentSection({ problemId, initialCommentsCount }: Props) {
+export default function ProblemCommentSection({
+  problemId,
+  initialCommentsCount,
+}: Props) {
   const [parentComments, setParentComments] = useState<Comment[]>([]);
-  const [replyingToComment, setReplyingToComment] = useState<Comment | null>(null);
+  const [replyingToComment, setReplyingToComment] = useState<Comment | null>(
+    null,
+  );
 
   const toast = useToast();
   const {
@@ -33,7 +44,7 @@ export default function ProblemCommentSection({ problemId, initialCommentsCount 
     const isReplyComment = Boolean(Number(comment.parentCommentId));
 
     if (isReplyComment) {
-      const newComments = parentComments.map(prevComment => {
+      const newComments = parentComments.map((prevComment) => {
         if (prevComment.id == comment.parentCommentId) {
           prevComment.repliesCount++;
           return prevComment;
@@ -45,12 +56,14 @@ export default function ProblemCommentSection({ problemId, initialCommentsCount 
       setParentComments(newComments);
       clearQueryCache("replies");
     } else {
-      setParentComments(prevComments => [comment, ...prevComments]);
+      setParentComments((prevComments) => [comment, ...prevComments]);
       clearQueryCache("comments");
     }
   };
 
-  const [getComments, { loading: commentsLoading }] = useLazyQuery(ParentCommentsDocument);
+  const [getComments, { loading: commentsLoading }] = useLazyQuery(
+    ParentCommentsDocument,
+  );
 
   const handleModalOpen = async () => {
     if (commentsLoading) return;
@@ -66,7 +79,9 @@ export default function ProblemCommentSection({ problemId, initialCommentsCount 
         description: result.error.message,
       });
     } else if (result.data?.whatToDiscardProblemComments) {
-      setParentComments(result.data.whatToDiscardProblemComments.edges.map(edge => edge.node));
+      setParentComments(
+        result.data.whatToDiscardProblemComments.edges.map((edge) => edge.node),
+      );
       onCommentModalOpen();
     }
   };
@@ -75,7 +90,11 @@ export default function ProblemCommentSection({ problemId, initialCommentsCount 
     <Fragment>
       <PopButton onClick={handleModalOpen}>
         <HStack gap="1">
-          {commentsLoading ? <Spinner size="sm" /> : <FaRegComment color="#333" size={24} />}
+          {commentsLoading ? (
+            <Spinner size="sm" />
+          ) : (
+            <FaRegComment color="#333" size={24} />
+          )}
           <Text fontFamily="sans-serif" fontWeight="bold">
             {parentComments.length || initialCommentsCount}
           </Text>

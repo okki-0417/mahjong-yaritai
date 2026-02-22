@@ -99,11 +99,14 @@ export default function Top() {
 
                 <Link
                   href="/what-to-discard-problems"
-                  className="rounded hover:underline transition-all border-2 border-white">
+                  className="rounded hover:underline transition-all border-2 border-white"
+                >
                   <li className="flex justify-between items-center gap-1 py-4 px-6 h-full">
                     <div className="flex items-center gap-5">
                       <GiThink size={40} color="white" />
-                      <span className="lg:text-2xl text-lg font-bold">何切る問題集</span>
+                      <span className="lg:text-2xl text-lg font-bold">
+                        何切る問題集
+                      </span>
                     </div>
                     <FaAngleRight />
                   </li>

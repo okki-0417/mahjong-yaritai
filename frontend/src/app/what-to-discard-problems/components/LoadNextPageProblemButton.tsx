@@ -8,7 +8,9 @@ import { Button, Text, useToast } from "@chakra-ui/react";
 export default function LoadNextPageProblemButton() {
   const { pageInfo, setPageInfo, setProblems } = useProblems();
 
-  const [getMoreProblems, { loading }] = useLazyQuery(WhatToDiscardProblemsDocument);
+  const [getMoreProblems, { loading }] = useLazyQuery(
+    WhatToDiscardProblemsDocument,
+  );
   const toast = useToast();
 
   const handleLoadNextPage = async () => {
@@ -30,10 +32,12 @@ export default function LoadNextPageProblemButton() {
     }
 
     if (data) {
-      const newProblems = data.whatToDiscardProblems.edges.map((edge: any) => edge.node);
+      const newProblems = data.whatToDiscardProblems.edges.map(
+        (edge: any) => edge.node,
+      );
       const newPageInfo = data.whatToDiscardProblems.pageInfo;
 
-      setProblems(prevProblems => [...prevProblems, ...newProblems]);
+      setProblems((prevProblems) => [...prevProblems, ...newProblems]);
       setPageInfo(newPageInfo);
     }
   };
@@ -41,7 +45,11 @@ export default function LoadNextPageProblemButton() {
   return (
     <>
       {pageInfo.hasNextPage ? (
-        <Button isLoading={loading} onClick={handleLoadNextPage} variant="outline">
+        <Button
+          isLoading={loading}
+          onClick={handleLoadNextPage}
+          variant="outline"
+        >
           <Text className="text-neutral">さらに読み込む</Text>
         </Button>
       ) : (

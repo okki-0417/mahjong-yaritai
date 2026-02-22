@@ -1,4 +1,7 @@
-export const getUniqueObjectArrayByKey = <T, K extends keyof T>(array: T[], key: K): T[] => {
+export const getUniqueObjectArrayByKey = <T, K extends keyof T>(
+  array: T[],
+  key: K,
+): T[] => {
   const map = new Map<T[K], T>();
 
   for (const item of array) {

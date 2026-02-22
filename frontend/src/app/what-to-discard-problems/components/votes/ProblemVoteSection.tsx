@@ -26,9 +26,19 @@ export default function ProblemVoteSection({
     <PopButton onClick={onOpenVoteResult} isLoading={isLoadingVoteResults}>
       <HStack gap="2px">
         {isVoted ? (
-          <Image src={VoteIconBlue} alt="投票結果を見る" width={30} height={30} />
+          <Image
+            src={VoteIconBlue}
+            alt="投票結果を見る"
+            width={30}
+            height={30}
+          />
         ) : (
-          <Image src={VoteIconDefault} alt="投票結果を見る" width={30} height={30} />
+          <Image
+            src={VoteIconDefault}
+            alt="投票結果を見る"
+            width={30}
+            height={30}
+          />
         )}
         <Text fontFamily="sans-serif" fontWeight="bold">
           {votesCount}

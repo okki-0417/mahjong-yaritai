@@ -1,4 +1,10 @@
-import { Container, ListItem, Text, UnorderedList, VStack } from "@chakra-ui/react";
+import {
+  Container,
+  ListItem,
+  Text,
+  UnorderedList,
+  VStack,
+} from "@chakra-ui/react";
 import WithdrawForm from "@/src/app/me/withdrawal/components/WithdrawForm";
 
 export default function WithdrawalPage() {
@@ -22,7 +28,9 @@ export default function WithdrawalPage() {
                   <Text>一度退会すると、データの復元はできません。</Text>
                 </ListItem>
                 <ListItem>
-                  <Text>同じメールアドレスで再登録しても、過去のデータは引き継がれません。</Text>
+                  <Text>
+                    同じメールアドレスで再登録しても、過去のデータは引き継がれません。
+                  </Text>
                 </ListItem>
                 <ListItem>
                   <Text>退会処理は即座に実行されます。</Text>
@@ -31,7 +39,9 @@ export default function WithdrawalPage() {
             </VStack>
           </VStack>
 
-          <Text>退会を希望される場合は、下の「退会する」ボタンを押してください。</Text>
+          <Text>
+            退会を希望される場合は、下の「退会する」ボタンを押してください。
+          </Text>
         </VStack>
 
         <WithdrawForm />

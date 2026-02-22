@@ -1,4 +1,12 @@
-import { Box, Center, Container, HStack, ListItem, Text, UnorderedList } from "@chakra-ui/react";
+import {
+  Box,
+  Center,
+  Container,
+  HStack,
+  ListItem,
+  Text,
+  UnorderedList,
+} from "@chakra-ui/react";
 import Link from "next/link";
 import ButtonNeutral from "@/src/components/Buttons/ButtonNeutral";
 import LoginSection from "@/src/components/Header/LoginSection";
@@ -10,12 +18,21 @@ import LoginPromptBar from "@/src/components/Header/LoginPromptBar";
 export default function Header() {
   return (
     <Fragment>
-      <Box as="header" w="full" zIndex="50" position="fixed" top="0" left="0" shadow="md">
+      <Box
+        as="header"
+        w="full"
+        zIndex="50"
+        position="fixed"
+        top="0"
+        left="0"
+        shadow="md"
+      >
         <Center as="nav" h="16" position="relative" className="bg-primary">
           <Container maxW="5xl">
             <HStack
               justifyContent={["center", "center", "space-between"]}
-              className="w-[70vw] mx-auto">
+              className="w-[70vw] mx-auto"
+            >
               <LogoLink />
 
               <UnorderedList listStyleType="none">

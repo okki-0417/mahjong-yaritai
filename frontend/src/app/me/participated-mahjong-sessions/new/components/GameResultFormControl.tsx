@@ -53,19 +53,28 @@ export default function GameResultFormControl({
       _even={{ bg: "neutral.300", _hover: { bg: "neutral.400" } }}
       p="0"
       alignItems="stretch"
-      justifyContent="stretch">
+      justifyContent="stretch"
+    >
       <FormControl isInvalid={Boolean(gameResultError)}>
         <VisuallyHiddenInput
-          {...register(`games.${gameIndex}.results.${participantIndex}.ranking` as const, {
-            valueAsNumber: true,
-          })}
+          {...register(
+            `games.${gameIndex}.results.${participantIndex}.ranking` as const,
+            {
+              valueAsNumber: true,
+            },
+          )}
         />
         <HStack
           as={Editable}
-          value={resultPoints != null && !Number.isNaN(resultPoints) ? String(resultPoints) : ""}
+          value={
+            resultPoints != null && !Number.isNaN(resultPoints)
+              ? String(resultPoints)
+              : ""
+          }
           h="full"
           w="full"
-          minH={["10", "14"]}>
+          minH={["10", "14"]}
+        >
           <HStack
             as={EditablePreview}
             cursor="pointer"
@@ -76,7 +85,13 @@ export default function GameResultFormControl({
             h="full"
             p="0"
             justify="center"
-            color={resultPoints > 0 ? "blue.500" : resultPoints < 0 ? "red.500" : "inherit"}
+            color={
+              resultPoints > 0
+                ? "blue.500"
+                : resultPoints < 0
+                  ? "red.500"
+                  : "inherit"
+            }
           />
           <Input
             as={EditableInput}
@@ -94,10 +109,13 @@ export default function GameResultFormControl({
                 MozAppearance: "textfield",
               },
             }}
-            {...register(`games.${gameIndex}.results.${participantIndex}.resultPoints` as const, {
-              valueAsNumber: true,
-              onChange: handleResultPointsChange,
-            })}
+            {...register(
+              `games.${gameIndex}.results.${participantIndex}.resultPoints` as const,
+              {
+                valueAsNumber: true,
+                onChange: handleResultPointsChange,
+              },
+            )}
             onInput={handleResultPointsInput}
           />
         </HStack>

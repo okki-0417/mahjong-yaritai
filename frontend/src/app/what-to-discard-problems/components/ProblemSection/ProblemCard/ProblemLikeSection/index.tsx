@@ -47,10 +47,10 @@ export default function ProblemLikeSection({
   >(CreateWhatToDiscardProblemLikeDocument, {
     onCompleted: () => {
       setIsLiked(true);
-      setLikesCount(prev => prev + 1);
+      setLikesCount((prev) => prev + 1);
       toast({ title: "いいねしました", status: "success" });
     },
-    onError: error => {
+    onError: (error) => {
       toast({
         status: "error",
         title: "いいねに失敗しました",
@@ -65,10 +65,10 @@ export default function ProblemLikeSection({
   >(DeleteWhatToDiscardProblemLikeDocument, {
     onCompleted: () => {
       setIsLiked(false);
-      setLikesCount(prev => prev - 1);
+      setLikesCount((prev) => prev - 1);
       toast({ title: "いいねを取り消しました", status: "success" });
     },
-    onError: error => {
+    onError: (error) => {
       toast({
         status: "error",
         title: "いいねの取り消しに失敗しました",
@@ -114,7 +114,10 @@ export default function ProblemLikeSection({
         />
       </form>
 
-      <NotLoggedInModal isOpen={isNotLoggedInModalOpen} onClose={onNotLoggedInModalClose} />
+      <NotLoggedInModal
+        isOpen={isNotLoggedInModalOpen}
+        onClose={onNotLoggedInModalClose}
+      />
     </>
   );
 }

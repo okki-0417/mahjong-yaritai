@@ -1,5 +1,7 @@
 mutation DeleteWhatToDiscardProblemVote($whatToDiscardProblemId: ID!) {
-  deleteWhatToDiscardProblemVote(input: { whatToDiscardProblemId: $whatToDiscardProblemId }) {
+  deleteWhatToDiscardProblemVote(
+    input: { whatToDiscardProblemId: $whatToDiscardProblemId }
+  ) {
     id
   }
 }

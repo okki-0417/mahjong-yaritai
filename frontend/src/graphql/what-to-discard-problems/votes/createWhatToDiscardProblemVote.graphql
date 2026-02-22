@@ -1,5 +1,7 @@
 mutation CreateWhatToDiscardProblemVote($problemId: ID!, $tileId: ID!) {
-  createWhatToDiscardProblemVote(input: { problemId: $problemId, tileId: $tileId }) {
+  createWhatToDiscardProblemVote(
+    input: { problemId: $problemId, tileId: $tileId }
+  ) {
     vote {
       id
       tileId

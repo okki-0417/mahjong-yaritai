@@ -33,7 +33,9 @@ export default function ProblemCardHeader({ problem }: Props) {
       </Button>
 
       <HStack spacing={2}>
-        {isMyProblem && <ProblemOperationMenu problem={problem} isMyProblem={isMyProblem} />}
+        {isMyProblem && (
+          <ProblemOperationMenu problem={problem} isMyProblem={isMyProblem} />
+        )}
       </HStack>
 
       <UserModal

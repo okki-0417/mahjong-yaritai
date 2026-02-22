@@ -1,7 +1,15 @@
 "use client";
 
 import { Comment } from "@/src/generated/graphql";
-import { Box, Button, Circle, HStack, Img, Text, useDisclosure } from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  Circle,
+  HStack,
+  Img,
+  Text,
+  useDisclosure,
+} from "@chakra-ui/react";
 import { MdOutlineReply } from "react-icons/md";
 import useGetSession from "@/src/hooks/useGetSession";
 import UserModal from "@/src/components/Modals/UserModal";
@@ -43,7 +51,12 @@ export default function CommentCard({ comment, onReply }: Props) {
         <HStack alignItems="center" justifyContent="space-between">
           <Button colorScheme="" onClick={onUserModalOpen} p="0">
             <HStack>
-              <Circle size="8" overflow="hidden" border="1px" borderColor="gray.300">
+              <Circle
+                size="8"
+                overflow="hidden"
+                border="1px"
+                borderColor="gray.300"
+              >
                 <Img
                   src={comment.user.avatarUrl || "/no-image.webp"}
                   className="w-full h-full object-cover"
@@ -63,14 +76,25 @@ export default function CommentCard({ comment, onReply }: Props) {
         <Text mt="1">{comment.content}</Text>
 
         <HStack justifyContent="end" mt="1">
-          <Text fontFamily="sans-serif" fontSize="xs" className="text-secondary">
+          <Text
+            fontFamily="sans-serif"
+            fontSize="xs"
+            className="text-secondary"
+          >
             {new Date(comment.createdAt).toLocaleString()}
           </Text>
         </HStack>
       </Box>
 
-      <NotLoggedInModal isOpen={isNotLoggedInModalOpen} onClose={onNotLoggedInModalClose} />
-      <UserModal user={comment.user} isOpen={isUserModalOpen} onClose={onUserModalClose} />
+      <NotLoggedInModal
+        isOpen={isNotLoggedInModalOpen}
+        onClose={onNotLoggedInModalClose}
+      />
+      <UserModal
+        user={comment.user}
+        isOpen={isUserModalOpen}
+        onClose={onUserModalClose}
+      />
     </>
   );
 }
