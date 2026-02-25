@@ -1,5 +1,5 @@
 import { Container } from "@chakra-ui/react";
-import ProblemsSectionSkeleton from "@/src/app/what-to-discard-problems/components/ProblemsSectionSkeleton";
+import ProblemsSectionSkeleton from "@/src/app/what-to-discard-problems/_components/ProblemsSectionSkeleton";
 
 export default function Loading() {
   return (

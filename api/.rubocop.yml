@@ -46,7 +46,7 @@ Layout/SpaceAroundOperators:
 # 例: user.posts.where(...).order(...) の改行時のインデント
 Layout/MultilineMethodCallIndentation:
   Enabled: true
-  EnforcedStyle: aligned
+  EnforcedStyle: indented
 
 # ブロックの end とブロック開始位置の整列
 Layout/BlockAlignment:

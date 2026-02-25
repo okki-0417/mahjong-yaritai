@@ -28,7 +28,7 @@ Rails.application.configure do
 
   config.log_level = :debug
 
-  logger = ActiveSupport::Logger.new(Rails.root.join("log/development.log"))
+  logger = ActiveSupport::Logger.new($stdout)
   logger.formatter = CustomizedLogger::Formatter.new
   config.logger = ActiveSupport::TaggedLogging.new(logger)
 

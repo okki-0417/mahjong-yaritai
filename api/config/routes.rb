@@ -6,18 +6,38 @@ Rails.application.routes.draw do
   get "/", to: "rails/health#show"
   get "/up", to: "rails/health#show"
 
-  namespace :auth do
-    namespace :google do
-      resource :callback, only: %i[create]
+  defaults format: :json do
+    namespace :auth do
+      namespace :google do
+        resource :callback, only: %i[create]
+      end
+
+      resource :status, only: %i[show]
+      resource :request, only: %i[create]
+      resource :verify, only: %i[create]
+      resource :refresh, only: %i[create]
+      resource :logout, only: %i[create]
+
+      namespace :line do
+        resource :login_url, only: %i[show]
+        resource :callback, only: %i[create]
+      end
     end
 
-    namespace :line do
-      resource :login_url, only: %i[show]
-      resource :callback, only: %i[create]
+    resource :me, controller: :me, only: %i[show update] do
+      resources :followings, only: %i[create destroy], module: :me
     end
+
+    resources :users, only: %i[show] do
+      resource :follow_stats, only: %i[show], module: :users
+      resources :followers, only: %i[index], module: :users
+      resources :followings, only: %i[index], module: :users
+    end
+
+    resources :what_to_discard_problems, only: %i[index]
+
+    post "/graphql", to: "graphql#execute"
   end
-
-  post "/graphql", to: "graphql#execute"
 
   if Rails.env.development?
     mount LetterOpenerWeb::Engine, at: "/letter_opener"

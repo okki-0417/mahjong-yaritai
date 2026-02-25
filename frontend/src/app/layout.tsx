@@ -5,6 +5,7 @@ import BottomNavigation from "@/src/components/BottomNavigation";
 import { SessionProvider } from "@/src/contexts/SessionProvider";
 import AppolloProviderWrapper from "@/src/contexts/AppolloProviderWrapper";
 import ChakraCustomProvider from "@/src/contexts/ChakraCustomProvider";
+import { ToastProvider } from "@/src/contexts/ToastProvider";
 
 export const metadata: Metadata = {
   title: {
@@ -57,18 +58,20 @@ export default function RootLayout({
         <ChakraCustomProvider>
           <AppolloProviderWrapper>
             <SessionProvider>
-              <main
-                className="flex pb-24 flex-col min-h-screen bg-secondary overflow-x-hidden text-neutral "
-                style={{ fontFamily: "PT Serif, serif" }}
-              >
-                <div className="mb-16">
-                  <Header />
-                </div>
-                <div className="flex-grow w-screen flex items-stretch">
-                  {children}
-                </div>
-              </main>
-              <BottomNavigation />
+              <ToastProvider>
+                <main
+                  className="flex pb-24 flex-col min-h-screen bg-secondary overflow-x-hidden text-neutral "
+                  style={{ fontFamily: "PT Serif, serif" }}
+                >
+                  <div className="mb-16">
+                    <Header />
+                  </div>
+                  <div className="grow w-screen flex items-stretch">
+                    {children}
+                  </div>
+                </main>
+                <BottomNavigation />
+              </ToastProvider>
             </SessionProvider>
           </AppolloProviderWrapper>
         </ChakraCustomProvider>

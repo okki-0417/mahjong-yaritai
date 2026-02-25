@@ -1,18 +1,8 @@
 "use client";
 
-import {
-  HStack,
-  Modal,
-  ModalBody,
-  ModalCloseButton,
-  ModalContent,
-  ModalFooter,
-  ModalHeader,
-  ModalOverlay,
-  Text,
-} from "@chakra-ui/react";
 import Link from "next/link";
 import ButtonAccent from "@/src/components/Buttons/ButtonAccent";
+import Modal from "@/src/components/Modal";
 
 export default function NotLoggedInModal({
   isOpen,
@@ -22,31 +12,20 @@ export default function NotLoggedInModal({
   onClose: () => void;
 }) {
   return (
-    <Modal
-      blockScrollOnMount={false}
-      isOpen={isOpen}
-      onClose={onClose}
-      isCentered
-      size={["xs", "2xl"]}
-    >
-      <ModalOverlay />
-      <ModalContent>
-        <ModalHeader fontFamily="serif">未ログイン</ModalHeader>
+    <Modal isOpen={isOpen} onClose={onClose}>
+      <p>未ログイン</p>
 
-        <ModalCloseButton className="text-primary" />
+      <div className="mt-2">
+        <p>この機能はログインしている時のみ利用できます。</p>
 
-        <ModalBody className="text-primary" fontFamily="serif">
-          <Text>この機能はログインしている時のみ利用できます。</Text>
-
-          <HStack mt="4">
-            <Link href="/auth/request">
-              <ButtonAccent>認証</ButtonAccent>
-            </Link>
-          </HStack>
-        </ModalBody>
-
-        <ModalFooter></ModalFooter>
-      </ModalContent>
+        <div className="mt-4">
+          <Link href="/auth/request">
+            <button className="px-4 py-2 bg-pink-500 text-neutral rounded-sm hover:bg-pink-600">
+              認証
+            </button>
+          </Link>
+        </div>
+      </div>
     </Modal>
   );
 }

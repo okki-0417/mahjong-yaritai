@@ -4,32 +4,6 @@ module Controllers
   module Authenticatable
     include ActionController::Cookies
 
-    def login(user)
-      reset_session
-
-      session[:user_id] = user.id
-    end
-
-    def remember(user)
-      user.remember
-
-      cookies.permanent.signed[:user_id] = {
-        value: user.id,
-        domain: Rails.env.production? ? ENV.fetch("ETLD_HOST") : "localhost",
-        same_site: :lax,
-        secure: Rails.env.production?,
-        httponly: true,
-      }
-
-      cookies.permanent.signed[:remember_token] = {
-        value: user.remember_token,
-        domain: Rails.env.production? ? ENV.fetch("ETLD_HOST") : "localhost",
-        same_site: :lax,
-        secure: Rails.env.production?,
-        httponly: true,
-      }
-    end
-
     def current_user
       @current_user ||= begin
         if user_id = session[:user_id]
@@ -47,18 +21,6 @@ module Controllers
           nil
         end
       end
-    end
-
-    def logout
-      forget current_user
-      reset_session
-      @current_user = nil
-    end
-
-    def forget(user)
-      user.forget
-      cookies.delete(:user_id)
-      cookies.delete(:remember_token)
     end
 
     def logged_in?

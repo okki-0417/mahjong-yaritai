@@ -1,7 +1,7 @@
 import { Box, Button, Circle, Image, Text, VStack } from "@chakra-ui/react";
 import { CiEdit } from "react-icons/ci";
 import FollowButton from "@/src/components/FollowButton";
-import { FollowStats } from "@/src/components/FollowStats";
+import FollowStats from "@/src/app/me/_components/DashboardSection/FollowStats";
 import { User } from "@/src/generated/graphql";
 import Link from "next/link";
 
@@ -41,8 +41,9 @@ export default function UserProfile({ user, isMyProfile = false }: Props) {
         </Box>
 
         <FollowStats
-          followersCount={user.followersCount}
-          followingCount={user.followingCount}
+          userId={parseInt(user.id, 10)}
+          followersCount={user.followersCount ?? 0}
+          followingCount={user.followingCount ?? 0}
         />
 
         {isMyProfile == false && (

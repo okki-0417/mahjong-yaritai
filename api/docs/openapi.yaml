@@ -1,0 +1,386 @@
+openapi: 3.0.0
+info:
+  title: My Rails API
+  version: 1.0.0
+
+paths:
+  /me:
+    get:
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+    patch:
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  maxLength: 20
+                profile_text:
+                  type: string
+                  maxLength: 500
+                avatar:
+                  type: string
+                  format: binary
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+
+  /me/followings:
+    post:
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - target_user_id
+              properties:
+                target_user_id:
+                  type: integer
+      responses:
+        '201':
+          description: フォロー成功
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+
+  /me/followings/{id}:
+    delete:
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: フォロー解除成功
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+
+  /users/{user_id}:
+    get:
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/User'
+                  - type: object
+                    required:
+                      - is_followed_by_me
+                    properties:
+                      is_followed_by_me:
+                        type: boolean
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+
+  /users/{user_id}/follow_stats:
+    get:
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FollowStats'
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+
+  /users/{user_id}/followers:
+    get:
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserList'
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+
+  /users/{user_id}/followings:
+    get:
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserList'
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+
+  /what_to_discard_problems:
+    get:
+      parameters:
+        - name: first
+          in: query
+          required: false
+          schema:
+            type: integer
+            default: 10
+        - name: after
+          in: query
+          required: false
+          schema:
+            type: integer
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WhatToDiscardProblemList'
+
+components:
+  schemas:
+    User:
+      type: object
+      required:
+        - id
+        - name
+        - avatar_url
+        - profile_text
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        avatar_url:
+          type: string
+          nullable: true
+        profile_text:
+          type: string
+          nullable: true
+
+    FollowStats:
+      type: object
+      required:
+        - following_count
+        - followers_count
+      properties:
+        following_count:
+          type: integer
+        followers_count:
+          type: integer
+
+    UserList:
+      type: object
+      required:
+        - users
+      properties:
+        users:
+          type: array
+          items:
+            $ref: '#/components/schemas/User'
+
+    Errors:
+      type: object
+      required:
+        - errors
+      properties:
+        errors:
+          type: array
+          items:
+            type: string
+
+    WhatToDiscardProblem:
+      type: object
+      required:
+        - id
+        - hand1_id
+        - hand2_id
+        - hand3_id
+        - hand4_id
+        - hand5_id
+        - hand6_id
+        - hand7_id
+        - hand8_id
+        - hand9_id
+        - hand10_id
+        - hand11_id
+        - hand12_id
+        - hand13_id
+        - tsumo_id
+        - dora_id
+        - comments_count
+        - likes_count
+        - votes_count
+        - is_liked_by_me
+        - my_vote_tile_id
+        - user
+        - created_at
+      properties:
+        id:
+          type: integer
+        hand1_id:
+          type: integer
+        hand2_id:
+          type: integer
+        hand3_id:
+          type: integer
+        hand4_id:
+          type: integer
+        hand5_id:
+          type: integer
+        hand6_id:
+          type: integer
+        hand7_id:
+          type: integer
+        hand8_id:
+          type: integer
+        hand9_id:
+          type: integer
+        hand10_id:
+          type: integer
+        hand11_id:
+          type: integer
+        hand12_id:
+          type: integer
+        hand13_id:
+          type: integer
+        tsumo_id:
+          type: integer
+        dora_id:
+          type: integer
+        round:
+          type: string
+          nullable: true
+        turn:
+          type: integer
+          nullable: true
+        wind:
+          type: string
+          nullable: true
+        points:
+          type: integer
+          nullable: true
+        description:
+          type: string
+          nullable: true
+        comments_count:
+          type: integer
+        likes_count:
+          type: integer
+        votes_count:
+          type: integer
+        is_liked_by_me:
+          type: boolean
+        my_vote_tile_id:
+          type: integer
+          nullable: true
+        user:
+          $ref: '#/components/schemas/User'
+        created_at:
+          type: string
+          format: date-time
+
+    PageInfo:
+      type: object
+      required:
+        - has_next_page
+        - has_previous_page
+      properties:
+        has_next_page:
+          type: boolean
+        has_previous_page:
+          type: boolean
+        start_cursor:
+          type: integer
+          nullable: true
+        end_cursor:
+          type: integer
+          nullable: true
+
+    WhatToDiscardProblemList:
+      type: object
+      required:
+        - problems
+        - page_info
+      properties:
+        problems:
+          type: array
+          items:
+            $ref: '#/components/schemas/WhatToDiscardProblem'
+        page_info:
+          $ref: '#/components/schemas/PageInfo'

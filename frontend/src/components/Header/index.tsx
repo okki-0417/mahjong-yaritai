@@ -1,64 +1,82 @@
-import {
-  Box,
-  Center,
-  Container,
-  HStack,
-  ListItem,
-  Text,
-  UnorderedList,
-} from "@chakra-ui/react";
 import Link from "next/link";
-import ButtonNeutral from "@/src/components/Buttons/ButtonNeutral";
 import LoginSection from "@/src/components/Header/LoginSection";
-import { Fragment } from "react";
 import SideNavigation from "@/src/components/Header/SideNavigation";
 import LogoLink from "@/src/components/Header/LogoLink";
 import LoginPromptBar from "@/src/components/Header/LoginPromptBar";
+import { cookies } from "next/headers";
 
-export default function Header() {
-  return (
-    <Fragment>
-      <Box
-        as="header"
-        w="full"
-        zIndex="50"
-        position="fixed"
-        top="0"
-        left="0"
-        shadow="md"
-      >
-        <Center as="nav" h="16" position="relative" className="bg-primary">
-          <Container maxW="5xl">
-            <HStack
-              justifyContent={["center", "center", "space-between"]}
-              className="w-[70vw] mx-auto"
-            >
-              <LogoLink />
+export default async function Header() {
+  try {
+    const cookieStore = await cookies();
+    const accessToken = cookieStore.get("access_token");
+    const isLoggedIn = !!accessToken;
 
-              <UnorderedList listStyleType="none">
-                <HStack display={["none", "none", "flex"]}>
-                  <ListItem>
-                    <Link href="/what-to-discard-problems">
-                      <HStack gap="1">
-                        <ButtonNeutral>
-                          <HStack mx="0">
-                            <Text>何切る問題</Text>
-                          </HStack>
-                        </ButtonNeutral>
-                      </HStack>
-                    </Link>
-                  </ListItem>
+    return (
+      <div>
+        <header className="z-45 fixed top-0 inset-x-0 shadow-md">
+          <nav className="bg-primary h-16 relative flex items-center">
+            <div className="max-w-5xl mx-auto">
+              <div className="flex md:justify-between justify-center w-[70vw] mx-auto items-center">
+                <LogoLink isLoggedIn={isLoggedIn} />
 
-                  <LoginSection />
-                </HStack>
-              </UnorderedList>
-            </HStack>
-          </Container>
-        </Center>
+                <ul>
+                  <div className="hidden md:flex items-center">
+                    <li>
+                      <Link href="/what-to-discard-problems">
+                        <div className="flex items-center gap-1">
+                          <button className="py-2 px-4 rounded-sm hover:bg-secondary">
+                            何切る問題
+                          </button>
+                        </div>
+                      </Link>
+                    </li>
 
-        <SideNavigation />
-        <LoginPromptBar />
-      </Box>
-    </Fragment>
-  );
+                    <LoginSection isLoggedIn={isLoggedIn} />
+                  </div>
+                </ul>
+              </div>
+            </div>
+          </nav>
+
+          <SideNavigation />
+          <LoginPromptBar />
+        </header>
+      </div>
+    );
+  } catch (error) {
+    console.error("Error fetching cookies:", error);
+
+    return (
+      <div>
+        <header className="z-45 fixed top-0 inset-x-0 shadow-md">
+          <nav className="bg-primary h-16 relative flex items-center">
+            <div className="max-w-5xl mx-auto">
+              <div className="flex md:justify-between justify-center w-[70vw] mx-auto items-center">
+                <LogoLink isLoggedIn={false} />
+
+                <ul>
+                  <div className="hidden md:flex items-center">
+                    <li>
+                      <Link href="/what-to-discard-problems">
+                        <div className="flex items-center gap-1">
+                          <button className="py-2 px-4 rounded-sm hover:bg-secondary">
+                            何切る問題
+                          </button>
+                        </div>
+                      </Link>
+                    </li>
+
+                    <LoginSection isLoggedIn={false} />
+                  </div>
+                </ul>
+              </div>
+            </div>
+          </nav>
+
+          <SideNavigation />
+          <LoginPromptBar />
+        </header>
+      </div>
+    );
+  }
 }

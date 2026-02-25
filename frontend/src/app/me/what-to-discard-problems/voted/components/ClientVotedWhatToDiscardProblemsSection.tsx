@@ -1,7 +1,7 @@
 "use client";
 
 import fetchVotedProblemsAction from "@/src/app/me/what-to-discard-problems/voted/actions/fetchVotedProblemsAction";
-import ProblemCard from "@/src/app/what-to-discard-problems/components/ProblemSection/ProblemCard";
+import ProblemCard from "@/src/app/what-to-discard-problems/_components/ProblemSection/ProblemCard";
 import { ProblemsContext } from "@/src/app/what-to-discard-problems/contexts/ProblemsContextProvider";
 import { useToast, VStack } from "@chakra-ui/react";
 import {

@@ -17,6 +17,10 @@ rescue ActiveRecord::PendingMigrationError => e
 end
 
 RSpec.configure do |config|
+  include Committee::Rails::Test::Methods
+  config.add_setting :committee_options
+  config.committee_options = { schema_path: Rails.root.join('docs/openapi.yaml').to_s }
+
   config.fixture_paths = [
     Rails.root.join('spec/fixtures'),
   ]

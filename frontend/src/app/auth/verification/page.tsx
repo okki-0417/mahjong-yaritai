@@ -1,25 +1,18 @@
-import { Box, Container, Divider, Text } from "@chakra-ui/react";
 import { Suspense } from "react";
-import Fallback from "@/src/components/fallbacks/Fallback";
-import AuthVerificationSection from "@/src/app/auth/verification/components/AuthVerificationSection";
-
-export const dynamic = "force-dynamic";
+import AuthVerificationSection from "@/src/app/auth/verification/_components/AuthVerificationSection";
 
 export default function AuthVerification() {
   return (
-    <Container maxW="2xl" mt="20">
-      <Text fontSize={["2xl", "4xl"]} fontWeight="bold">
-        認証メールを送信しました
-      </Text>
-      <Divider />
+    <div className="lg:w-xl mx-auto mt-10">
+      <h1 className="text-2xl lg:text-2xl">認証メールを送信しました</h1>
 
-      <Text mt="8">メール内の認証コードを入力してください</Text>
+      <p className="mt-6">メール内の認証コードを入力してください</p>
 
-      <Box mt="4">
-        <Suspense fallback={<Fallback />}>
+      <div className="mt-1">
+        <Suspense fallback={<p>読み込み中...</p>}>
           <AuthVerificationSection />
         </Suspense>
-      </Box>
-    </Container>
+      </div>
+    </div>
   );
 }

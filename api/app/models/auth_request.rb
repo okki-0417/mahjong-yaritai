@@ -13,14 +13,18 @@ class AuthRequest < ApplicationRecord
 
   scope :within_expiration, -> { where("expired_at > ?", Time.current) }
 
-  def expired?
-    Time.current > expired_at
+  def valid_request?
+    !expired?
   end
 
   private
 
+  def expired?
+    Time.current > expired_at
+  end
+
   def generate_token
-    self.token ||= SecureRandom.alphanumeric(TOKEN_LENGTH)
+    self.token ||= format("%0#{TOKEN_LENGTH}d", SecureRandom.random_number(10**TOKEN_LENGTH))
   end
 
   def set_expired_at

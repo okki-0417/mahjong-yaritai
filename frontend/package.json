@@ -13,7 +13,8 @@
     "format:check": "npx prettier . --check",
     "typecheck": "tsc --noEmit",
     "gen-client": "npx openapi-zod-client ../api/swagger/v1/swagger.yaml -o src/zodios/api.ts",
-    "codegen": "graphql-codegen --config codegen.ts"
+    "codegen": "graphql-codegen --config codegen.ts",
+    "gen:api": "openapi-typescript ../api/docs/openapi.yaml -o src/types/api.ts"
   },
   "dependencies": {
     "@apollo/client": "^4.0.5",
@@ -30,14 +31,14 @@
     "axios": "^1.5.0",
     "framer-motion": "^12.7.3",
     "graphql": "^16.11.0",
-    "next": "15.5.7",
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1",
+    "next": "16.1.6",
+    "react": "19.2.4",
+    "react-dom": "19.2.4",
     "react-hook-form": "^7.55.0",
     "react-icons": "^5.5.0",
     "styled-components": "^6.1.15",
     "tailwindcss": "^4.1.8",
-    "zod": "^3.24.2"
+    "zod": "^4"
   },
   "devDependencies": {
     "@graphql-codegen/cli": "^6.0.0",
@@ -49,15 +50,16 @@
     "@graphql-typed-document-node/core": "^3.0.0",
     "@types/apollo-upload-client": "^18.0.0",
     "@types/node": "^25.3.0",
-    "@types/react": "^18.3.21",
-    "@types/react-dom": "^18.3.1",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
     "@typescript-eslint/eslint-plugin": "^8.33.1",
     "@typescript-eslint/parser": "^8.33.1",
     "autoprefixer": "^10.4.21",
     "eslint": "^9",
     "eslint-config-next": "^16.1.6",
+    "openapi-typescript": "^7.13.0",
     "openapi-zod-client": "^1.18.3",
     "prettier": "^3.8.1",
-    "typescript": "~5.6.2"
+    "typescript": "^5"
   }
 }

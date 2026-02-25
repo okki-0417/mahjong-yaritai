@@ -1,6 +1,6 @@
 "use client";
 
-import VoteButton from "@/src/app/what-to-discard-problems/components/votes/VoteButton";
+import VoteButton from "@/src/app/what-to-discard-problems/_components/votes/VoteButton";
 import { WhatToDiscardProblemVoteResult } from "@/src/generated/graphql";
 import {
   Box,

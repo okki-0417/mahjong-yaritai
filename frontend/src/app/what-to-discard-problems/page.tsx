@@ -1,13 +1,6 @@
-import { Container } from "@chakra-ui/react";
 import { Suspense } from "react";
 import { Metadata } from "next";
-import ProblemsSectionSkeleton from "@/src/app/what-to-discard-problems/components/ProblemsSectionSkeleton";
-import { WhatToDiscardProblem } from "@/src/generated/graphql";
-import ProblemsSection from "@/src/app/what-to-discard-problems/components/ProblemSection";
-
-export type WhatToDiscardProblems = WhatToDiscardProblem[] | [];
-
-export const dynamic = "force-dynamic";
+import ProblemsSection from "@/src/app/what-to-discard-problems/_components/ProblemSection";
 
 export const metadata: Metadata = {
   title: "何切る問題集",
@@ -22,10 +15,10 @@ export const metadata: Metadata = {
 
 export default function WhatToDiscardProblems() {
   return (
-    <Container maxW="8xl" px={["1px", "6"]} mt={["6", "12"]}>
-      <Suspense fallback={<ProblemsSectionSkeleton />}>
+    <div className="w-7xl mx-auto lg:px-6 px-px lg:mt-12 mt-6">
+      <Suspense fallback={<div>読み込み中...</div>}>
         <ProblemsSection />
       </Suspense>
-    </Container>
+    </div>
   );
 }

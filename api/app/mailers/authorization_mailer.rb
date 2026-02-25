@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class AuthorizationMailer < ApplicationMailer
-  def send_authorization_token(auth_request)
+  def authorization_token(auth_request)
     @token = auth_request.token
 
     mail(

@@ -1,97 +1,87 @@
 "use client";
 
-import {
-  Avatar,
-  Box,
-  Modal,
-  ModalBody,
-  ModalCloseButton,
-  ModalContent,
-  ModalFooter,
-  ModalHeader,
-  ModalOverlay,
-  Text,
-  VStack,
-} from "@chakra-ui/react";
+import { useState, useEffect, useCallback, useTransition } from "react";
+import Modal from "@/src/components/Modal";
+import { FollowableUser } from "@/src/types/components";
 import FollowButton from "@/src/components/FollowButton";
-import { useState, useEffect } from "react";
-import { useQuery } from "@apollo/client/react";
-import {
-  User,
-  UserProfileDocument,
-  UserProfileQuery,
-} from "@/src/generated/graphql";
-import { canFollow } from "@/src/lib/utils/canFollow";
+import fetchUserAction from "@/src/actions/fetchUserAction";
+import { fetchMeAction } from "@/src/actions/fetchMeAction";
 
 type Props = {
-  user: User;
+  userId: string | number;
   isOpen: boolean;
   onClose: () => void;
-  isFollowing?: boolean;
-  currentUserId?: string | null;
 };
 
-export default function UserModal({
-  user,
-  isOpen,
-  onClose,
-  isFollowing = false,
-  currentUserId = null,
-}: Props) {
-  const [followState, setFollowState] = useState(isFollowing);
+export default function UserModal({ userId, isOpen, onClose }: Props) {
+  const [myUserId, setMyUserId] = useState<number | string | null>(null);
+  const [userProfile, setUserProfile] = useState<FollowableUser | null>(null);
+  const [isPending, startTransition] = useTransition();
 
-  const { data } = useQuery<UserProfileQuery>(UserProfileDocument, {
-    variables: { userId: String(user.id) },
-    skip: !isOpen,
-  });
+  const fetchUsers = useCallback(async () => {
+    const [userResult, meResult] = await Promise.all([
+      fetchUserAction(userId),
+      fetchMeAction(),
+    ]);
+
+    if (userResult.errors) {
+      console.error("ユーザの情報の取得に失敗:", userResult.errors);
+      return;
+    }
+    if (meResult.errors) {
+      console.error("自分の情報の取得に失敗:", meResult.errors);
+      return;
+    }
+
+    setUserProfile(userResult.data);
+    setMyUserId(meResult.data?.id || null);
+  }, [userId]);
 
   useEffect(() => {
-    if (data?.user) {
-      setFollowState(isFollowing);
+    if (isOpen) {
+      startTransition(() => {
+        fetchUsers();
+      });
     }
-  }, [data, isFollowing]);
+  }, [isOpen, fetchUsers]);
 
   return (
-    <Modal
-      isOpen={isOpen}
-      onClose={onClose}
-      isCentered
-      size={{ base: "sm", md: "md" }}
-    >
-      <ModalOverlay />
+    <Modal isOpen={isOpen} onClose={onClose}>
+      <p>ユーザー情報</p>
 
-      <ModalContent fontFamily="serif">
-        <ModalHeader pb={2}>ユーザー情報</ModalHeader>
-
-        <ModalCloseButton />
-
-        <ModalBody>
-          <VStack spacing={4} align="center">
-            <Avatar src={user.avatarUrl} size="2xl" />
-
-            <Box textAlign="center">
-              <Text fontSize="xl" fontWeight="bold" mb={2}>
-                {user.name}
-              </Text>
-              {user.profileText && (
-                <Text color="gray.300" fontSize="sm">
-                  {user.profileText}
-                </Text>
-              )}
-            </Box>
-          </VStack>
-        </ModalBody>
-
-        <ModalFooter>
-          {canFollow(currentUserId, user.id) && (
-            <FollowButton
-              userId={user.id}
-              initialIsFollowing={followState}
-              onFollowChange={setFollowState}
+      {isPending ? (
+        <p>読み込み中...</p>
+      ) : (
+        <div>
+          <div className="mt-2 flex flex-col items-center gap-4">
+            <div
+              style={{
+                backgroundImage: `url(${userProfile?.avatar_url || "/no-image.webp"})`,
+              }}
+              className="size-36 border-2 rounded-full bg-cover bg-center"
             />
-          )}
-        </ModalFooter>
-      </ModalContent>
+
+            <p className="text-xl">{userProfile?.name}</p>
+
+            {userProfile?.profile_text && (
+              <p className="mt-2 text-sm line-clamp-10">
+                {userProfile.profile_text}
+              </p>
+            )}
+          </div>
+
+          {myUserId &&
+            userProfile &&
+            Number(myUserId) !== Number(userProfile.id) && (
+              <div className="mt-4 flex justify-center">
+                <FollowButton
+                  userId={userProfile.id}
+                  initialIsFollowing={userProfile.is_followed_by_me}
+                />
+              </div>
+            )}
+        </div>
+      )}
     </Modal>
   );
 }

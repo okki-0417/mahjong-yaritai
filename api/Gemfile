@@ -17,6 +17,8 @@ gem "sidekiq"
 gem "graphql"
 gem "graphql-batch"
 gem "apollo_upload_server", "~> 2.1"
+gem "jwt"
+gem "jbuilder"
 
 group :development do
   gem "graphiql-rails"
@@ -33,6 +35,10 @@ group :development, :test do
   gem "rspec-rails", "~> 8.0.1"
   gem "shoulda-matchers"
   gem "rswag-specs"
+end
+
+group :test do
+  gem "committee-rails"
 end
 
 group :production do
