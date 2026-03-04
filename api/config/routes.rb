@@ -19,7 +19,7 @@ Rails.application.routes.draw do
       resource :logout, only: %i[create]
 
       namespace :line do
-        resource :login_url, only: %i[show]
+        resource :login_url, only: %i[create]
         resource :callback, only: %i[create]
       end
     end
@@ -34,7 +34,9 @@ Rails.application.routes.draw do
       resources :followings, only: %i[index], module: :users
     end
 
-    resources :what_to_discard_problems, only: %i[index]
+    resources :what_to_discard_problems, only: %i[index show update destroy] do
+      resources :likes, only: %i[create destroy], module: :what_to_discard_problems
+    end
 
     post "/graphql", to: "graphql#execute"
   end

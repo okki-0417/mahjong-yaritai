@@ -2,10 +2,10 @@ import { cookies } from "next/headers";
 import { API_BASE_URL } from "@/config/apiConfig";
 import { User, WhatToDiscardProblemList } from "@/src/types/components";
 
-type FetchProblemsResult = {
-  problems: WhatToDiscardProblemList;
-  me: User | null;
-};
+type FetchProblemsResult = [
+  problems: WhatToDiscardProblemList,
+  me: User | null,
+];
 
 export async function fetchProblems(): Promise<FetchProblemsResult> {
   const cookieStore = await cookies();
@@ -34,5 +34,5 @@ export async function fetchProblems(): Promise<FetchProblemsResult> {
     }
   }
 
-  return { problems, me };
+  return [problems, me];
 }

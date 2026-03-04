@@ -3,8 +3,7 @@
 import { useState } from "react";
 import VoteButton from "@/src/app/what-to-discard-problems/_components/votes/VoteButton";
 import TileImage from "@/src/components/TileImage";
-import ProblemDescriptionModal from "@/src/app/what-to-discard-problems/_components/ProblemSection/ProblemCard/ProblemDescriptionModal";
-import ProblemLikeSection from "@/src/app/what-to-discard-problems/_components/ProblemSection/ProblemCard/ProblemLikeSection";
+import ProblemLike from "@/src/app/what-to-discard-problems/_components/ProblemSection/ProblemCard/ProblemLike";
 import ProblemCardHeader from "@/src/app/what-to-discard-problems/_components/ProblemSection/ProblemCard/ProblemCardHeader";
 import TilesDisplay from "@/src/app/what-to-discard-problems/_components/ProblemSection/ProblemCard/TilesDisplay";
 import ProblemCommentSection from "@/src/app/what-to-discard-problems/_components/ProblemSection/ProblemCard/ProblemCommentSection";
@@ -13,6 +12,7 @@ import VoteResultModal from "@/src/components/Modals/VoteResultModal";
 import { clearQueryCache } from "@/src/lib/apollo/cache";
 import { User, WhatToDiscardProblem } from "@/src/types/components";
 import { useDisclosure } from "@/src/hooks/useDisclosure";
+import ProblemDescription from "@/src/app/what-to-discard-problems/_components/ProblemSection/ProblemCard/ProblemDescription";
 
 type Props = {
   problem: WhatToDiscardProblem;
@@ -27,12 +27,6 @@ export default function ProblemCard({ problem, me }: Props) {
   const [myVoteTileId, setMyVoteTileId] = useState<number | null>(
     problem.my_vote_tile_id,
   );
-
-  const {
-    isOpen: isDescriptionOpen,
-    onOpen: onDescriptionOpen,
-    onClose: onDescriptionClose,
-  } = useDisclosure();
 
   const {
     isOpen: isVoteResultOpen,
@@ -71,8 +65,8 @@ export default function ProblemCard({ problem, me }: Props) {
         <div className="bg-mj-mat pt-2 lg:px-4 px-2 pb-3">
           <ProblemCardHeader problem={problem} me={me} />
 
-          <div className="flex gap-2 mt-2 lg:mt-0 items-end">
-            <TilesDisplay
+          <div className="flex gap-2 mt-2 lg:-mt-3 items-end">
+            {/* <TilesDisplay
               tileIds={[
                 problem.hand1_id,
                 problem.hand2_id,
@@ -93,28 +87,44 @@ export default function ProblemCard({ problem, me }: Props) {
               myVoteTileId={myVoteTileId}
               onVoteCreate={onVoteCreate}
               onVoteDelete={onVoteDelete}
-            />
+            /> */}
+
+            <div className="flex gap-1 items-end">
+              {[
+                problem.hand1_id,
+                problem.hand2_id,
+                problem.hand3_id,
+                problem.hand4_id,
+                problem.hand5_id,
+                problem.hand6_id,
+                problem.hand7_id,
+                problem.hand8_id,
+                problem.hand9_id,
+                problem.hand10_id,
+                problem.hand11_id,
+                problem.hand12_id,
+                problem.hand13_id,
+              ].map((tileId, index) => (
+                <TileImage tileId={tileId} key={index} />
+              ))}
+            </div>
 
             <div className="lg:block hidden">
               <div className="flex flex-col items-center">
                 <p className="text-sm lg:text-base">ツモ</p>
-                <VoteButton
-                  problemId={problem.id}
-                  doraId={problem.dora_id}
-                  tileId={problem.tsumo_id}
-                  isVoted={Boolean(myVoteTileId == problem.tsumo_id)}
-                  onCreate={() => onVoteCreate(problem.tsumo_id)}
-                  onDelete={onVoteDelete}
-                />
+                <TileImage tileId={Number(problem.tsumo_id)} />
               </div>
             </div>
           </div>
 
           <div className="flex flex-wrap mt-2 gap-x-2 items-center">
-            <div className="flex gap-1">
+            <div className="flex gap-1 items-center">
               <p className="text-sm lg:text-base">ドラ</p>
-              <div className="h-8 aspect-ratio-7/9">
-                <TileImage tileId={Number(problem.dora_id)} hover={false} />
+              <div className="w-6">
+                <TileImage
+                  tileId={Number(problem.dora_id)}
+                  className="h-full object-contain"
+                />
               </div>
             </div>
 
@@ -150,34 +160,23 @@ export default function ProblemCard({ problem, me }: Props) {
 
           {problem.description && (
             <div>
-              <button
-                className="mt-4 line-clamp-2 relative"
-                onClick={onDescriptionOpen}
-              >
-                <p className="text-xs lg:text-sm">{problem.description}</p>
-                <div className="absolute inset-0 bg-linear-to-b from-transparent to-mj-mat z-10" />
-              </button>
-
-              <ProblemDescriptionModal
-                description={problem.description}
-                isOpen={isDescriptionOpen}
-                onClose={onDescriptionClose}
-              />
+              <ProblemDescription description={problem.description} />
             </div>
           )}
         </div>
 
         <div className="flex gap-2 lg:px-4 px-2 lg:py-2 py-1 items-center text-primary bg-neutral">
-          {/* <ProblemLikeSection
-            initialIsLiked={problem.is_liked_by_me}
+          <ProblemLike
+            initialMyLikeId={problem.my_like_id}
             initialLikesCount={problem.likes_count}
             problemId={problem.id}
-          /> */}
+            isLoggedIn={Boolean(me)}
+          />
 
-          {/* <ProblemCommentSection
+          <ProblemCommentSection
             initialCommentsCount={problem.comments_count}
             problemId={problem.id}
-          /> */}
+          />
 
           {/* <ProblemVoteSection
             isVoted={Boolean(myVoteTileId)}

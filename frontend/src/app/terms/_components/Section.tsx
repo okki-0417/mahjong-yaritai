@@ -1,4 +1,3 @@
-import { Box, Text, VStack } from "@chakra-ui/react";
 import { Subsection } from "./Subsection";
 
 interface SubsectionData {
@@ -19,23 +18,21 @@ export default function Section({
   subsections,
 }: SectionProps) {
   return (
-    <Box>
-      <Text fontSize={["lg", "xl"]} fontWeight="bold" mb="4">
-        {title}
-      </Text>
+    <div>
+      <h2 className="text-lg lg:text-2xl">{title}</h2>
 
       {description && (
-        <VStack align="stretch" mb="4">
+        <div className="mt-2 flex flex-col items-stretch">
           {Array.isArray(description) ? (
-            description.map((desc, index) => <Text key={index}>{desc}</Text>)
+            description.map((desc, index) => <p key={index}>{desc}</p>)
           ) : (
-            <Text>{description}</Text>
+            <p>{description}</p>
           )}
-        </VStack>
+        </div>
       )}
 
       {subsections && (
-        <VStack align="stretch" gap="6">
+        <div className="mt-2 flex flex-col items-stretch gap-4">
           {subsections.map((subsection, index) => (
             <Subsection
               key={index}
@@ -44,8 +41,8 @@ export default function Section({
               items={subsection.items}
             />
           ))}
-        </VStack>
+        </div>
       )}
-    </Box>
+    </div>
   );
 }

@@ -13,21 +13,7 @@ class Auth::VerifiesController < Auth::BaseController
 
     if auth_request = AuthRequest.within_expiration.find_by(token: verify_params[:token], email:)
       if user = User.find_by(email:)
-        access_token_payload = {
-          user_id: user.id,
-          exp: (Time.now + 1.hour).to_i,
-        }
-
-        user.regenerate_jti!
-        refresh_token_payload = {
-          user_id: user.id,
-          jti: user.jti,
-          exp: (Time.now + 30.days).to_i,
-        }
-
-        @access_token = JWT.encode(access_token_payload, Rails.application.secret_key_base)
-        @refresh_token = JWT.encode(refresh_token_payload, Rails.application.secret_key_base)
-
+        @access_token, @refresh_token = login(user)
         @user_name = user.name
 
         render :show, status: :created

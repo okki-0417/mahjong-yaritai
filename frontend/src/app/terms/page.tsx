@@ -1,7 +1,6 @@
-import { Container, Divider, Text, VStack } from "@chakra-ui/react";
 import { Metadata } from "next";
-import termsData from "@/src/app/terms/data/terms-data.json";
-import Section from "@/src/app/terms/components/Section";
+import termsData from "@/src/app/terms/_data/terms-data.json";
+import Section from "@/src/app/terms/_components/Section";
 
 export const metadata: Metadata = {
   title: "利用規約",
@@ -15,13 +14,10 @@ export const metadata: Metadata = {
 
 export default function TermsPage() {
   return (
-    <Container mt="20" maxW="4xl" mb="20">
-      <Text as="h1" fontSize={["2xl", "4xl"]} fontWeight="bold">
-        利用規約
-      </Text>
-      <Divider />
+    <div className="mt-12 max-w-4xl mx-auto">
+      <h1 className="text-2xl lg:text-4xl font-bold">利用規約</h1>
 
-      <VStack mt="8" fontSize={["sm", "md"]} align="stretch" gap="12">
+      <div className="mt-8 lg:text-md text-sm flex flex-col items-stretch gap-10">
         {termsData.sections.map((section, index) => (
           <Section
             key={index}
@@ -30,7 +26,7 @@ export default function TermsPage() {
             subsections={section.subsections}
           />
         ))}
-      </VStack>
-    </Container>
+      </div>
+    </div>
   );
 }

@@ -35,7 +35,11 @@ export default function LikeButton({
       disabled={isLoading}
     >
       <div className="flex items-center gap-1">
-        {isLoading ? <Spinner size="sm" color="pink.500" /> : <Icon />}
+        {isLoading ? (
+          <div className="w-6 h-6 border-4 border-t-4 border-t-transparent border-pink-500 rounded-full animate-spin"></div>
+        ) : (
+          <Icon />
+        )}
         <div className="font-sans font-semibold text-lg">{likeCount}</div>
       </div>
     </PopButton>

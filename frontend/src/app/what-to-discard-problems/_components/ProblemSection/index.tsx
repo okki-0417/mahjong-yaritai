@@ -4,7 +4,7 @@ import ErrorPage from "@/src/components/errors/ErrorPage";
 
 export default async function ProblemsSection() {
   try {
-    const { problems, me } = await fetchProblems();
+    const [problemData, me] = await fetchProblems();
 
     return (
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-4 lg:gap-3 items-start justify-items-end">
@@ -17,7 +17,7 @@ export default async function ProblemsSection() {
         </div>
 
         <div className="max-w-4xl mx-auto lg:col-span-2 flex flex-col gap-6">
-          {problems.problems.map((problem) => (
+          {problemData.problems.map((problem) => (
             <ProblemCard key={problem.id} problem={problem} me={me} />
           ))}
 

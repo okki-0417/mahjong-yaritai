@@ -16,6 +16,17 @@ html {
   --color-mj-mat-light: #00a256;
 }
 
+@utility no-spin {
+  &::-webkit-inner-spin-button,
+  &::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  -moz-appearance: textfield;
+  appearance: none;
+}
+
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -61,7 +72,7 @@ html {
 }
 
 .aspect-tile {
-  @apply aspect-[47/63];
+  @apply aspect-47/63;
 }
 
 .shining-tile {

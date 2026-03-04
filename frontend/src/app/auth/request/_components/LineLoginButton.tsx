@@ -1,7 +1,7 @@
 "use client";
 
+import createLineLoginUrlAction from "@/src/actions/createLineLoginUrlAction";
 import useToast from "@/src/hooks/useToast";
-import { apiClient } from "@/src/lib/api/client";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 
@@ -10,29 +10,35 @@ export default function LineLoginButton() {
   const toast = useToast();
 
   const handleLineLogin = async () => {
-    try {
-      const response = await apiClient.getLineLoginUrl();
-      if (!response.login_url) throw new Error();
+    const result = await createLineLoginUrlAction();
 
-      router.push(response.login_url);
-    } catch (error) {
+    if (result.errors) {
       toast({
         title: "LINEのログインURLの取得に失敗しました",
-        description:
-          error instanceof Error ? error.message : "不明なエラーが発生しました",
+        description: result.errors.join("\n"),
         status: "error",
       });
+      return;
+    }
+
+    if (result.data?.login_url) {
+      router.push(result.data.login_url);
     }
   };
 
   return (
     <button
       onClick={handleLineLogin}
-      className="rounded-full w-64 bg-white py-2 px-4 flex items-center gap-4 hover:bg-gray-200"
+      className="rounded-sm w-64 bg-white py-2 px-4 flex items-center gap-4 hover:bg-gray-200"
     >
-      <div className="flex items-center w-full">
-        <div className="size-8 flex items-center rounded-full">
-          <Image src="/social-login/line.png" alt="" width="160" height="160" />
+      <div className="flex gap-4 items-center">
+        <div className="w-10 flex items-center">
+          <Image
+            src="/social-login/line.png"
+            alt="LINEでログイン/登録"
+            width="160"
+            height="160"
+          />
         </div>
         <p className="w-full text-primary">LINEでログイン/登録</p>
       </div>

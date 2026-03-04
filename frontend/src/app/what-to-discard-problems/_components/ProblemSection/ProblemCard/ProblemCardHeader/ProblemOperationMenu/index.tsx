@@ -1,10 +1,6 @@
-"use client";
-
-import ProblemDeleteItem from "@/src/app/what-to-discard-problems/_components/ProblemSection/ProblemCard/ProblemCardHeader/ProblemOperationMenu/ProblemDeleteItem";
-import ProblemEditItem from "@/src/app/what-to-discard-problems/_components/ProblemSection/ProblemCard/ProblemCardHeader/ProblemOperationMenu/ProblemEditItem";
+import DeleteProblem from "@/src/app/what-to-discard-problems/_components/ProblemSection/ProblemCard/ProblemCardHeader/ProblemOperationMenu/DeleteProblem";
 import { WhatToDiscardProblem } from "@/src/types/components";
-import { Menu, MenuButton, MenuList } from "@chakra-ui/react";
-import { Fragment } from "react";
+import Link from "next/link";
 import { HiOutlineDotsHorizontal } from "react-icons/hi";
 
 type Props = {
@@ -14,23 +10,32 @@ type Props = {
 
 export default function ProblemOperationMenu({ problem, isMyProblem }: Props) {
   return (
-    <Menu>
-      <MenuButton>
+    <details className="relative group">
+      <summary className="p-1 list-none size-fit flex justify-end cursor-pointer marker:hidden">
         <HiOutlineDotsHorizontal size={22} />
-      </MenuButton>
+      </summary>
 
-      <MenuList>
-        {isMyProblem && (
-          <>
-            {/* <ProblemEditItem problem={problem} /> */}
-            {/* <ProblemDeleteItem problem={problem} /> */}
-          </>
-        )}
-
-        {/* <MenuItem icon={<FiAlertTriangle size={18} color="red" />}>
-          <span className="text-red-500">通報する</span>
-        </MenuItem> */}
-      </MenuList>
-    </Menu>
+      <div className="w-48 bg-transparent absolute z-20 top-8 right-0">
+        <ul className="z-50 w-full p-2 rounded-sm bg-neutral text-primary border shadow text-sm flex flex-col divide-y">
+          {isMyProblem && (
+            <>
+              <li className="w-full">
+                <Link
+                  href={`/what-to-discard-problems/${problem.id}/edit`}
+                  className="p-2 inline-block w-full hover:bg-neutral-200 rounded-sm"
+                >
+                  編集する
+                </Link>
+              </li>
+              <li className="w-full">
+                <div>
+                  <DeleteProblem problemId={problem.id} />
+                </div>
+              </li>
+            </>
+          )}
+        </ul>
+      </div>
+    </details>
   );
 }

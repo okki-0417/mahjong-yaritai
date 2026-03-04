@@ -1,13 +1,13 @@
 # frozen_string_literal: true
 
 class Auth::Line::LoginUrlsController < ApplicationController
-  def show
-    state = SecureRandom.hex(32)
-    session[:line_login_state] = state
+  def create
+    line_login = LineLogin.create!(state: SecureRandom.hex(32))
 
-    login_url = build_line_login_url(state)
+    login_url = build_line_login_url(line_login.state)
+    encrypted_line_login_id = EncryptionService.encrypt(line_login.id)
 
-    render json: { login_url: }, status: :ok
+    render json: { login_url:, line_login_id: encrypted_line_login_id }, status: :created
   end
 
   private

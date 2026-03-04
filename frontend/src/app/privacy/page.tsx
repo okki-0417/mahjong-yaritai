@@ -1,12 +1,3 @@
-import {
-  Box,
-  Container,
-  Divider,
-  Text,
-  List,
-  ListItem,
-  VStack,
-} from "@chakra-ui/react";
 import { Metadata } from "next";
 import privacyData from "./privacy-data.json";
 
@@ -21,61 +12,54 @@ export const metadata: Metadata = {
   },
 };
 
-interface ListSectionProps {
+type ListSectionProps = {
   title: string;
   description?: string | string[];
   items?: string[];
-}
+};
 
 function ListSection({ title, description, items }: ListSectionProps) {
   return (
-    <Box mb="8">
-      <Text fontSize={["lg", "xl"]} as="h1" fontWeight="bold" mb="4">
-        {title}
-      </Text>
+    <div>
+      <h2 className="lg:text-xl text-lg font-bold">{title}</h2>
 
       {description && (
-        <VStack align="stretch" mb="4">
+        <div className="mt-3 flex flex-col items-stretch gap-2">
           {Array.isArray(description) ? (
-            description.map((desc, index) => <Text key={index}>{desc}</Text>)
+            description.map((desc, index) => <p key={index}>{desc}</p>)
           ) : (
-            <Text>{description}</Text>
+            <p>{description}</p>
           )}
-        </VStack>
+        </div>
       )}
 
       {items && (
-        <List spacing={4}>
+        <ol className="mt-3 list-disc space-y-2 pl-4">
           {items.map((item, index) => (
-            <ListItem key={index} listStyleType="disc" listStylePos="inside">
-              {item}
-            </ListItem>
+            <li key={index}>{item}</li>
           ))}
-        </List>
+        </ol>
       )}
-    </Box>
+    </div>
   );
 }
 
 export default function PrivacyPage() {
   return (
-    <Container mt="20" maxW="4xl" mb="20">
-      <Text as="h1" fontSize={["2xl", "4xl"]} fontWeight="bold">
-        プライバシーポリシー
-      </Text>
-      <Divider />
+    <div className="mt-12 max-w-4xl mx-auto">
+      <h1 className="lg:text-4xl text-2xl font-bold">プライバシーポリシー</h1>
 
-      <Box mt="8" fontSize={["sm", "md"]}>
+      <div className="mt-8 text-sm lg:text-md flex flex-col items-stretch gap-8">
         {privacyData.sections.map((section, index) => (
-          <Box key={index} mt={index > 0 ? "12" : "0"}>
+          <div key={index}>
             <ListSection
               title={section.title}
               description={section.description}
               items={section.items}
             />
-          </Box>
+          </div>
         ))}
-      </Box>
-    </Container>
+      </div>
+    </div>
   );
 }

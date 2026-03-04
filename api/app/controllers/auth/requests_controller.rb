@@ -2,11 +2,11 @@ class Auth::RequestsController < ApplicationController
   before_action :restrict_to_guests, only: %i[create]
 
   def create
-    @auth_request = AuthRequest.new(request_params)
+    auth_request = AuthRequest.new(request_params)
 
-    if @auth_request.save
-      AuthorizationMailer.authorization_token(@auth_request).deliver_now
-      @encrypted_email = EncryptionService.encrypt(@auth_request.email)
+    if auth_request.save
+      AuthorizationMailer.authorization_token(auth_request).deliver_now
+      @encrypted_email = EncryptionService.encrypt(auth_request.email)
 
       render json: {
         encrypted_email: @encrypted_email,

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2026_02_23_085124) do
+ActiveRecord::Schema[7.2].define(version: 2026_02_26_022616) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -21,7 +21,7 @@ ActiveRecord::Schema[7.2].define(version: 2026_02_23_085124) do
     t.bigint "blob_id", null: false
     t.datetime "created_at", null: false
     t.index ["blob_id"], name: "index_active_storage_attachments_on_blob_id"
-    t.index ["record_type", "record_id", "name", "blob_id"], name: "index_active_storage_attachments_uniqueness", unique: true
+    t.index %w[record_type record_id name blob_id], name: "index_active_storage_attachments_uniqueness", unique: true
   end
 
   create_table "active_storage_blobs", force: :cascade do |t|
@@ -39,7 +39,7 @@ ActiveRecord::Schema[7.2].define(version: 2026_02_23_085124) do
   create_table "active_storage_variant_records", force: :cascade do |t|
     t.bigint "blob_id", null: false
     t.string "variation_digest", null: false
-    t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
+    t.index %w[blob_id variation_digest], name: "index_active_storage_variant_records_uniqueness", unique: true
   end
 
   create_table "auth_requests", force: :cascade do |t|
@@ -69,7 +69,7 @@ ActiveRecord::Schema[7.2].define(version: 2026_02_23_085124) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["followee_id"], name: "index_follows_on_followee_id"
-    t.index ["follower_id", "followee_id"], name: "index_follows_on_follower_id_and_followee_id", unique: true
+    t.index %w[follower_id followee_id], name: "index_follows_on_follower_id_and_followee_id", unique: true
     t.index ["follower_id"], name: "index_follows_on_follower_id"
   end
 
@@ -98,6 +98,12 @@ ActiveRecord::Schema[7.2].define(version: 2026_02_23_085124) do
     t.index ["user_id"], name: "index_likes_on_user_id"
   end
 
+  create_table "line_logins", force: :cascade do |t|
+    t.string "state", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "mahjong_games", force: :cascade do |t|
     t.bigint "mahjong_session_id", null: false, comment: "麻雀開催ID"
     t.datetime "created_at", null: false
@@ -111,7 +117,7 @@ ActiveRecord::Schema[7.2].define(version: 2026_02_23_085124) do
     t.string "name", null: false, comment: "参加者名"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["mahjong_session_id", "user_id"], name: "index_mahjong_participants_on_session_and_user", unique: true
+    t.index %w[mahjong_session_id user_id], name: "index_mahjong_participants_on_session_and_user", unique: true
     t.index ["mahjong_session_id"], name: "index_mahjong_participants_on_mahjong_session_id"
     t.index ["user_id"], name: "index_mahjong_participants_on_user_id"
   end
@@ -124,7 +130,7 @@ ActiveRecord::Schema[7.2].define(version: 2026_02_23_085124) do
     t.integer "score", comment: "得点"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["mahjong_game_id", "mahjong_participant_id"], name: "index_mahjong_results_on_game_and_participant", unique: true
+    t.index %w[mahjong_game_id mahjong_participant_id], name: "index_mahjong_results_on_game_and_participant", unique: true
     t.index ["mahjong_game_id"], name: "index_mahjong_results_on_mahjong_game_id"
     t.index ["mahjong_participant_id"], name: "index_mahjong_results_on_mahjong_participant_id"
   end
@@ -175,7 +181,7 @@ ActiveRecord::Schema[7.2].define(version: 2026_02_23_085124) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["tile_id"], name: "index_what_to_discard_problem_votes_on_tile_id"
-    t.index ["user_id", "what_to_discard_problem_id"], name: "idx_on_user_id_what_to_discard_problem_id_ba7da3c2b5", unique: true
+    t.index %w[user_id what_to_discard_problem_id], name: "idx_on_user_id_what_to_discard_problem_id_ba7da3c2b5", unique: true
     t.index ["user_id"], name: "index_what_to_discard_problem_votes_on_user_id"
     t.index ["what_to_discard_problem_id"], name: "idx_on_what_to_discard_problem_id_619294c3a6"
   end

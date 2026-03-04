@@ -1,174 +1,210 @@
 # frozen_string_literal: true
 
-require "swagger_helper"
+require "rails_helper"
 
-RSpec.describe "auth/line/callbacks", type: :request do
-  path "/auth/line/callback" do
-    post("create callback") do
-      tags "Auth::Line::Callback"
-      operationId "createLineCallback"
-      produces "application/json"
-      consumes "application/json"
-      parameter name: :request_params, in: :body, schema: {
-        type: :object,
-        required: %w[code state],
-        properties: {
-          code: { type: :string, description: "Authorization code from LINE" },
-          state: { type: :string, description: "State parameter for CSRF protection" },
-        },
-      }
+RSpec.describe "Auth::Line::Callbacks", type: :request do
+  describe "POST /auth/line/callback" do
+    subject { post auth_line_callback_url, params: { code:, state:, line_login_id: }, headers: { "Content-Type" => "application/json" }, as: :json }
+
+    let(:line_login) { create(:line_login) }
+    let(:code) { "valid_authorization_code" }
+    let(:state) { line_login.state }
+    let(:line_login_id) { EncryptionService.encrypt(line_login.id) }
+
+    let(:line_channel_id) { "test_channel_id" }
+    let(:line_channel_secret) { "test_channel_secret" }
+    let(:line_redirect_uri) { "http://localhost:3000/auth/line/callback" }
+
+    before do
+      ENV["LINE_CHANNEL_ID"] = line_channel_id
+      ENV["LINE_CHANNEL_SECRET"] = line_channel_secret
+      ENV["LINE_REDIRECT_URI"] = line_redirect_uri
+    end
+
+    after do
+      ENV.delete("LINE_CHANNEL_ID")
+      ENV.delete("LINE_CHANNEL_SECRET")
+      ENV.delete("LINE_REDIRECT_URI")
+    end
+
+    context "stateパラメータが無効な場合" do
+      let(:state) { "invalid_state" }
+
+      it "400を返すこと" do
+        subject
+        expect(response).to have_http_status(:bad_request)
+      end
+
+      it "エラーメッセージを返すこと" do
+        subject
+        json_response = JSON.parse(response.body)
+        expect(json_response["errors"]).to include("パラメーターが不正です")
+      end
+    end
+
+    context "line_login_idが無効な場合" do
+      let(:line_login_id) { "invalid_encrypted_id" }
+
+      it "400を返すこと" do
+        subject
+        expect(response).to have_http_status(:bad_request)
+      end
+
+      it "エラーメッセージを返すこと" do
+        subject
+        json_response = JSON.parse(response.body)
+        expect(json_response["errors"]).to include("パラメーターが不正です")
+      end
+    end
+
+    context "line_login_idがない場合" do
+      let(:line_login_id) { nil }
+
+      it "400を返すこと" do
+        subject
+        expect(response).to have_http_status(:bad_request)
+      end
+    end
+
+    context "認証コードがない場合" do
+      let(:code) { nil }
+
+      it "400を返すこと" do
+        subject
+        expect(response).to have_http_status(:bad_request)
+      end
+
+      it "エラーメッセージを返すこと" do
+        subject
+        json_response = JSON.parse(response.body)
+        expect(json_response["errors"]).to include("Authorization code が存在しません")
+      end
+    end
+
+    context "トークン交換に失敗した場合" do
+      before do
+        allow_any_instance_of(Auth::Line::CallbacksController).to receive(:exchange_code_for_token).and_return(
+          { error: "Invalid authorization code" }
+        )
+      end
+
+      it "422を返すこと" do
+        subject
+        expect(response).to have_http_status(:unprocessable_entity)
+        assert_schema_conform(422)
+      end
+
+      it "エラーメッセージを返すこと" do
+        subject
+        json_response = JSON.parse(response.body)
+        expect(json_response["errors"]).to include("Invalid authorization code")
+      end
+    end
+
+    context "IDトークンの検証に失敗した場合" do
+      before do
+        allow_any_instance_of(Auth::Line::CallbacksController).to receive(:exchange_code_for_token).and_return(
+          { access_token: "test_access_token", id_token: "test_id_token", refresh_token: "test_refresh_token" }
+        )
+        allow_any_instance_of(Auth::Line::CallbacksController).to receive(:verify_id_token).and_return(
+          { error: "IDトークンの検証に失敗しました" }
+        )
+      end
+
+      it "422を返すこと" do
+        subject
+        expect(response).to have_http_status(:unprocessable_entity)
+        assert_schema_conform(422)
+      end
+
+      it "エラーメッセージを返すこと" do
+        subject
+        json_response = JSON.parse(response.body)
+        expect(json_response["errors"]).to include("IDトークンの検証に失敗しました")
+      end
+    end
+
+    context "認証が成功した場合" do
+      let(:email) { "test@example.com" }
 
       before do
-        allow_any_instance_of(ApplicationController).to receive(:session).and_return({ line_login_state: "valid_state" })
+        allow_any_instance_of(Auth::Line::CallbacksController).to receive(:exchange_code_for_token).and_return(
+          { access_token: "test_access_token", id_token: "test_id_token", refresh_token: "test_refresh_token" }
+        )
+        allow_any_instance_of(Auth::Line::CallbacksController).to receive(:verify_id_token).and_return(
+          { email: email }
+        )
       end
 
-      response(400, "bad request - invalid state") do
-        let(:request_params) { { code: "valid_code", state: nil } }
-        run_test!
+      context "既存ユーザーの場合" do
+        let!(:existing_user) { create(:user, email: email) }
+
+        it "201を返すこと" do
+          subject
+          expect(response).to have_http_status(:created)
+          assert_schema_conform(201)
+        end
+
+        it "access_tokenとrefresh_tokenを返すこと" do
+          subject
+          json_response = JSON.parse(response.body)
+          expect(json_response).to have_key("access_token")
+          expect(json_response).to have_key("refresh_token")
+        end
+
+        it "ユーザー名を返すこと" do
+          subject
+          json_response = JSON.parse(response.body)
+          expect(json_response["user_name"]).to eq(existing_user.name)
+        end
       end
 
-      response(400, "bad request - missing code") do
-        let(:request_params) { { code: nil, state: "valid_state" } }
-        run_test!
+      context "新規ユーザーの場合" do
+        let(:email) { "newuser@example.com" }
+
+        it "201を返すこと" do
+          subject
+          expect(response).to have_http_status(:created)
+          assert_schema_conform(201)
+        end
+
+        it "AuthRequestを作成すること" do
+          expect { subject }.to change(AuthRequest, :count).by(1)
+        end
+
+        it "暗号化されたメールアドレスを返すこと" do
+          subject
+          json_response = JSON.parse(response.body)
+          expect(json_response).to have_key("encrypted_email")
+        end
+
+        it "access_tokenがnullであること" do
+          subject
+          json_response = JSON.parse(response.body)
+          expect(json_response["access_token"]).to be_nil
+        end
       end
 
-      response(422, "unprocessable entity - token exchange failed") do
-        let(:request_params) { { code: "invalid_code", state: "valid_state" } }
+      context "AuthRequestの保存に失敗した場合" do
+        let(:email) { "newuser@example.com" }
 
         before do
-          ENV["LINE_CHANNEL_ID"] = "test_channel_id"
-          ENV["LINE_CHANNEL_SECRET"] = "test_channel_secret"
-          ENV["LINE_REDIRECT_URI"] = "http://localhost:3000/auth/line/callback"
-
-          allow_any_instance_of(Auth::Line::CallbacksController).to receive(:exchange_code_for_token).and_return(
-            { error: "invalid_grant", error_description: "Invalid authorization code" }
-          )
-        end
-
-        after do
-          ENV.delete("LINE_CHANNEL_ID")
-          ENV.delete("LINE_CHANNEL_SECRET")
-          ENV.delete("LINE_REDIRECT_URI")
-        end
-
-        run_test!
-      end
-
-      response(422, "unprocessable entity - id token verification fails") do
-        let(:request_params) { { code: "valid_code", state: "valid_state" } }
-
-        before do
-          ENV["LINE_CHANNEL_ID"] = "test_channel_id"
-          ENV["LINE_CHANNEL_SECRET"] = "test_channel_secret"
-          ENV["LINE_REDIRECT_URI"] = "http://localhost:3000/auth/line/callback"
-
-          allow_any_instance_of(Auth::Line::CallbacksController).to receive(:exchange_code_for_token).and_return(
-            { access_token: "test_access_token", id_token: "test_id_token", refresh_token: "test_refresh_token" }
-          )
-
-          allow_any_instance_of(Auth::Line::CallbacksController).to receive(:verify_id_token).and_return(
-            { error: "Invalid ID token" }
-          )
-        end
-
-        after do
-          ENV.delete("LINE_CHANNEL_ID")
-          ENV.delete("LINE_CHANNEL_SECRET")
-          ENV.delete("LINE_REDIRECT_URI")
-        end
-
-        run_test!
-      end
-
-      response(422, "unprocessable entity - auth request validation fails") do
-        let(:request_params) { { code: "valid_code", state: "valid_state" } }
-
-        before do
-          ENV["LINE_CHANNEL_ID"] = "test_channel_id"
-          ENV["LINE_CHANNEL_SECRET"] = "test_channel_secret"
-          ENV["LINE_REDIRECT_URI"] = "http://localhost:3000/auth/line/callback"
-
           allow_any_instance_of(AuthRequest).to receive(:save).and_return(false)
+          allow_any_instance_of(AuthRequest).to receive_message_chain(:errors, :full_messages)
+            .and_return([ "Email is invalid" ])
         end
 
-        after do
-          ENV.delete("LINE_CHANNEL_ID")
-          ENV.delete("LINE_CHANNEL_SECRET")
-          ENV.delete("LINE_REDIRECT_URI")
+        it "422を返すこと" do
+          subject
+          expect(response).to have_http_status(:unprocessable_entity)
+          assert_schema_conform(422)
         end
 
-        run_test!
-      end
-
-      response(200, "successful - existing user") do
-        let(:request_params) { { code: "valid_code", state: "valid_state" } }
-        let(:existing_user) { create(:user, email: "test@example.com") }
-
-        schema type: :object,
-          required: %w[session],
-          properties: {
-            session: {
-              "$ref" => "#/components/schemas/Session",
-            },
-          }
-
-        before do
-          ENV["LINE_CHANNEL_ID"] = "test_channel_id"
-          ENV["LINE_CHANNEL_SECRET"] = "test_channel_secret"
-          ENV["LINE_REDIRECT_URI"] = "http://localhost:3000/auth/line/callback"
-
-          allow_any_instance_of(Auth::Line::CallbacksController).to receive(:exchange_code_for_token).and_return(
-            { access_token: "test_access_token", id_token: "test_id_token", refresh_token: "test_refresh_token" }
-          )
-
-          allow_any_instance_of(Auth::Line::CallbacksController).to receive(:verify_id_token).and_return(
-            { email: "test@example.com" }
-          )
-
-          existing_user
+        it "エラーメッセージを返すこと" do
+          subject
+          json_response = JSON.parse(response.body)
+          expect(json_response["errors"]).to include("Email is invalid")
         end
-
-        after do
-          ENV.delete("LINE_CHANNEL_ID")
-          ENV.delete("LINE_CHANNEL_SECRET")
-          ENV.delete("LINE_REDIRECT_URI")
-        end
-
-        after do |example|
-          example.metadata[:response][:content] = {
-            "application/json" => {
-              example: JSON.parse(response.body, symbolize_names: true),
-            },
-          }
-        end
-
-        run_test!
-      end
-
-      response(204, "successful - new user creates auth request") do
-        let(:request_params) { { code: "valid_code", state: "valid_state" } }
-
-        before do
-          ENV["LINE_CHANNEL_ID"] = "test_channel_id"
-          ENV["LINE_CHANNEL_SECRET"] = "test_channel_secret"
-          ENV["LINE_REDIRECT_URI"] = "http://localhost:3000/auth/line/callback"
-
-          allow_any_instance_of(Auth::Line::CallbacksController).to receive(:exchange_code_for_token).and_return(
-            { access_token: "test_access_token", id_token: "test_id_token", refresh_token: "test_refresh_token" }
-          )
-
-          allow_any_instance_of(Auth::Line::CallbacksController).to receive(:verify_id_token).and_return(
-            { email: "newuser@example.com" }
-          )
-        end
-
-        after do
-          ENV.delete("LINE_CHANNEL_ID")
-          ENV.delete("LINE_CHANNEL_SECRET")
-          ENV.delete("LINE_REDIRECT_URI")
-        end
-
-        run_test!
       end
     end
   end

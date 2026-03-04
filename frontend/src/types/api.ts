@@ -381,6 +381,179 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/auth/google/callback": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Google OAuth認証コールバック
+         * @description Googleから取得した認証コードを使ってユーザー認証を行う。
+         *     既存ユーザーの場合はアクセストークンを返し、新規ユーザーの場合は暗号化されたメールアドレスを返す。
+         */
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody: {
+                content: {
+                    "application/json": {
+                        /** @description Googleから取得した認証コード */
+                        code: string;
+                    };
+                };
+            };
+            responses: {
+                /** @description 認証成功 */
+                201: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["GoogleAuthResponse"];
+                    };
+                };
+                /** @description 認証コードがない */
+                400: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["Errors"];
+                    };
+                };
+                /** @description トークン交換失敗、ユーザー情報取得失敗、またはAuthRequest保存失敗 */
+                422: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["Errors"];
+                    };
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/auth/line/login_url": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * LINE OAuth認証URL取得
+         * @description LINE OAuth認証用のログインURLを取得する
+         */
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description ログインURL作成成功 */
+                201: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["LineLoginUrlResponse"];
+                    };
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/auth/line/callback": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * LINE OAuth認証コールバック
+         * @description LINEから取得した認証コードを使ってユーザー認証を行う。
+         *     既存ユーザーの場合はアクセストークンを返し、新規ユーザーの場合は暗号化されたメールアドレスを返す。
+         */
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody: {
+                content: {
+                    "application/json": {
+                        /** @description LINEから取得した認証コード */
+                        code: string;
+                        /** @description CSRF対策用のstateパラメータ */
+                        state: string;
+                        /** @description 暗号化されたLineLoginレコードID */
+                        line_login_id: string;
+                    };
+                };
+            };
+            responses: {
+                /** @description 認証成功 */
+                201: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["LineAuthResponse"];
+                    };
+                };
+                /** @description stateパラメータが無効、または認証コードがない */
+                400: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["Errors"];
+                    };
+                };
+                /** @description トークン交換失敗、IDトークン検証失敗、またはAuthRequest保存失敗 */
+                422: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["Errors"];
+                    };
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/what_to_discard_problems": {
         parameters: {
             query?: never;
@@ -418,10 +591,302 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/what_to_discard_problems/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * 何切る問題を取得
+         * @description 指定したIDの何切る問題を取得する
+         */
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    id: number;
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["WhatToDiscardProblem"];
+                    };
+                };
+                /** @description 問題が見つからない */
+                404: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["Error"];
+                    };
+                };
+            };
+        };
+        /**
+         * 何切る問題を更新
+         * @description 自分が作成した何切る問題を更新する
+         */
+        put: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    id: number;
+                };
+                cookie?: never;
+            };
+            requestBody: {
+                content: {
+                    "application/json": {
+                        round?: string | null;
+                        turn?: number | null;
+                        wind?: string | null;
+                        points?: number | null;
+                        description?: string | null;
+                        dora_id: number;
+                        hand1_id: number;
+                        hand2_id: number;
+                        hand3_id: number;
+                        hand4_id: number;
+                        hand5_id: number;
+                        hand6_id: number;
+                        hand7_id: number;
+                        hand8_id: number;
+                        hand9_id: number;
+                        hand10_id: number;
+                        hand11_id: number;
+                        hand12_id: number;
+                        hand13_id: number;
+                        tsumo_id: number;
+                    };
+                };
+            };
+            responses: {
+                /** @description 更新成功 */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["WhatToDiscardProblem"];
+                    };
+                };
+                /** @description 認証エラー */
+                401: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["Error"];
+                    };
+                };
+                /** @description 問題が見つからない */
+                404: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["Error"];
+                    };
+                };
+                /** @description バリデーションエラー */
+                422: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["Error"];
+                    };
+                };
+            };
+        };
+        post?: never;
+        /**
+         * 何切る問題を削除
+         * @description 自分が作成した何切る問題を削除する
+         */
+        delete: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    id: number;
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description 削除成功 */
+                204: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+                /** @description 認証エラー */
+                401: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["Error"];
+                    };
+                };
+            };
+        };
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/what_to_discard_problems/{what_to_discard_problem_id}/likes": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * 何切る問題にいいねする
+         * @description 指定した何切る問題にいいねを追加する
+         */
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    what_to_discard_problem_id: number;
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description いいね作成成功 */
+                201: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["Like"];
+                    };
+                };
+                /** @description 認証エラー */
+                401: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["Error"];
+                    };
+                };
+                /** @description 問題が見つからない */
+                404: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["Error"];
+                    };
+                };
+                /** @description 既にいいね済み */
+                422: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["Error"];
+                    };
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/what_to_discard_problems/{what_to_discard_problem_id}/likes/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        /**
+         * 何切る問題のいいねを取り消す
+         * @description 指定した何切る問題のいいねを削除する
+         */
+        delete: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    what_to_discard_problem_id: number;
+                    id: number;
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description いいね削除成功 */
+                204: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+                /** @description 認証エラー */
+                401: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["Error"];
+                    };
+                };
+                /** @description 問題またはいいねが見つからない */
+                404: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["Error"];
+                    };
+                };
+            };
+        };
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
     schemas: {
+        Like: {
+            id: number;
+            user_id: number;
+            likable_id: number;
+            likable_type: string;
+            /** Format: date-time */
+            created_at: string;
+        };
         User: {
             id: number;
             name: string;
@@ -435,8 +900,44 @@ export interface components {
         UserList: {
             users: components["schemas"]["User"][];
         };
+        Error: {
+            /** @description エラーメッセージ */
+            error: string;
+        };
         Errors: {
             errors: string[];
+        };
+        GoogleAuthResponse: {
+            /** @description ユーザー名（既存ユーザーの場合） */
+            user_name: string | null;
+            /** @description JWTアクセストークン（既存ユーザーの場合） */
+            access_token: string | null;
+            /** @description JWTリフレッシュトークン（既存ユーザーの場合） */
+            refresh_token: string | null;
+            /** @description 暗号化されたメールアドレス（新規ユーザーの場合） */
+            encrypted_email: string | null;
+        };
+        LineLoginUrlResponse: {
+            /** @description LINE OAuth認証URL */
+            login_url: string;
+            /** @description 暗号化されたLineLoginレコードID */
+            line_login_id: string;
+        };
+        LineAuthResponse: {
+            /** @description ユーザー名（既存ユーザーの場合） */
+            user_name: string | null;
+            /** @description JWTアクセストークン（既存ユーザーの場合） */
+            access_token: string | null;
+            /** @description JWTリフレッシュトークン（既存ユーザーの場合） */
+            refresh_token: string | null;
+            /** @description 暗号化されたメールアドレス（新規ユーザーの場合） */
+            encrypted_email: string | null;
+        };
+        Session: {
+            /** @description ログイン状態 */
+            is_logged_in: boolean;
+            /** @description ユーザーID */
+            user_id?: number | null;
         };
         WhatToDiscardProblem: {
             id: number;
@@ -463,7 +964,7 @@ export interface components {
             comments_count: number;
             likes_count: number;
             votes_count: number;
-            is_liked_by_me: boolean;
+            my_like_id: number | null;
             my_vote_tile_id: number | null;
             user: components["schemas"]["User"];
             /** Format: date-time */

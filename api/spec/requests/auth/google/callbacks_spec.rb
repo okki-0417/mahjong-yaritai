@@ -1,169 +1,188 @@
 # frozen_string_literal: true
 
-require "swagger_helper"
-require "net/http"
+require "rails_helper"
 
-RSpec.describe "auth/google/callbacks", type: :request do
-  path "/auth/google/callback" do
-    post("create callback") do
-      tags "Auth::Google::Callback"
-      operationId "createGoogleCallback"
-      produces "application/json"
-      consumes "application/json"
-      parameter name: :request_params, in: :body, schema: {
-        type: :object,
-        required: [ "code" ],
-        properties: {
-          code: { type: :string, description: "Authorization code from Google" },
-        },
-      }
+RSpec.describe "Auth::Google::Callbacks", type: :request do
+  describe "POST /auth/google/callback" do
+    subject { post auth_google_callback_url, params: { code: }, headers: { "Content-Type" => "application/json" }, as: :json }
 
-      response(400, "bad request") do
-        let(:request_params) { { code: nil } }
+    let(:code) { "valid_authorization_code" }
 
-        run_test!
+    let(:google_client_id) { "test_client_id" }
+    let(:google_client_secret) { "test_client_secret" }
+    let(:google_redirect_uri) { "http://localhost:3000/auth/google/callback" }
+
+    before do
+      ENV["GOOGLE_CLIENT_ID"] = google_client_id
+      ENV["GOOGLE_CLIENT_SECRET"] = google_client_secret
+      ENV["GOOGLE_REDIRECT_URI"] = google_redirect_uri
+    end
+
+    after do
+      ENV.delete("GOOGLE_CLIENT_ID")
+      ENV.delete("GOOGLE_CLIENT_SECRET")
+      ENV.delete("GOOGLE_REDIRECT_URI")
+    end
+
+    context "認証コードがない場合" do
+      let(:code) { nil }
+
+      it "400を返すこと" do
+        subject
+        expect(response).to have_http_status(:bad_request)
       end
 
-      response(422, "unprocessable entity - token exchange failed") do
-        let(:request_params) { { code: "invalid_code" } }
+      it "エラーメッセージを返すこと" do
+        subject
+        json_response = JSON.parse(response.body)
+        expect(json_response["errors"]).to include("認証コードがありません")
+      end
+    end
 
-        before do
-          ENV["GOOGLE_CLIENT_ID"] = "test_client_id"
-          ENV["GOOGLE_CLIENT_SECRET"] = "test_client_secret"
-          ENV["GOOGLE_REDIRECT_URI"] = "http://localhost:3000/auth/google/callback"
+    context "認証コードが空文字の場合" do
+      let(:code) { "" }
 
-          # Mock token exchange failure
-          allow_any_instance_of(Net::HTTP).to receive(:request).and_return(
-            double(code: "400", body: '{"error": "invalid_grant"}')
-          )
-        end
+      it "400を返すこと" do
+        subject
+        expect(response).to have_http_status(:bad_request)
+        assert_schema_conform(400)
+      end
+    end
 
-        after do
-          ENV.delete("GOOGLE_CLIENT_ID")
-          ENV.delete("GOOGLE_CLIENT_SECRET")
-          ENV.delete("GOOGLE_REDIRECT_URI")
-        end
-
-        run_test!
+    context "トークン交換に失敗した場合" do
+      before do
+        token_response = double(code: "400", body: '{"error": "invalid_grant"}')
+        allow_any_instance_of(Net::HTTP).to receive(:request).and_return(token_response)
       end
 
-      response(200, "successful - existing user") do
-        let(:request_params) { { code: "valid_code" } }
-
-        let(:existing_user) { create(:user, email: "test@example.com") }
-
-        schema type: :object,
-          required: [ "session" ],
-          properties: {
-            session: {
-              "$ref" => "#/components/schemas/Session",
-            },
-          }
-
-        before do
-          ENV["GOOGLE_CLIENT_ID"] = "test_client_id"
-          ENV["GOOGLE_CLIENT_SECRET"] = "test_client_secret"
-          ENV["GOOGLE_REDIRECT_URI"] = "http://localhost:3000/auth/google/callback"
-
-          # Mock successful token exchange
-          token_response = double(
-            code: "200",
-            body: '{"access_token": "test_access_token", "id_token": "test_id_token"}'
-          )
-
-          # Mock successful user info fetch
-          user_info_response = double(
-            code: "200",
-            body: '{"email": "test@example.com", "name": "Test User", "picture": "https://example.com/picture.jpg"}'
-          )
-
-          allow_any_instance_of(Net::HTTP).to receive(:request).with(instance_of(Net::HTTP::Post)).and_return(token_response)
-          allow_any_instance_of(Net::HTTP).to receive(:request).with(instance_of(Net::HTTP::Get)).and_return(user_info_response)
-
-          existing_user
-        end
-
-        after do
-          ENV.delete("GOOGLE_CLIENT_ID")
-          ENV.delete("GOOGLE_CLIENT_SECRET")
-          ENV.delete("GOOGLE_REDIRECT_URI")
-        end
-
-        after do |example|
-          example.metadata[:response][:content] = {
-            "application/json" => {
-              example: JSON.parse(response.body, symbolize_names: true),
-            },
-          }
-        end
-
-        run_test!
+      it "422を返すこと" do
+        subject
+        expect(response).to have_http_status(:unprocessable_entity)
+        assert_schema_conform(422)
       end
 
-      response(204, "successful - new user creates auth request") do
-        let(:request_params) { { code: "valid_code" } }
+      it "エラーメッセージを返すこと" do
+        subject
+        json_response = JSON.parse(response.body)
+        expect(json_response["errors"]).to include("Failed to exchange code for token")
+      end
+    end
 
-        before do
-          ENV["GOOGLE_CLIENT_ID"] = "test_client_id"
-          ENV["GOOGLE_CLIENT_SECRET"] = "test_client_secret"
-          ENV["GOOGLE_REDIRECT_URI"] = "http://localhost:3000/auth/google/callback"
+    context "ユーザー情報の取得に失敗した場合" do
+      before do
+        token_response = double(
+          code: "200",
+          body: '{"access_token": "test_access_token", "id_token": "test_id_token"}'
+        )
+        user_info_response = double(code: "400", body: '{"error": "invalid_token"}')
 
-          # Mock successful token exchange
-          token_response = double(
-            code: "200",
-            body: '{"access_token": "test_access_token", "id_token": "test_id_token"}'
-          )
-
-          # Mock successful user info fetch
-          user_info_response = double(
-            code: "200",
-            body: '{"email": "newuser@example.com", "name": "New User", "picture": "https://example.com/picture.jpg"}'
-          )
-
-          allow_any_instance_of(Net::HTTP).to receive(:request).with(instance_of(Net::HTTP::Post)).and_return(token_response)
-          allow_any_instance_of(Net::HTTP).to receive(:request).with(instance_of(Net::HTTP::Get)).and_return(user_info_response)
-        end
-
-        after do
-          ENV.delete("GOOGLE_CLIENT_ID")
-          ENV.delete("GOOGLE_CLIENT_SECRET")
-          ENV.delete("GOOGLE_REDIRECT_URI")
-        end
-
-        run_test!
+        allow_any_instance_of(Net::HTTP).to receive(:request)
+          .with(instance_of(Net::HTTP::Post)).and_return(token_response)
+        allow_any_instance_of(Net::HTTP).to receive(:request)
+          .with(instance_of(Net::HTTP::Get)).and_return(user_info_response)
       end
 
-      response(422, "unprocessable entity - auth request validation fails") do
-        let(:request_params) { { code: "valid_code" } }
+      it "422を返すこと" do
+        subject
+        expect(response).to have_http_status(:unprocessable_entity)
+        assert_schema_conform(422)
+      end
+
+      it "エラーメッセージを返すこと" do
+        subject
+        json_response = JSON.parse(response.body)
+        expect(json_response["errors"]).to include("Failed to fetch user info")
+      end
+    end
+
+    context "認証が成功した場合" do
+      let(:email) { "test@example.com" }
+
+      before do
+        token_response = double(
+          code: "200",
+          body: '{"access_token": "test_access_token", "id_token": "test_id_token"}'
+        )
+        user_info_response = double(
+          code: "200",
+          body: { email: email }.to_json
+        )
+
+        allow_any_instance_of(Net::HTTP).to receive(:request)
+          .with(instance_of(Net::HTTP::Post)).and_return(token_response)
+        allow_any_instance_of(Net::HTTP).to receive(:request)
+          .with(instance_of(Net::HTTP::Get)).and_return(user_info_response)
+      end
+
+      context "既存ユーザーの場合" do
+        let!(:existing_user) { create(:user, email: email) }
+
+        it "201を返すこと" do
+          subject
+          expect(response).to have_http_status(:created)
+          assert_schema_conform(201)
+        end
+
+        it "access_tokenとrefresh_tokenを返すこと" do
+          subject
+          json_response = JSON.parse(response.body)
+          expect(json_response).to have_key("access_token")
+          expect(json_response).to have_key("refresh_token")
+        end
+
+        it "ユーザー名を返すこと" do
+          subject
+          json_response = JSON.parse(response.body)
+          expect(json_response["user_name"]).to eq(existing_user.name)
+        end
+      end
+
+      context "新規ユーザーの場合" do
+        let(:email) { "newuser@example.com" }
+
+        it "201を返すこと" do
+          subject
+          expect(response).to have_http_status(:created)
+          assert_schema_conform(201)
+        end
+
+        it "AuthRequestを作成すること" do
+          expect { subject }.to change(AuthRequest, :count).by(1)
+        end
+
+        it "暗号化されたメールアドレスを返すこと" do
+          subject
+          json_response = JSON.parse(response.body)
+          expect(json_response).to have_key("encrypted_email")
+        end
+
+        it "access_tokenがnullであること" do
+          subject
+          json_response = JSON.parse(response.body)
+          expect(json_response["access_token"]).to be_nil
+        end
+      end
+
+      context "AuthRequestの保存に失敗した場合" do
+        let(:email) { "newuser@example.com" }
 
         before do
-          ENV["GOOGLE_CLIENT_ID"] = "test_client_id"
-          ENV["GOOGLE_CLIENT_SECRET"] = "test_client_secret"
-          ENV["GOOGLE_REDIRECT_URI"] = "http://localhost:3000/auth/google/callback"
-
-          # Mock successful token exchange
-          token_response = double(
-            code: "200",
-            body: '{"access_token": "test_access_token", "id_token": "test_id_token"}'
-          )
-
-          # Mock successful user info fetch with invalid email
-          user_info_response = double(
-            code: "200",
-            body: '{"email": "", "name": "Invalid User", "picture": "https://example.com/picture.jpg"}'
-          )
-
-          allow_any_instance_of(Net::HTTP).to receive(:request).with(instance_of(Net::HTTP::Post)).and_return(token_response)
-          allow_any_instance_of(Net::HTTP).to receive(:request).with(instance_of(Net::HTTP::Get)).and_return(user_info_response)
+          allow_any_instance_of(AuthRequest).to receive(:save).and_return(false)
+          allow_any_instance_of(AuthRequest).to receive_message_chain(:errors, :full_messages)
+            .and_return([ "Email is invalid" ])
         end
 
-        after do
-          ENV.delete("GOOGLE_CLIENT_ID")
-          ENV.delete("GOOGLE_CLIENT_SECRET")
-          ENV.delete("GOOGLE_REDIRECT_URI")
+        it "422を返すこと" do
+          subject
+          expect(response).to have_http_status(:unprocessable_entity)
+          assert_schema_conform(422)
         end
 
-        run_test!
+        it "エラーメッセージを返すこと" do
+          subject
+          json_response = JSON.parse(response.body)
+          expect(json_response["errors"]).to include("Email is invalid")
+        end
       end
     end
   end

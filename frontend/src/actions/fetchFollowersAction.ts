@@ -6,8 +6,7 @@ import { ApiResult } from "@/src/types/apiResult";
 
 export type FetchFollowersActionSuccessResponse =
   paths["/users/{user_id}/followers"]["get"]["responses"]["200"]["content"]["application/json"];
-export type FetchFollowersActionErrorResponse =
-  components["schemas"]["Errors"];
+export type FetchFollowersActionErrorResponse = components["schemas"]["Errors"];
 export type FetchFollowersActionUserItem = {
   id: number;
   name: string;

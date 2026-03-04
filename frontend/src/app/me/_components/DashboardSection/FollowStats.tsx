@@ -26,22 +26,22 @@ export default function FollowStats({
 
   const { isOpen, onOpen, onClose } = useDisclosure();
 
-  const loadData = useCallback(() => {
-    startTransition(async () => {
-      const [followersResult, followingsResult] = await Promise.all([
-        fetchFollowersAction(userId),
-        fetchFollowingsAction(userId),
-      ]);
-      setFollowers(followersResult.data);
-      setFollowings(followingsResult.data);
-    });
-  }, [userId]);
-
   useEffect(() => {
     if (isOpen) {
+      const loadData = () => {
+        startTransition(async () => {
+          const [followersResult, followingsResult] = await Promise.all([
+            fetchFollowersAction(userId),
+            fetchFollowingsAction(userId),
+          ]);
+          setFollowers(followersResult.data);
+          setFollowings(followingsResult.data);
+        });
+      };
+
       loadData();
     }
-  }, [isOpen, loadData]);
+  }, [isOpen]);
 
   const openWithTab = (selectedTab: "followings" | "followers") => {
     setTab(selectedTab);

@@ -5,3 +5,5 @@ tmp/
 storage/
 node_modules
 config/master.key
+.env
+.env.local

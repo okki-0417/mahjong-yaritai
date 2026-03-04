@@ -6,47 +6,46 @@ class Auth::Line::CallbacksController < ApplicationController
   def create
     code = params[:code]
     state = params[:state]
+    line_login_id = params[:line_login_id]
 
-    if state.blank? || state != session[:line_login_state]
-      return render json: error_json([ "Invalid state parameter" ]), status: :bad_request
+    line_login = find_line_login(line_login_id)
+
+    if line_login.nil? || state.blank? || state != line_login.state
+      return render json: { errors: [ "パラメーターが不正です" ] }, status: :bad_request
     end
 
-    session.delete(:line_login_state)
-
     if code.blank?
-      return render json: error_json([ "Authorization code is missing" ]), status: :bad_request
+      return render json: { errors: [ "Authorization code が存在しません" ] }, status: :bad_request
     end
 
     token_response = exchange_code_for_token(code)
 
     if token_response[:error]
-      return render json: error_json([ token_response[:error] ]), status: :unprocessable_entity
+      return render json: { errors: [ token_response[:error] ] }, status: :unprocessable_entity
     end
 
     user_data = verify_id_token(token_response[:id_token])
 
     if user_data[:error]
-      return render json: error_json([ user_data[:error] ]), status: :unprocessable_entity
+      return render json: { errors: [ user_data[:error] ] }, status: :unprocessable_entity
     end
 
     user = User.find_by(email: user_data[:email])
 
     if user
-      login user
-      remember user
+      @user_name = user.name
+      @access_token, @refresh_token = login(user)
 
-      render json: user,
-        serializer: SessionSerializer,
-        root: :session,
-        status: :ok
+      render :show, status: :created
     else
       auth_request = AuthRequest.new(email: user_data[:email])
 
       if auth_request.save
-        session[:auth_request_id] = auth_request.id
-        render body: nil, status: :no_content
+        @encrypted_email = EncryptionService.encrypt(auth_request.email)
+
+        render :show, status: :created
       else
-        render json: validation_error_json(auth_request), status: :unprocessable_entity
+        render json: { errors: auth_request.errors.full_messages }, status: :unprocessable_entity
       end
     end
   end
@@ -108,5 +107,14 @@ class Auth::Line::CallbacksController < ApplicationController
     end
   rescue => e
     { error: e.message }
+  end
+
+  def find_line_login(encrypted_id)
+    return nil if encrypted_id.blank?
+
+    id = EncryptionService.decrypt(encrypted_id)
+    LineLogin.find_by(id:)
+  rescue ActiveSupport::MessageEncryptor::InvalidMessage
+    nil
   end
 end

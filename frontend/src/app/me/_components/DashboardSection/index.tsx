@@ -2,12 +2,12 @@ import ProfileEdit from "@/src/app/me/_components/DashboardSection/ProfileEdit";
 import Logout from "@/src/app/me/_components/DashboardSection/Logout";
 import FollowStatsSection from "@/src/app/me/_components/DashboardSection/FollowStats";
 import Link from "next/link";
-import { fetchDashboardData } from "@/src/app/me/_services/fetchDashboardData";
+import fetchDashboardDataService from "@/src/app/me/_services/fetchDashboardDataService";
 import ErrorPage from "@/src/components/errors/ErrorPage";
 
 export default async function DashboardSection() {
   try {
-    const [user, followStats] = await fetchDashboardData();
+    const [user, followStats] = await fetchDashboardDataService();
 
     return (
       <div>
@@ -63,13 +63,14 @@ export default async function DashboardSection() {
       </div>
     );
   } catch (error) {
-    console.error("ダッシュボードのデータの取得に失敗:", error);
+    console.error("DashboardSection error:", error);
+
     return (
       <ErrorPage
         message={
           error instanceof Error
             ? error.message
-            : "ダッシュボードのデータの取得中に予期せぬエラーが発生しました"
+            : "ダッシュボードのデータの取得に失敗しました。"
         }
       />
     );

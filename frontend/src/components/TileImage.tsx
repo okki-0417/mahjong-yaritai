@@ -33,8 +33,7 @@ import Tile31 from "@/public/tiles/31.webp";
 import Tile32 from "@/public/tiles/32.webp";
 import Tile33 from "@/public/tiles/33.webp";
 import Tile34 from "@/public/tiles/34.webp";
-import tileNameById from "@/src/lib/utils/tileNameById";
-import { Center } from "@chakra-ui/react";
+import getTileNameById from "@/src/lib/utils/tileNameById";
 
 export const tileImagePathByTileId: Record<number, StaticImageData> = {
   1: Tile1,
@@ -76,7 +75,7 @@ export const tileImagePathByTileId: Record<number, StaticImageData> = {
 export default function TileImage({
   tile,
   tileId,
-  hover = true,
+  hover = false,
   className,
   isShiny = false,
 }: {
@@ -86,11 +85,11 @@ export default function TileImage({
   className?: string;
   isShiny?: boolean;
 }) {
-  const src = tileImagePathByTileId[tileId || tile];
-  const alt = tileNameById[tileId || tile] || "";
+  const src = tileImagePathByTileId[Number(tileId) || Number(tile) || 0];
+  const alt = getTileNameById(Number(tileId) || Number(tile)) || "Unknown Tile";
 
   return (
-    <Center className="aspect-tile relative overflow-hidden">
+    <div className="flex items-center justify-center aspect-tile relative overflow-hidden h-full">
       <Image
         width={47}
         height={63}
@@ -102,6 +101,6 @@ export default function TileImage({
       />
 
       <div className={`${isShiny ? "shining-tile" : "hidden"}`} />
-    </Center>
+    </div>
   );
 }

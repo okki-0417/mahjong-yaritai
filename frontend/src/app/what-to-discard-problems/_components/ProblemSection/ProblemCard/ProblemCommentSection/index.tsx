@@ -2,22 +2,18 @@
 
 import { FaRegComment } from "react-icons/fa";
 import PopButton from "@/src/components/PopButton";
-import {
-  HStack,
-  Spinner,
-  Text,
-  useDisclosure,
-  useToast,
-} from "@chakra-ui/react";
+import { HStack, Spinner, Text } from "@chakra-ui/react";
 import CommentsModal from "@/src/app/what-to-discard-problems/_components/ProblemSection/ProblemCard/ProblemCommentSection/CommentsModal";
 import { Comment, ParentCommentsDocument } from "@/src/generated/graphql";
 import { Fragment, useState } from "react";
 import { useLazyQuery } from "@apollo/client/react";
 import { clearQueryCache } from "@/src/lib/apollo/cache";
+import useToast from "@/src/hooks/useToast";
+import { useDisclosure } from "@/src/hooks/useDisclosure";
 
 type Props = {
   initialCommentsCount: number;
-  problemId: string;
+  problemId: number;
 };
 
 export default function ProblemCommentSection({
@@ -30,11 +26,7 @@ export default function ProblemCommentSection({
   );
 
   const toast = useToast();
-  const {
-    isOpen: isCommentModalOpen,
-    onOpen: onCommentModalOpen,
-    onClose: onCommentModalClose,
-  } = useDisclosure();
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
   const onReply = (comment: Comment) => setReplyingToComment(comment);
   const onReplyCancel = () => setReplyingToComment(null);
@@ -82,7 +74,7 @@ export default function ProblemCommentSection({
       setParentComments(
         result.data.whatToDiscardProblemComments.edges.map((edge) => edge.node),
       );
-      onCommentModalOpen();
+      onOpen();
     }
   };
 
@@ -101,16 +93,16 @@ export default function ProblemCommentSection({
         </HStack>
       </PopButton>
 
-      <CommentsModal
-        isOpen={isCommentModalOpen}
-        onClose={onCommentModalClose}
+      {/* <CommentsModal
+        isOpen={isOpen}
+        onClose={onClose}
         parentComments={parentComments}
         problemId={problemId}
         onReply={onReply}
         replyingToComment={replyingToComment}
         onReplyCancel={onReplyCancel}
         onCommentCreate={(comment: Comment) => onCommentCreate(comment)}
-      />
+      /> */}
     </Fragment>
   );
 }

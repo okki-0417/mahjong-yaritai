@@ -1,4 +1,4 @@
-import GoogleVerification from "@/src/app/auth/google-callback/components/GoogleVerification";
+import GoogleVerification from "@/src/app/auth/google-callback/_components/GoogleVerification";
 import ErrorPage from "@/src/components/errors/ErrorPage";
 
 type Props = {
@@ -13,10 +13,18 @@ export default async function GoogleCallbackPage({ searchParams }: Props) {
   try {
     if (!code) throw new Error("Googleからの認証コードが見つかりません。");
 
-    return <GoogleVerification code={code} />;
+    return (
+      <div className="mt-8 lg:w-4xl mx-auto">
+        <GoogleVerification code={code} />
+      </div>
+    );
   } catch (error) {
-    /* eslint-disable-next-line no-console */
     console.error("Google callback page error:", error);
-    return <ErrorPage message={error.message || "認証に失敗しました"} />;
+
+    return (
+      <ErrorPage
+        message={error instanceof Error ? error.message : "認証に失敗しました"}
+      />
+    );
   }
 }

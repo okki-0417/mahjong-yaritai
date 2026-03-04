@@ -22,7 +22,7 @@ export default function TilesDisplay({
   onVoteDelete,
 }: Props) {
   return (
-    <HStack gap="1px">
+    <div className="flex gap-px">
       {[...tileIds].map((tileId, index) => {
         return (
           <VoteButton
@@ -36,6 +36,6 @@ export default function TilesDisplay({
           />
         );
       })}
-    </HStack>
+    </div>
   );
 }

@@ -2,7 +2,7 @@ import { cookies } from "next/headers";
 import { API_BASE_URL } from "@/config/apiConfig";
 import { paths } from "@/src/types/api";
 import {
-  type ApiError,
+  type ApiErrors,
   type FollowStats,
   type User,
 } from "@/src/types/components";
@@ -12,7 +12,9 @@ type MeApiResponse =
 type FollowStatsApiResponse =
   paths["/users/{user_id}/follow_stats"]["get"]["responses"]["200"]["content"]["application/json"];
 
-export async function fetchDashboardData(): Promise<[User, FollowStats]> {
+export default async function fetchDashboardData(): Promise<
+  [User, FollowStats]
+> {
   const cookieStore = await cookies();
   const accessToken = cookieStore.get("access_token")?.value;
 
@@ -25,7 +27,7 @@ export async function fetchDashboardData(): Promise<[User, FollowStats]> {
   });
 
   if (!meResponse.ok) {
-    const data: ApiError = await meResponse.json();
+    const data: ApiErrors = await meResponse.json();
     throw new Error(
       data.errors?.join(", ") || "ユーザ情報の取得に失敗しました",
     );
@@ -39,7 +41,7 @@ export async function fetchDashboardData(): Promise<[User, FollowStats]> {
   );
 
   if (!followStatsResponse.ok) {
-    const data: ApiError = await followStatsResponse.json();
+    const data: ApiErrors = await followStatsResponse.json();
     throw new Error(
       data.errors?.join(", ") || "フォロー・フォロワー数の取得に失敗しました",
     );

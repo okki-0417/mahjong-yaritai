@@ -191,6 +191,102 @@ paths:
               schema:
                 $ref: '#/components/schemas/Errors'
 
+  /auth/google/callback:
+    post:
+      summary: Google OAuth認証コールバック
+      description: |
+        Googleから取得した認証コードを使ってユーザー認証を行う。
+        既存ユーザーの場合はアクセストークンを返し、新規ユーザーの場合は暗号化されたメールアドレスを返す。
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - code
+              properties:
+                code:
+                  type: string
+                  description: Googleから取得した認証コード
+      responses:
+        '201':
+          description: 認証成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GoogleAuthResponse'
+        '400':
+          description: 認証コードがない
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+        '422':
+          description: トークン交換失敗、ユーザー情報取得失敗、またはAuthRequest保存失敗
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+
+  /auth/line/login_url:
+    post:
+      summary: LINE OAuth認証URL取得
+      description: LINE OAuth認証用のログインURLを取得する
+      responses:
+        '201':
+          description: ログインURL作成成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LineLoginUrlResponse'
+
+  /auth/line/callback:
+    post:
+      summary: LINE OAuth認証コールバック
+      description: |
+        LINEから取得した認証コードを使ってユーザー認証を行う。
+        既存ユーザーの場合はアクセストークンを返し、新規ユーザーの場合は暗号化されたメールアドレスを返す。
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - code
+                - state
+                - line_login_id
+              properties:
+                code:
+                  type: string
+                  description: LINEから取得した認証コード
+                state:
+                  type: string
+                  description: CSRF対策用のstateパラメータ
+                line_login_id:
+                  type: string
+                  description: 暗号化されたLineLoginレコードID
+      responses:
+        '201':
+          description: 認証成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LineAuthResponse'
+        '400':
+          description: stateパラメータが無効、または認証コードがない
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+        '422':
+          description: トークン交換失敗、IDトークン検証失敗、またはAuthRequest保存失敗
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+
   /what_to_discard_problems:
     get:
       parameters:
@@ -212,8 +308,239 @@ paths:
               schema:
                 $ref: '#/components/schemas/WhatToDiscardProblemList'
 
+  /what_to_discard_problems/{id}:
+    get:
+      summary: 何切る問題を取得
+      description: 指定したIDの何切る問題を取得する
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WhatToDiscardProblem'
+        '404':
+          description: 問題が見つからない
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    put:
+      summary: 何切る問題を更新
+      description: 自分が作成した何切る問題を更新する
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - dora_id
+                - hand1_id
+                - hand2_id
+                - hand3_id
+                - hand4_id
+                - hand5_id
+                - hand6_id
+                - hand7_id
+                - hand8_id
+                - hand9_id
+                - hand10_id
+                - hand11_id
+                - hand12_id
+                - hand13_id
+                - tsumo_id
+              properties:
+                round:
+                  type: string
+                  nullable: true
+                turn:
+                  type: integer
+                  nullable: true
+                wind:
+                  type: string
+                  nullable: true
+                points:
+                  type: integer
+                  nullable: true
+                description:
+                  type: string
+                  nullable: true
+                dora_id:
+                  type: integer
+                hand1_id:
+                  type: integer
+                hand2_id:
+                  type: integer
+                hand3_id:
+                  type: integer
+                hand4_id:
+                  type: integer
+                hand5_id:
+                  type: integer
+                hand6_id:
+                  type: integer
+                hand7_id:
+                  type: integer
+                hand8_id:
+                  type: integer
+                hand9_id:
+                  type: integer
+                hand10_id:
+                  type: integer
+                hand11_id:
+                  type: integer
+                hand12_id:
+                  type: integer
+                hand13_id:
+                  type: integer
+                tsumo_id:
+                  type: integer
+      responses:
+        '200':
+          description: 更新成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WhatToDiscardProblem'
+        '401':
+          description: 認証エラー
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: 問題が見つからない
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '422':
+          description: バリデーションエラー
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    delete:
+      summary: 何切る問題を削除
+      description: 自分が作成した何切る問題を削除する
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: 削除成功
+        '401':
+          description: 認証エラー
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /what_to_discard_problems/{what_to_discard_problem_id}/likes:
+    post:
+      summary: 何切る問題にいいねする
+      description: 指定した何切る問題にいいねを追加する
+      parameters:
+        - name: what_to_discard_problem_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '201':
+          description: いいね作成成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Like'
+        '401':
+          description: 認証エラー
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: 問題が見つからない
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '422':
+          description: 既にいいね済み
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /what_to_discard_problems/{what_to_discard_problem_id}/likes/{id}:
+    delete:
+      summary: 何切る問題のいいねを取り消す
+      description: 指定した何切る問題のいいねを削除する
+      parameters:
+        - name: what_to_discard_problem_id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: いいね削除成功
+        '401':
+          description: 認証エラー
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: 問題またはいいねが見つからない
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
 components:
   schemas:
+    Like:
+      type: object
+      required:
+        - id
+        - user_id
+        - likable_id
+        - likable_type
+        - created_at
+      properties:
+        id:
+          type: integer
+        user_id:
+          type: integer
+        likable_id:
+          type: integer
+        likable_type:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+
     User:
       type: object
       required:
@@ -254,6 +581,15 @@ components:
           items:
             $ref: '#/components/schemas/User'
 
+    Error:
+      type: object
+      required:
+        - error
+      properties:
+        error:
+          type: string
+          description: エラーメッセージ
+
     Errors:
       type: object
       required:
@@ -263,6 +599,82 @@ components:
           type: array
           items:
             type: string
+
+    GoogleAuthResponse:
+      type: object
+      required:
+        - user_name
+        - access_token
+        - refresh_token
+        - encrypted_email
+      properties:
+        user_name:
+          type: string
+          nullable: true
+          description: ユーザー名（既存ユーザーの場合）
+        access_token:
+          type: string
+          nullable: true
+          description: JWTアクセストークン（既存ユーザーの場合）
+        refresh_token:
+          type: string
+          nullable: true
+          description: JWTリフレッシュトークン（既存ユーザーの場合）
+        encrypted_email:
+          type: string
+          nullable: true
+          description: 暗号化されたメールアドレス（新規ユーザーの場合）
+
+    LineLoginUrlResponse:
+      type: object
+      required:
+        - login_url
+        - line_login_id
+      properties:
+        login_url:
+          type: string
+          description: LINE OAuth認証URL
+        line_login_id:
+          type: string
+          description: 暗号化されたLineLoginレコードID
+
+    LineAuthResponse:
+      type: object
+      required:
+        - user_name
+        - access_token
+        - refresh_token
+        - encrypted_email
+      properties:
+        user_name:
+          type: string
+          nullable: true
+          description: ユーザー名（既存ユーザーの場合）
+        access_token:
+          type: string
+          nullable: true
+          description: JWTアクセストークン（既存ユーザーの場合）
+        refresh_token:
+          type: string
+          nullable: true
+          description: JWTリフレッシュトークン（既存ユーザーの場合）
+        encrypted_email:
+          type: string
+          nullable: true
+          description: 暗号化されたメールアドレス（新規ユーザーの場合）
+
+    Session:
+      type: object
+      required:
+        - is_logged_in
+      properties:
+        is_logged_in:
+          type: boolean
+          description: ログイン状態
+        user_id:
+          type: integer
+          nullable: true
+          description: ユーザーID
 
     WhatToDiscardProblem:
       type: object
@@ -286,7 +698,7 @@ components:
         - comments_count
         - likes_count
         - votes_count
-        - is_liked_by_me
+        - my_like_id
         - my_vote_tile_id
         - user
         - created_at
@@ -344,8 +756,9 @@ components:
           type: integer
         votes_count:
           type: integer
-        is_liked_by_me:
-          type: boolean
+        my_like_id:
+          type: integer
+          nullable: true
         my_vote_tile_id:
           type: integer
           nullable: true

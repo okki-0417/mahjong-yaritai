@@ -7,41 +7,39 @@ class Auth::Google::CallbacksController < ApplicationController
     code = params[:code]
 
     if code.blank?
-      return render json: error_json([ "認証コードがありません" ]), status: :bad_request
+      return render json: { errors: [ "認証コードがありません" ] }, status: :bad_request
     end
 
     # コードからGoogleのアクセストークンを取得
     token_response = exchange_code_for_token(code)
 
     if token_response[:error]
-      return render json: error_json([ token_response[:error] ]), status: :unprocessable_entity
+      return render json: { errors: [ token_response[:error] ] }, status: :unprocessable_entity
     end
 
     # Googleからユーザー情報を取得
     user_info = fetch_google_user_info(token_response[:access_token])
 
     if user_info[:error]
-      return render json: error_json([ user_info[:error] ]), status: :unprocessable_entity
+      return render json: { errors: [ user_info[:error] ] }, status: :unprocessable_entity
     end
 
     user = User.find_by(email: user_info[:email])
 
     if user
-      login user
-      remember user
+      @user_name = user.name
+      @access_token, @refresh_token = login(user)
 
-      render json: user,
-        serializer: SessionSerializer,
-        root: :session,
-        status: :ok
+      render :show, status: :created
     else
       auth_request = AuthRequest.new(email: user_info[:email])
 
       if auth_request.save
-        session[:auth_request_id] = auth_request.id
-        render body: nil, status: :no_content
+        @encrypted_email = EncryptionService.encrypt(auth_request.email)
+
+        render :show, status: :created
       else
-        render json: validation_error_json(auth_request), status: :unprocessable_entity
+        render json: { errors: auth_request.errors.full_messages }, status: :unprocessable_entity
       end
     end
   end
@@ -69,10 +67,10 @@ class Auth::Google::CallbacksController < ApplicationController
       data = JSON.parse(response.body)
       { access_token: data["access_token"], id_token: data["id_token"] }
     else
-      { error: "Failed to exchange code for token" }
+      { error: "トークンの取得に失敗しました" }
     end
   rescue => e
-    { error: e.message }
+    { error: "トークンの取得中にエラーが発生しました: #{e.message}" }
   end
 
   def fetch_google_user_info(access_token)
@@ -89,9 +87,9 @@ class Auth::Google::CallbacksController < ApplicationController
       data = JSON.parse(response.body)
       { email: data["email"] }
     else
-      { error: "Failed to fetch user info" }
+      { error: "ユーザー情報の取得に失敗しました" }
     end
   rescue => e
-    { error: e.message }
+    { error: "ユーザー情報の取得中にエラーが発生しました: #{e.message}" }
   end
 end
