@@ -2,7 +2,7 @@ import { cookies } from "next/headers";
 import { API_BASE_URL } from "@/config/apiConfig";
 import { User, WhatToDiscardProblemList } from "@/src/types/components";
 
-type FetchProblemsResult = [
+export type FetchProblemsResult = [
   problems: WhatToDiscardProblemList,
   me: User | null,
 ];

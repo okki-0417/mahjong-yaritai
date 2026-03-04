@@ -1,10 +1,13 @@
 import ProblemCard from "@/src/app/what-to-discard-problems/_components/ProblemSection/ProblemCard";
-import { fetchProblems } from "@/src/app/what-to-discard-problems/_services/fetchProblems";
+import {
+  fetchProblems,
+  FetchProblemsResult,
+} from "@/src/app/what-to-discard-problems/_services/fetchProblems";
 import ErrorPage from "@/src/components/errors/ErrorPage";
 
 export default async function ProblemsSection() {
   try {
-    const [problemData, me] = await fetchProblems();
+    const [problemData, me]: FetchProblemsResult = await fetchProblems();
 
     return (
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-4 lg:gap-3 items-start justify-items-end">
