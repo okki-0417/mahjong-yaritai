@@ -941,6 +941,121 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/what_to_discard_problems/{what_to_discard_problem_id}/votes": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * 何切る問題に投票する
+         * @description 指定した何切る問題に投票を追加する。既に投票済みの場合は上書きされる。
+         */
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    what_to_discard_problem_id: number;
+                };
+                cookie?: never;
+            };
+            requestBody: {
+                content: {
+                    "application/json": {
+                        /** @description 投票する牌のID */
+                        tile_id: number;
+                    };
+                };
+            };
+            responses: {
+                /** @description 投票作成成功 */
+                201: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["Vote"];
+                    };
+                };
+                /** @description 認証エラー */
+                401: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["Error"];
+                    };
+                };
+                /** @description バリデーションエラー */
+                422: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["Error"];
+                    };
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/what_to_discard_problems/{what_to_discard_problem_id}/votes/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        /**
+         * 何切る問題の投票を取り消す
+         * @description 指定した何切る問題の投票を削除する
+         */
+        delete: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    what_to_discard_problem_id: number;
+                    id: number;
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description 投票削除成功 */
+                204: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+                /** @description 認証エラー */
+                401: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["Error"];
+                    };
+                };
+            };
+        };
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/what_to_discard_problems/{what_to_discard_problem_id}/comments": {
         parameters: {
             query?: never;
@@ -1126,6 +1241,14 @@ export interface components {
             user_id: number;
             likable_id: number;
             likable_type: string;
+            /** Format: date-time */
+            created_at: string;
+        };
+        Vote: {
+            id: number;
+            user_id: number;
+            what_to_discard_problem_id: number;
+            tile_id: number;
             /** Format: date-time */
             created_at: string;
         };

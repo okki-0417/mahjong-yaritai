@@ -12,8 +12,6 @@
     "format": "npx prettier . --write",
     "format:check": "npx prettier . --check",
     "typecheck": "tsc --noEmit",
-    "gen-client": "npx openapi-zod-client ../api/swagger/v1/swagger.yaml -o src/zodios/api.ts",
-    "codegen": "graphql-codegen --config codegen.ts",
     "gen:api": "openapi-typescript ../api/docs/openapi.yaml -o src/types/api.ts"
   },
   "dependencies": {

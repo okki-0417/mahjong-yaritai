@@ -36,6 +36,7 @@ Rails.application.routes.draw do
 
     resources :what_to_discard_problems, only: %i[index show create update destroy] do
       resources :likes, only: %i[create destroy], module: :what_to_discard_problems
+      resources :votes, only: %i[create destroy], module: :what_to_discard_problems
       resources :comments, module: :what_to_discard_problems, only: %i[index create] do
         resources :replies, only: %i[index], controller: :comments, action: :replies
       end

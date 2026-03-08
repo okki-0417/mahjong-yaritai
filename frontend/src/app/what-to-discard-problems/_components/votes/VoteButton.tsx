@@ -1,85 +1,39 @@
 "use client";
 
-import { Box, Skeleton, useDisclosure, useToast } from "@chakra-ui/react";
 import PopButton from "@/src/components/PopButton";
 import TileImage from "@/src/components/TileImage";
 import NotLoggedInModal from "@/src/components/Modals/NotLoggedInModal";
-import { useMutation } from "@apollo/client/react";
-import {
-  CreateWhatToDiscardProblemVoteDocument,
-  DeleteWhatToDiscardProblemVoteDocument,
-  DeleteWhatToDiscardProblemVoteInput,
-  DeleteWhatToDiscardProblemVoteMutationVariables,
-} from "@/src/generated/graphql";
 import { SubmitHandler, useForm } from "react-hook-form";
-import useGetSession from "@/src/hooks/useGetSession";
+import useToast from "@/src/hooks/useToast";
+import { useDisclosure } from "@/src/hooks/useDisclosure";
+import deleteVoteAction from "@/src/actions/deleteVoteAction";
+import createVoteAction from "@/src/actions/createVoteAction";
+import { Vote } from "@/src/types/components";
+import useMe from "@/src/hooks/useMe";
 
 type Props = {
   problemId: number;
-  doraId: number;
+  isDora: boolean;
   tileId: number;
-  isVoted: boolean;
-  onCreate: () => void;
+  myVoteTileId: number | null;
+  onCreate: (tileId: number) => void;
   onDelete: () => void;
 };
 
 export default function VoteButton({
   problemId,
-  doraId,
+  isDora,
   tileId,
-  isVoted,
+  myVoteTileId,
   onCreate,
   onDelete,
 }: Props) {
-  const { session } = useGetSession();
-  const isLoggedIn = session?.isLoggedIn;
+  const { isLoggedIn } = useMe();
 
   const toast = useToast();
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
-  const [createVote] = useMutation(CreateWhatToDiscardProblemVoteDocument, {
-    onCompleted: (data) => {
-      toast({
-        title:
-          data.createWhatToDiscardProblemVote.vote.tile.name + "に投票しました",
-        status: "success",
-      });
-
-      onCreate();
-    },
-    onError: (error) => {
-      toast({
-        title: "投票に失敗しました",
-        description: error.message,
-        status: "error",
-      });
-    },
-  });
-  const [deleteVote] = useMutation<
-    DeleteWhatToDiscardProblemVoteInput,
-    DeleteWhatToDiscardProblemVoteMutationVariables
-  >(DeleteWhatToDiscardProblemVoteDocument, {
-    onCompleted: () => {
-      toast({
-        title: "投票を取り消しました",
-        status: "success",
-      });
-
-      onDelete();
-    },
-    onError: (error) => {
-      toast({
-        title: "投票の取り消しに失敗しました",
-        description: error.message,
-        status: "error",
-      });
-    },
-  });
-
-  const {
-    isOpen: isNotLoggedInModalOpen,
-    onOpen: onNotLoggedInModalOpen,
-    onClose: onNotLoggedInModalClose,
-  } = useDisclosure();
+  const isVoted = myVoteTileId === tileId;
 
   const {
     handleSubmit,
@@ -88,23 +42,38 @@ export default function VoteButton({
 
   const onSubmit: SubmitHandler<{}> = async () => {
     if (!isLoggedIn) {
-      onNotLoggedInModalOpen();
+      onOpen();
       return;
     }
 
     if (isVoted) {
-      await deleteVote({
-        variables: {
-          whatToDiscardProblemId: problemId,
-        },
-      });
+      try {
+        await deleteVoteAction({ problemId, voteId: myVoteTileId });
+        onDelete();
+      } catch (error) {
+        toast({
+          title: "投票の削除に失敗しました",
+          status: "error",
+          description:
+            error instanceof Error
+              ? error.message
+              : "予期せぬエラーが発生しました",
+        });
+      }
     } else {
-      await createVote({
-        variables: {
-          problemId,
-          tileId: String(tileId),
-        },
-      });
+      try {
+        const newVote = await createVoteAction({ problemId, tileId });
+        onCreate(newVote.tile_id);
+      } catch (error) {
+        toast({
+          title: "投票の作成に失敗しました",
+          status: "error",
+          description:
+            error instanceof Error
+              ? error.message
+              : "予期せぬエラーが発生しました",
+        });
+      }
     }
   };
 
@@ -116,30 +85,24 @@ export default function VoteButton({
           disabled={isSubmitting}
           className="aspect-tile relative"
         >
-          <TileImage tileId={tileId} isShiny={tileId == doraId} />
+          <TileImage tileId={tileId} isShiny={isDora} />
 
-          <Box
-            position="absolute"
-            inset="0"
-            zIndex="10"
-            className={`${isVoted && "bg-blue-500/50"} rounded-sm`}
+          <div
+            className={`${isVoted && "bg-blue-500/50"} rounded-sm absolute inset-0 z-10`}
           />
           {isSubmitting && <VotingFallback />}
         </PopButton>
       </form>
 
-      <NotLoggedInModal
-        isOpen={isNotLoggedInModalOpen}
-        onClose={onNotLoggedInModalClose}
-      />
+      {isOpen && <NotLoggedInModal isOpen={isOpen} onClose={onClose} />}
     </>
   );
 }
 
 const VotingFallback = () => {
   return (
-    <Box position="absolute" inset="0" zIndex="5" rounded="sm">
-      <Skeleton w="full" h="full" />
-    </Box>
+    <div className="absolute inset-0 z-5 rounded-sm">
+      <div className="bg-gray-200 inset-0" />
+    </div>
   );
 };

@@ -6,7 +6,8 @@ import ProblemCardHeader from "@/src/app/what-to-discard-problems/_components/Pr
 import ProblemCommentSection from "@/src/app/what-to-discard-problems/_components/ProblemSection/ProblemCard/ProblemCommentSection";
 import { WhatToDiscardProblem } from "@/src/types/components";
 import ProblemDescription from "@/src/app/what-to-discard-problems/_components/ProblemSection/ProblemCard/ProblemDescription";
-import useMe from "@/src/hooks/useMe";
+import { useState } from "react";
+import VoteButton from "@/src/app/what-to-discard-problems/_components/votes/VoteButton";
 
 type Props = {
   problem: WhatToDiscardProblem;
@@ -14,6 +15,21 @@ type Props = {
 };
 
 export default function ProblemCard({ problem, onUpdate }: Props) {
+  const [myVoteTileId, setMyVoteTileId] = useState<number | null>(
+    problem.my_vote_tile_id,
+  );
+  const [votesCount, setVotesCount] = useState<number>(problem.votes_count);
+
+  const onVote = (tileId: number) => {
+    setMyVoteTileId(tileId);
+    setVotesCount((prev) => prev + 1);
+  };
+
+  const onUnvote = () => {
+    setMyVoteTileId(null);
+    setVotesCount((prev) => prev - 1);
+  };
+
   return (
     <div className="md:max-w-2xl w-screen px-1">
       <p className="text-sm">{new Date(problem.created_at).toLocaleString()}</p>
@@ -23,7 +39,7 @@ export default function ProblemCard({ problem, onUpdate }: Props) {
           <ProblemCardHeader problem={problem} onUpdate={onUpdate} />
 
           <div className="flex gap-2 mt-2 lg:-mt-3 items-end">
-            <div className="flex gap-1 items-end">
+            <div className="flex gap-px items-end">
               {[
                 problem.hand1_id,
                 problem.hand2_id,
@@ -39,14 +55,29 @@ export default function ProblemCard({ problem, onUpdate }: Props) {
                 problem.hand12_id,
                 problem.hand13_id,
               ].map((tileId, index) => (
-                <TileImage tileId={tileId} key={index} />
+                <VoteButton
+                  key={index}
+                  problemId={problem.id}
+                  isDora={tileId === problem.dora_id}
+                  tileId={tileId}
+                  myVoteTileId={myVoteTileId}
+                  onCreate={onVote}
+                  onDelete={onUnvote}
+                />
               ))}
             </div>
 
             <div className="lg:block hidden">
               <div className="flex flex-col items-center">
                 <p className="text-sm lg:text-base">ツモ</p>
-                <TileImage tileId={Number(problem.tsumo_id)} />
+                <VoteButton
+                  problemId={problem.id}
+                  isDora={problem.tsumo_id === problem.dora_id}
+                  tileId={problem.tsumo_id}
+                  myVoteTileId={myVoteTileId}
+                  onCreate={onVote}
+                  onDelete={onUnvote}
+                />
               </div>
             </div>
           </div>
@@ -54,7 +85,7 @@ export default function ProblemCard({ problem, onUpdate }: Props) {
           <div className="flex flex-wrap mt-2 gap-x-2 items-center">
             <div className="flex gap-1 items-center">
               <p className="text-sm lg:text-base">ドラ</p>
-              <div className="w-6">
+              <div className="w-8">
                 <TileImage
                   tileId={Number(problem.dora_id)}
                   className="h-full object-contain"
@@ -66,14 +97,14 @@ export default function ProblemCard({ problem, onUpdate }: Props) {
               <div className="flex gap-1 items-center">
                 <p className="text-sm lg:text-base">ツモ</p>
                 <div className="h-8 aspect-ratio-7/9">
-                  {/* <VoteButton
+                  <VoteButton
                     problemId={problem.id}
-                    doraId={problem.dora_id}
+                    isDora={problem.tsumo_id === problem.dora_id}
                     tileId={problem.tsumo_id}
-                    isVoted={Boolean(myVoteTileId == problem.tsumo_id)}
-                    onCreate={() => onVoteCreate(problem.tsumo_id)}
-                    onDelete={onVoteDelete}
-                  /> */}
+                    myVoteTileId={myVoteTileId}
+                    onCreate={onVote}
+                    onDelete={onUnvote}
+                  />
                 </div>
               </div>
             </div>

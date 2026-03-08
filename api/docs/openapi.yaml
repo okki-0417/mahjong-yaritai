@@ -608,6 +608,73 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
 
+  /what_to_discard_problems/{what_to_discard_problem_id}/votes:
+    post:
+      summary: 何切る問題に投票する
+      description: 指定した何切る問題に投票を追加する。既に投票済みの場合は上書きされる。
+      parameters:
+        - name: what_to_discard_problem_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - tile_id
+              properties:
+                tile_id:
+                  type: integer
+                  description: 投票する牌のID
+      responses:
+        '201':
+          description: 投票作成成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Vote'
+        '401':
+          description: 認証エラー
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '422':
+          description: バリデーションエラー
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /what_to_discard_problems/{what_to_discard_problem_id}/votes/{id}:
+    delete:
+      summary: 何切る問題の投票を取り消す
+      description: 指定した何切る問題の投票を削除する
+      parameters:
+        - name: what_to_discard_problem_id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: 投票削除成功
+        '401':
+          description: 認証エラー
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
   /what_to_discard_problems/{what_to_discard_problem_id}/comments:
     get:
       summary: 何切る問題のコメント一覧を取得
@@ -775,6 +842,27 @@ components:
           type: integer
         likable_type:
           type: string
+        created_at:
+          type: string
+          format: date-time
+
+    Vote:
+      type: object
+      required:
+        - id
+        - user_id
+        - what_to_discard_problem_id
+        - tile_id
+        - created_at
+      properties:
+        id:
+          type: integer
+        user_id:
+          type: integer
+        what_to_discard_problem_id:
+          type: integer
+        tile_id:
+          type: integer
         created_at:
           type: string
           format: date-time
