@@ -1,6 +1,14 @@
 "use client";
 
-import { createContext, ReactNode, useEffect, useRef, useState } from "react";
+import {
+  createContext,
+  ReactNode,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 
 type ToastOptions = {
   title: string;
@@ -37,26 +45,29 @@ export function ToastProvider({ children }: { children: ReactNode }) {
     }
   }, [isShowing]);
 
-  const showToast: ToastContextType["showToast"] = ({
-    title,
-    description,
-    status,
-  }) => {
-    if (isShowing) return;
+  const showToast: ToastContextType["showToast"] = useCallback(
+    ({ title, description, status }) => {
+      setIsShowing((currentlyShowing) => {
+        if (currentlyShowing) return true;
 
-    setTitle(title);
-    setDescription(description || "");
-    setStatus(status || "info");
+        setTitle(title);
+        setDescription(description || "");
+        setStatus(status || "info");
 
-    setIsShowing(true);
+        setTimeout(() => {
+          setIsShowing(false);
+        }, 3000);
 
-    setTimeout(() => {
-      setIsShowing(false);
-    }, 3000);
-  };
+        return true;
+      });
+    },
+    [],
+  );
+
+  const value = useMemo(() => ({ showToast }), [showToast]);
 
   return (
-    <ToastContext.Provider value={{ showToast }}>
+    <ToastContext.Provider value={value}>
       {children}
 
       <div

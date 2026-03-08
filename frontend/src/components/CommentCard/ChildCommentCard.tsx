@@ -1,23 +1,19 @@
 "use client";
 
-import { Comment } from "@/src/generated/graphql";
 import CommentCard from "@/src/components/CommentCard";
-import { Box, HStack } from "@chakra-ui/react";
+import { Comment, ParentComment } from "@/src/types/components";
 
 type Props = {
-  reply: Comment;
-  /* eslint-disable-next-line no-unused-vars */
-  onReply: (comment: Comment) => void;
-  commentableType: string;
-  commentableId: string;
+  childComment: Comment;
+  onReply: (comment: ParentComment) => void;
 };
 
-export default function ChildCommentCard({ reply, onReply }: Props) {
+export default function ChildCommentCard({ childComment, onReply }: Props) {
   return (
-    <HStack alignItems="start" spacing="4" w="full">
-      <Box borderLeft="2px" borderLeftColor="gray.500" w="full" pl="4">
-        <CommentCard comment={reply} onReply={onReply} />
-      </Box>
-    </HStack>
+    <div className="flex items-start gap-4 w-full">
+      <div className="border-l-2 border-gray-500 pl-4 w-full">
+        <CommentCard comment={childComment} onReply={onReply} />
+      </div>
+    </div>
   );
 }

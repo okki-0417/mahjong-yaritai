@@ -1,49 +1,41 @@
 "use client";
 
-import { useState, useEffect, useCallback, useTransition } from "react";
+import { useState, useEffect, useTransition, memo } from "react";
 import Modal from "@/src/components/Modal";
 import { FollowableUser } from "@/src/types/components";
 import FollowButton from "@/src/components/FollowButton";
 import fetchUserAction from "@/src/actions/fetchUserAction";
-import { fetchMeAction } from "@/src/actions/fetchMeAction";
 
 type Props = {
-  userId: string | number;
+  userId: number;
+  meId?: number | null | undefined;
   isOpen: boolean;
   onClose: () => void;
 };
 
-export default function UserModal({ userId, isOpen, onClose }: Props) {
-  const [myUserId, setMyUserId] = useState<number | string | null>(null);
+const UserModal = ({ userId, meId, isOpen, onClose }: Props) => {
   const [userProfile, setUserProfile] = useState<FollowableUser | null>(null);
   const [isPending, startTransition] = useTransition();
 
-  const fetchUsers = useCallback(async () => {
-    const [userResult, meResult] = await Promise.all([
-      fetchUserAction(userId),
-      fetchMeAction(),
-    ]);
-
-    if (userResult.errors) {
-      console.error("ユーザの情報の取得に失敗:", userResult.errors);
-      return;
-    }
-    if (meResult.errors) {
-      console.error("自分の情報の取得に失敗:", meResult.errors);
-      return;
-    }
-
-    setUserProfile(userResult.data);
-    setMyUserId(meResult.data?.id || null);
-  }, [userId]);
-
   useEffect(() => {
-    if (isOpen) {
-      startTransition(() => {
-        fetchUsers();
-      });
+    if (!isOpen) {
+      setUserProfile(null);
+      return;
     }
-  }, [isOpen, fetchUsers]);
+
+    startTransition(async () => {
+      const userResult = await fetchUserAction(userId);
+
+      if (userResult.errors) {
+        console.error("ユーザの情報の取得に失敗:", userResult.errors);
+        return;
+      }
+
+      setUserProfile(userResult.data);
+    });
+  }, [isOpen, userId]);
+
+  if (!isOpen) return null;
 
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
@@ -70,18 +62,19 @@ export default function UserModal({ userId, isOpen, onClose }: Props) {
             )}
           </div>
 
-          {myUserId &&
-            userProfile &&
-            Number(myUserId) !== Number(userProfile.id) && (
-              <div className="mt-4 flex justify-center">
-                <FollowButton
-                  userId={userProfile.id}
-                  initialIsFollowing={userProfile.is_followed_by_me}
-                />
-              </div>
-            )}
+          {meId && userProfile && Number(meId) !== Number(userProfile.id) && (
+            <div className="mt-4 flex justify-center">
+              <FollowButton
+                meId={meId}
+                userId={userProfile.id}
+                initialIsFollowing={userProfile.is_followed_by_me}
+              />
+            </div>
+          )}
         </div>
       )}
     </Modal>
   );
-}
+};
+
+export default memo(UserModal);

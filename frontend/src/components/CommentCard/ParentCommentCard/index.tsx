@@ -1,173 +1,91 @@
 "use client";
 
-import FetchRepliesButton from "@/src/components/CommentCard/ParentCommentCard/FetchRepliesButton";
-import { Comment } from "@/src/generated/graphql";
-import {
-  Box,
-  Button,
-  Circle,
-  Divider,
-  HStack,
-  Img,
-  Text,
-  useDisclosure,
-  VStack,
-} from "@chakra-ui/react";
-import { useState } from "react";
-import { MdKeyboardArrowUp, MdOutlineReply } from "react-icons/md";
-import useGetSession from "@/src/hooks/useGetSession";
-import UserModal from "@/src/components/Modals/UserModal";
-import NotLoggedInModal from "@/src/components/Modals/NotLoggedInModal";
-import ChildCommentCard from "@/src/components/CommentCard/ChildCommentCard";
-import { FaRegComment } from "react-icons/fa6";
+import { useState, useTransition } from "react";
+import { Comment, ParentComment } from "@/src/types/components";
+import CommentCard from "@/src/components/CommentCard";
+import { MdKeyboardArrowDown, MdKeyboardArrowUp } from "react-icons/md";
+import getWhatToDiscardProblemReplies from "@/src/actions/getWhatToDiscardProblemReplies";
+import useToast from "@/src/hooks/useToast";
 
 type Props = {
-  comment: Comment;
-  /* eslint-disable-next-line no-unused-vars */
-  onReply: (comment: Comment) => void;
-  commentableType: string;
-  commentableId: string;
+  parentComment: ParentComment;
+  onReply: (comment: ParentComment) => void;
 };
 
-export default function ParentCommentCard({
-  comment,
-  onReply,
-  commentableType,
-  commentableId,
-}: Props) {
-  const [replies, setReplies] = useState<Comment[]>([]);
-  const [isRepliesVisible, setIsRepliesVisible] = useState(false);
-  const { session } = useGetSession();
-  const isLoggedIn = session?.isLoggedIn;
+export default function ParentCommentCard({ parentComment, onReply }: Props) {
+  const [isPending, startTransition] = useTransition();
 
-  const {
-    isOpen: isUserModalOpen,
-    onOpen: onUserModalOpen,
-    onClose: onUserModalClose,
-  } = useDisclosure();
+  const [isShowingReplies, setIsShowingReplies] = useState(false);
+  const toast = useToast();
 
-  const {
-    isOpen: isNotLoggedInModalOpen,
-    onOpen: onNotLoggedInModalOpen,
-    onClose: onNotLoggedInModalClose,
-  } = useDisclosure();
+  const fetchReplies = () => {
+    startTransition(async () => {
+      try {
+        const replies: Comment[] = await getWhatToDiscardProblemReplies({
+          problemId: parentComment.commentable_id,
+          commentId: parentComment.id,
+        });
 
-  const handleReplyClick = () => {
-    if (!isLoggedIn) {
-      onNotLoggedInModalOpen();
-      return;
-    }
-    onReply(comment);
-  };
-
-  const onRepliesFetched = (fetchedReplies: Comment[]) => {
-    setReplies(fetchedReplies);
-    setIsRepliesVisible(true);
+        parentComment.child_comments = replies;
+        setIsShowingReplies(true);
+      } catch (error) {
+        console.error("返信の取得に失敗しました", error);
+        toast({
+          status: "error",
+          title: "返信の取得に失敗しました",
+          description:
+            error instanceof Error
+              ? error.message
+              : "予期せぬエラーが発生しました",
+        });
+      }
+    });
   };
 
   return (
-    <>
-      <Box w="full">
-        <HStack alignItems="center" justifyContent="space-between">
-          <Button colorScheme="" onClick={onUserModalOpen} p="0">
-            <HStack>
-              <Circle
-                size="8"
-                overflow="hidden"
-                border="1px"
-                borderColor="gray.300"
-              >
-                <Img
-                  src={comment.user.avatarUrl || "/no-image.webp"}
-                  className="w-full h-full object-cover"
-                />
-              </Circle>
-              <Text fontWeight="bold" className="text-primary">
-                {comment.user.name}
-              </Text>
-            </HStack>
-          </Button>
+    <div className="w-full">
+      <CommentCard comment={parentComment} onReply={onReply} />
 
-          <Button size="sm" px="1" onClick={handleReplyClick} bgColor="inherit">
-            <MdOutlineReply size={18} className="text-primary" />
-          </Button>
-        </HStack>
-
-        <Text mt="1">{comment.content}</Text>
-
-        <HStack justifyContent="space-between" align="end" mt="1">
-          <Text
-            fontFamily="sans-serif"
-            fontSize="xs"
-            className="text-secondary"
-            flexShrink={0}
-          >
-            {new Date(comment.createdAt).toLocaleString()}
-          </Text>
-
-          <HStack w="full" justifyContent="end" alignItems="center" mt="1">
-            {comment.repliesCount > 0 && !isRepliesVisible ? (
-              <FetchRepliesButton
-                parentComment={comment}
-                commentableType={commentableType}
-                commentableId={commentableId}
-                onRepliesFetched={onRepliesFetched}
-              />
-            ) : (
-              <HStack gap="1" mx="1">
-                <FaRegComment size={20} color="gray" />
-                <Text
-                  fontSize="md"
-                  fontWeight="semibold"
-                  fontFamily="sans-serif"
-                  color="gray"
-                >
-                  {comment.repliesCount}
-                </Text>
-              </HStack>
-            )}
-          </HStack>
-        </HStack>
-      </Box>
-
-      {isRepliesVisible && (
-        <Box w="full" mt="4">
-          <VStack pl="8" divider={<Divider />} alignItems="stretch">
-            {replies.map((reply: Comment) => (
-              <ChildCommentCard
-                key={reply.id}
-                reply={reply}
-                commentableType={commentableType}
-                commentableId={commentableId}
-                onReply={onReply}
-              />
+      {isShowingReplies ? (
+        <div>
+          <div className="flex flex-col pl-8 items-stretch divide-y">
+            {parentComment.child_comments.map((childComment) => (
+              <div key={childComment.id} className="border-l">
+                <CommentCard comment={childComment} onReply={onReply} />
+              </div>
             ))}
-          </VStack>
-          <HStack justifyContent="end" w="full" mt="2">
-            <Button
-              px="2"
-              py="1"
-              size="sm"
-              fontSize="xs"
-              onClick={() => setIsRepliesVisible(false)}
-              variant="ghost"
-            >
-              <MdKeyboardArrowUp size={20} />
-              <Text className="text-secondary">スレッドを閉じる</Text>
-            </Button>
-          </HStack>
-        </Box>
-      )}
+          </div>
 
-      <NotLoggedInModal
-        isOpen={isNotLoggedInModalOpen}
-        onClose={onNotLoggedInModalClose}
-      />
-      <UserModal
-        user={comment.user}
-        isOpen={isUserModalOpen}
-        onClose={onUserModalClose}
-      />
-    </>
+          <button
+            className="px-2 py-1 font-xs flex items-center justify-end w-full hover:bg-slate-200 rounded-sm"
+            onClick={() => setIsShowingReplies(false)}
+          >
+            <span className="text-xs">閉じる </span>
+            <MdKeyboardArrowUp size={20} />
+          </button>
+        </div>
+      ) : (
+        <>
+          {(parentComment.child_comments.length > 0 ||
+            parentComment.replies_count > 0) && (
+            <>
+              {isPending ? (
+                <div className="text-center text-sm text-gray-500">
+                  Loading...
+                </div>
+              ) : (
+                <button
+                  onClick={fetchReplies}
+                  className="-mt-2 px-2 py-1 w-full flex items-center justify-center text-xs hover:bg-slate-200 rounded-sm"
+                >
+                  <MdKeyboardArrowDown size={18} />
+                  返信を見る
+                </button>
+              )}
+            </>
+          )}
+        </>
+      )}
+    </div>
   );
 }

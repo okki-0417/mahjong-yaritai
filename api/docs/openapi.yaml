@@ -307,6 +307,96 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/WhatToDiscardProblemList'
+    post:
+      summary: 何切る問題を作成
+      description: 新しい何切る問題を作成する
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - dora_id
+                - hand1_id
+                - hand2_id
+                - hand3_id
+                - hand4_id
+                - hand5_id
+                - hand6_id
+                - hand7_id
+                - hand8_id
+                - hand9_id
+                - hand10_id
+                - hand11_id
+                - hand12_id
+                - hand13_id
+                - tsumo_id
+              properties:
+                round:
+                  type: string
+                  nullable: true
+                turn:
+                  type: integer
+                  nullable: true
+                wind:
+                  type: string
+                  nullable: true
+                points:
+                  type: integer
+                  nullable: true
+                description:
+                  type: string
+                  nullable: true
+                dora_id:
+                  type: integer
+                hand1_id:
+                  type: integer
+                hand2_id:
+                  type: integer
+                hand3_id:
+                  type: integer
+                hand4_id:
+                  type: integer
+                hand5_id:
+                  type: integer
+                hand6_id:
+                  type: integer
+                hand7_id:
+                  type: integer
+                hand8_id:
+                  type: integer
+                hand9_id:
+                  type: integer
+                hand10_id:
+                  type: integer
+                hand11_id:
+                  type: integer
+                hand12_id:
+                  type: integer
+                hand13_id:
+                  type: integer
+                tsumo_id:
+                  type: integer
+      responses:
+        '201':
+          description: 作成成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WhatToDiscardProblem'
+        '401':
+          description: 認証エラー
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '422':
+          description: バリデーションエラー
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
 
   /what_to_discard_problems/{id}:
     get:
@@ -518,8 +608,156 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
 
+  /what_to_discard_problems/{what_to_discard_problem_id}/comments:
+    get:
+      summary: 何切る問題のコメント一覧を取得
+      description: 指定した何切る問題の親コメント一覧を取得する
+      parameters:
+        - name: what_to_discard_problem_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: コメント一覧取得成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommentList'
+        '404':
+          description: 問題が見つからない
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    post:
+      summary: 何切る問題にコメントする
+      description: 指定した何切る問題にコメントを追加する
+      parameters:
+        - name: what_to_discard_problem_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - comment
+              properties:
+                comment:
+                  type: object
+                  required:
+                    - content
+                  properties:
+                    content:
+                      type: string
+                      maxLength: 500
+                    parent_comment_id:
+                      type: integer
+                      nullable: true
+      responses:
+        '201':
+          description: コメント作成成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Comment'
+        '401':
+          description: 認証エラー
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: 問題が見つからない
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '422':
+          description: バリデーションエラー
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /what_to_discard_problems/{what_to_discard_problem_id}/comments/{comment_id}/replies:
+    get:
+      summary: コメントの返信一覧を取得
+      description: 指定したコメントの返信（子コメント）一覧を取得する
+      parameters:
+        - name: what_to_discard_problem_id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: comment_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: 返信一覧取得成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommentList'
+        '404':
+          description: コメントが見つからない
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
 components:
   schemas:
+    Comment:
+      type: object
+      required:
+        - id
+        - content
+        - parent_comment_id
+        - replies_count
+        - created_at
+        - commentable_type
+        - commentable_id
+        - user
+      properties:
+        id:
+          type: integer
+        content:
+          type: string
+        parent_comment_id:
+          type: integer
+          nullable: true
+        replies_count:
+          type: integer
+        commentable_type:
+          type: string
+        commentable_id:
+          type: integer
+        created_at:
+          type: string
+          format: date-time
+        user:
+          $ref: '#/components/schemas/User'
+
+    CommentList:
+      type: object
+      required:
+        - comments
+      properties:
+        comments:
+          type: array
+          items:
+            $ref: '#/components/schemas/Comment'
+
     Like:
       type: object
       required:

@@ -1,14 +1,16 @@
 import DeleteProblem from "@/src/app/what-to-discard-problems/_components/ProblemSection/ProblemCard/ProblemCardHeader/ProblemOperationMenu/DeleteProblem";
+import EditProblem from "@/src/app/what-to-discard-problems/_components/ProblemSection/ProblemCard/ProblemCardHeader/ProblemOperationMenu/EditProblem";
 import { WhatToDiscardProblem } from "@/src/types/components";
-import Link from "next/link";
+import { memo } from "react";
 import { HiOutlineDotsHorizontal } from "react-icons/hi";
 
 type Props = {
   problem: WhatToDiscardProblem;
   isMyProblem: boolean;
+  onUpdate: (updatedProblem: WhatToDiscardProblem) => void;
 };
 
-export default function ProblemOperationMenu({ problem, isMyProblem }: Props) {
+const ProblemOperationMenu = ({ problem, isMyProblem, onUpdate }: Props) => {
   return (
     <details className="relative group">
       <summary className="p-1 list-none size-fit flex justify-end cursor-pointer marker:hidden">
@@ -20,17 +22,10 @@ export default function ProblemOperationMenu({ problem, isMyProblem }: Props) {
           {isMyProblem && (
             <>
               <li className="w-full">
-                <Link
-                  href={`/what-to-discard-problems/${problem.id}/edit`}
-                  className="p-2 inline-block w-full hover:bg-neutral-200 rounded-sm"
-                >
-                  編集する
-                </Link>
+                <EditProblem problem={problem} onUpdate={onUpdate} />
               </li>
               <li className="w-full">
-                <div>
-                  <DeleteProblem problemId={problem.id} />
-                </div>
+                <DeleteProblem problemId={problem.id} />
               </li>
             </>
           )}
@@ -38,4 +33,6 @@ export default function ProblemOperationMenu({ problem, isMyProblem }: Props) {
       </div>
     </details>
   );
-}
+};
+
+export default memo(ProblemOperationMenu);

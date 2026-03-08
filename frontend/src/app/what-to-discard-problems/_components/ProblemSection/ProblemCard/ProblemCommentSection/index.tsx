@@ -2,107 +2,169 @@
 
 import { FaRegComment } from "react-icons/fa";
 import PopButton from "@/src/components/PopButton";
-import { HStack, Spinner, Text } from "@chakra-ui/react";
-import CommentsModal from "@/src/app/what-to-discard-problems/_components/ProblemSection/ProblemCard/ProblemCommentSection/CommentsModal";
-import { Comment, ParentCommentsDocument } from "@/src/generated/graphql";
-import { Fragment, useState } from "react";
-import { useLazyQuery } from "@apollo/client/react";
-import { clearQueryCache } from "@/src/lib/apollo/cache";
+import { memo, useCallback, useState, useTransition } from "react";
 import useToast from "@/src/hooks/useToast";
 import { useDisclosure } from "@/src/hooks/useDisclosure";
+import Modal from "@/src/components/Modal";
+import CommentForm from "@/src/app/what-to-discard-problems/_components/ProblemSection/ProblemCard/ProblemCommentSection/CommentsModal/CommentForm";
+import ParentCommentCard from "@/src/components/CommentCard/ParentCommentCard";
+import getWhatToDiscardProblemCommentsAction from "@/src/actions/getWhatToDiscardProblemCommentsAction";
+import { Comment, ParentComment } from "@/src/types/components";
 
 type Props = {
   initialCommentsCount: number;
   problemId: number;
 };
 
-export default function ProblemCommentSection({
-  problemId,
-  initialCommentsCount,
-}: Props) {
-  const [parentComments, setParentComments] = useState<Comment[]>([]);
-  const [replyingToComment, setReplyingToComment] = useState<Comment | null>(
-    null,
-  );
+const ProblemCommentSection = ({ problemId, initialCommentsCount }: Props) => {
+  const [parentComments, setParentComments] = useState<ParentComment[]>([]);
+  const [commentsCount, setCommentsCount] = useState(initialCommentsCount);
+  const [replyingToComment, setReplyingToComment] =
+    useState<ParentComment | null>(null);
 
-  const toast = useToast();
+  const [isPending, startTransition] = useTransition();
+  const [error, setError] = useState<Error | null>(null);
+
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const toast = useToast();
 
-  const onReply = (comment: Comment) => setReplyingToComment(comment);
-  const onReplyCancel = () => setReplyingToComment(null);
-  const onCommentCreate = (comment: Comment) => {
-    setReplyingToComment(null);
+  const onReply = useCallback((comment: ParentComment) => {
+    const isReplyingToChildComment = Boolean(comment.parent_comment_id);
 
-    const isReplyComment = Boolean(Number(comment.parentCommentId));
-
-    if (isReplyComment) {
-      const newComments = parentComments.map((prevComment) => {
-        if (prevComment.id == comment.parentCommentId) {
-          prevComment.repliesCount++;
-          return prevComment;
-        } else {
-          return prevComment;
-        }
-      });
-
-      setParentComments(newComments);
-      clearQueryCache("replies");
+    if (isReplyingToChildComment) {
+      const parentComment = parentComments.find(
+        (parent) => parent.id === comment.parent_comment_id,
+      );
+      setReplyingToComment(parentComment || null);
     } else {
-      setParentComments((prevComments) => [comment, ...prevComments]);
-      clearQueryCache("comments");
+      setReplyingToComment(comment);
     }
-  };
+  }, []);
 
-  const [getComments, { loading: commentsLoading }] = useLazyQuery(
-    ParentCommentsDocument,
+  const onReplyCancel = useCallback(() => {
+    setReplyingToComment(null);
+  }, []);
+
+  const onCommentCreate = useCallback(
+    (newComment: Comment | ParentComment) => {
+      setReplyingToComment(null);
+
+      if (newComment.parent_comment_id) {
+        const newChildComment = newComment as Comment;
+
+        const repliedComment = parentComments.find(
+          (parentComment) => newComment.parent_comment_id === parentComment.id,
+        );
+
+        if (repliedComment) {
+          repliedComment.child_comments = [
+            newChildComment,
+            ...repliedComment.child_comments,
+          ];
+        }
+      } else {
+        const newParentComment = {
+          ...newComment,
+          child_comments: [],
+        } as ParentComment;
+
+        setParentComments((prevComments) => [
+          newParentComment,
+          ...prevComments,
+        ]);
+      }
+
+      setCommentsCount((prevCount) => prevCount + 1);
+      toast({
+        status: "success",
+        title: "コメントを投稿しました",
+      });
+    },
+    [parentComments],
   );
 
   const handleModalOpen = async () => {
-    if (commentsLoading) return;
-
-    const result = await getComments({
-      variables: { whatToDiscardProblemId: problemId },
-    });
-
-    if (result.error) {
-      toast({
-        status: "error",
-        title: "コメントを取得できませんでした",
-        description: result.error.message,
-      });
-    } else if (result.data?.whatToDiscardProblemComments) {
-      setParentComments(
-        result.data.whatToDiscardProblemComments.edges.map((edge) => edge.node),
-      );
+    try {
       onOpen();
+
+      startTransition(async () => {
+        const comments = await getWhatToDiscardProblemCommentsAction(problemId);
+
+        const parentComments = comments.map((parentComment) => {
+          return {
+            ...parentComment,
+            child_comments: [],
+          };
+        });
+        setParentComments(parentComments);
+      });
+    } catch (error) {
+      console.error("Failed to fetch comments:", error);
+
+      setError(
+        error instanceof Error
+          ? error
+          : new Error("予想外なエラーが発生しました"),
+      );
     }
   };
 
   return (
-    <Fragment>
+    <>
       <PopButton onClick={handleModalOpen}>
-        <HStack gap="1">
-          {commentsLoading ? (
-            <Spinner size="sm" />
-          ) : (
-            <FaRegComment color="#333" size={24} />
-          )}
-          <Text fontFamily="sans-serif" fontWeight="bold">
-            {parentComments.length || initialCommentsCount}
-          </Text>
-        </HStack>
+        <div className="flex gap-1">
+          <FaRegComment color="#333" size={24} />
+
+          <div className="font-sans font-bold">{commentsCount}</div>
+        </div>
       </PopButton>
 
-      {/* <CommentsModal
-        isOpen={isOpen}
-        onClose={onClose}
-        parentComments={parentComments}
-        problemId={problemId}
-        onReply={onReply}
-        replyingToComment={replyingToComment}
-        onReplyCancel={onReplyCancel}
-        onCommentCreate={(comment: Comment) => onCommentCreate(comment)}
-      /> */}
-    </Fragment>
+      {isOpen && (
+        <Modal isOpen={isOpen} onClose={onClose}>
+          <div className="h-full flex flex-col divide-y-2">
+            <div className="basis-full grow-0 overflow-scroll">
+              {isPending ? (
+                <div className="text-center text-lg">Loading...</div>
+              ) : error ? (
+                <div className="text-center text-lg font-bold text-red-500">
+                  {error.message}
+                </div>
+              ) : (
+                <>
+                  {parentComments.length > 0 ? (
+                    <div className="flex flex-col divide-y">
+                      {parentComments.map((parentComment) => {
+                        return (
+                          <ParentCommentCard
+                            key={parentComment.id}
+                            parentComment={parentComment}
+                            onReply={onReply}
+                          />
+                        );
+                      })}
+                    </div>
+                  ) : (
+                    <p className="text-center text-lg font-bold">
+                      コメントはまだありません
+                    </p>
+                  )}
+                </>
+              )}
+            </div>
+
+            <div className="mt-2">
+              <CommentForm
+                problemId={problemId}
+                replyingToComment={replyingToComment}
+                onReplyCancel={onReplyCancel}
+                onCommentCreate={(comment: Comment) => onCommentCreate(comment)}
+              />
+            </div>
+          </div>
+        </Modal>
+      )}
+    </>
   );
-}
+};
+
+export default memo(ProblemCommentSection);

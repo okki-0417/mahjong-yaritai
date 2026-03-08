@@ -1,15 +1,19 @@
+"use client";
+
 import ProblemOperationMenu from "@/src/app/what-to-discard-problems/_components/ProblemSection/ProblemCard/ProblemCardHeader/ProblemOperationMenu";
 import UserModal from "@/src/components/Modals/UserModal";
 import { useDisclosure } from "@/src/hooks/useDisclosure";
-import { User, WhatToDiscardProblem } from "@/src/types/components";
+import useMe from "@/src/hooks/useMe";
+import { WhatToDiscardProblem } from "@/src/types/components";
 
 type Props = {
   problem: WhatToDiscardProblem;
-  me: User | null;
+  onUpdate: (updatedProblem: WhatToDiscardProblem) => void;
 };
 
-export default function ProblemCardHeader({ problem, me }: Props) {
+const ProblemCardHeader = ({ problem, onUpdate }: Props) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const { me } = useMe();
   const isMyProblem = me?.id === problem.user.id;
 
   return (
@@ -29,11 +33,24 @@ export default function ProblemCardHeader({ problem, me }: Props) {
 
       <div className="flex gap-2">
         {isMyProblem && (
-          <ProblemOperationMenu problem={problem} isMyProblem={isMyProblem} />
+          <ProblemOperationMenu
+            problem={problem}
+            isMyProblem={isMyProblem}
+            onUpdate={onUpdate}
+          />
         )}
       </div>
 
-      <UserModal userId={problem.user.id} isOpen={isOpen} onClose={onClose} />
+      {isOpen && (
+        <UserModal
+          userId={problem.user.id}
+          meId={me?.id}
+          isOpen={isOpen}
+          onClose={onClose}
+        />
+      )}
     </div>
   );
-}
+};
+
+export default ProblemCardHeader;

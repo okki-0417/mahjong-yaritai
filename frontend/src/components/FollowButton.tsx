@@ -1,32 +1,30 @@
 "use client";
 
-import { useState, useTransition } from "react";
-import NotLoggedInModal from "@/src/components/Modals/NotLoggedInModal";
+import { memo, useState, useTransition } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { useDisclosure } from "@/src/hooks/useDisclosure";
 import { followAction, unfollowAction } from "@/src/actions/followingsAction";
 import useToast from "@/src/hooks/useToast";
 
 type Props = {
+  meId: number | null;
   userId: string | number;
   initialIsFollowing?: boolean;
 };
 
-export default function FollowButton({ userId, initialIsFollowing }: Props) {
+const FollowButton = ({ meId, userId, initialIsFollowing }: Props) => {
+  if (!meId) return null;
+
   const [isFollowing, setIsFollowing] = useState(initialIsFollowing);
   const [isPending, startTransition] = useTransition();
 
   const toast = useToast();
 
-  const {
-    handleSubmit,
-    formState: { isSubmitting },
-  } = useForm();
+  const { handleSubmit } = useForm();
 
   const onSubmit: SubmitHandler<{}> = async () => {
     if (isFollowing) {
       startTransition(async () => {
-        const result = await unfollowAction(String(userId));
+        const result = await unfollowAction(userId);
         if (result.errors) {
           toast({
             title: "フォロー解除に失敗",
@@ -40,7 +38,7 @@ export default function FollowButton({ userId, initialIsFollowing }: Props) {
       });
     } else {
       startTransition(async () => {
-        const result = await followAction(String(userId));
+        const result = await followAction(userId);
 
         if (result.errors) {
           toast({
@@ -61,16 +59,14 @@ export default function FollowButton({ userId, initialIsFollowing }: Props) {
       <form onSubmit={handleSubmit(onSubmit)}>
         <button
           type="submit"
-          disabled={isSubmitting || isPending}
+          disabled={isPending}
           className={`px-4 py-2 rounded-sm disabled:bg-gray-400 ${isFollowing ? "bg-gray-400 hover:bg-gray-500 text-white" : "bg-blue-500 hover:bg-blue-600 text-white"}`}
         >
-          {isSubmitting || isPending
-            ? "処理中..."
-            : isFollowing
-              ? "フォロー解除"
-              : "フォロー"}
+          {isPending ? "処理中..." : isFollowing ? "フォロー解除" : "フォロー"}
         </button>
       </form>
     </>
   );
-}
+};
+
+export default memo(FollowButton);

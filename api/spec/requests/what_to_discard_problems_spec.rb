@@ -186,6 +186,103 @@ RSpec.describe "WhatToDiscardProblems", type: :request do
     end
   end
 
+  describe "POST /what_to_discard_problems" do
+    subject do
+      post what_to_discard_problems_url,
+        params: params.to_json,
+        headers: {
+          "Authorization" => "Bearer #{access_token}",
+          "Content-Type" => "application/json",
+        }
+    end
+
+    let!(:tiles) { create_list(:tile, 15) }
+    let(:params) do
+      {
+        round: "東一",
+        turn: 2,
+        wind: "東",
+        points: 25000,
+        description: "テスト問題です",
+        dora_id: tiles[0].id,
+        hand1_id: tiles[1].id,
+        hand2_id: tiles[2].id,
+        hand3_id: tiles[3].id,
+        hand4_id: tiles[4].id,
+        hand5_id: tiles[5].id,
+        hand6_id: tiles[6].id,
+        hand7_id: tiles[7].id,
+        hand8_id: tiles[8].id,
+        hand9_id: tiles[9].id,
+        hand10_id: tiles[10].id,
+        hand11_id: tiles[11].id,
+        hand12_id: tiles[12].id,
+        hand13_id: tiles[13].id,
+        tsumo_id: tiles[14].id,
+      }
+    end
+
+    context "ログインしていない場合" do
+      let(:access_token) { nil }
+
+      it "401を返すこと" do
+        subject
+        expect(response).to have_http_status(:unauthorized)
+
+        assert_schema_conform(401)
+      end
+    end
+
+    context "ログインしている場合" do
+      let(:current_user) { create(:user) }
+      let(:access_token) { get_access_token(current_user) }
+
+      it "問題を作成して201を返すこと" do
+        expect { subject }.to change(WhatToDiscardProblem, :count).by(1)
+        expect(response).to have_http_status(:created)
+
+        json = response.parsed_body
+        expect(json["round"]).to eq("東一")
+        expect(json["turn"]).to eq(2)
+        expect(json["wind"]).to eq("東")
+        expect(json["points"]).to eq(25000)
+        expect(json["description"]).to eq("テスト問題です")
+        expect(json["user"]["id"]).to eq(current_user.id)
+
+        assert_schema_conform(201)
+      end
+
+      context "バリデーションエラーの場合" do
+        let(:params) do
+          {
+            dora_id: tiles[0].id,
+            hand1_id: tiles[0].id,
+            hand2_id: tiles[0].id,
+            hand3_id: tiles[0].id,
+            hand4_id: tiles[0].id,
+            hand5_id: tiles[0].id,
+            hand6_id: tiles[1].id,
+            hand7_id: tiles[2].id,
+            hand8_id: tiles[3].id,
+            hand9_id: tiles[4].id,
+            hand10_id: tiles[5].id,
+            hand11_id: tiles[6].id,
+            hand12_id: tiles[7].id,
+            hand13_id: tiles[8].id,
+            tsumo_id: tiles[9].id,
+          }
+        end
+
+        it "422を返すこと" do
+          expect { subject }.not_to change(WhatToDiscardProblem, :count)
+          expect(response).to have_http_status(:unprocessable_entity)
+
+          assert_schema_conform(422)
+        end
+      end
+    end
+  end
+
   describe "PUT /what_to_discard_problems/:id" do
     subject do
       put what_to_discard_problem_url(problem_id),

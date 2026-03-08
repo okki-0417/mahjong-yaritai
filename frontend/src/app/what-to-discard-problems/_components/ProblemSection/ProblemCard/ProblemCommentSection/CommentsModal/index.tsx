@@ -1,22 +1,10 @@
 "use client";
 
-import {
-  Box,
-  Modal,
-  ModalBody,
-  ModalCloseButton,
-  ModalContent,
-  ModalFooter,
-  ModalHeader,
-  ModalOverlay,
-  StackDivider,
-  Text,
-  VStack,
-} from "@chakra-ui/react";
 import CommentForm from "@/src/app/what-to-discard-problems/_components/ProblemSection/ProblemCard/ProblemCommentSection/CommentsModal/CommentForm";
 import { Comment } from "@/src/generated/graphql";
 import ParentCommentCard from "@/src/components/CommentCard/ParentCommentCard";
 import { useRef } from "react";
+import Modal from "@/src/components/Modal";
 
 type Props = {
   isOpen: boolean;
@@ -52,62 +40,28 @@ export default function CommentsModal({
   };
 
   return (
-    <Modal
-      isOpen={isOpen}
-      onClose={onClose}
-      isCentered
-      size="xl"
-      scrollBehavior="inside"
-    >
-      <ModalOverlay />
-
-      <ModalContent overflow="hidden">
-        <ModalHeader fontFamily="serif" className="bg-neutral text-primary">
-          コメント
-        </ModalHeader>
-
-        <ModalCloseButton className="text-primary" />
-
-        <ModalBody className="text-primary bg-neutral" fontFamily="serif">
-          <Box minH={30} ref={commentsTopRef}>
-            {parentComments.length > 0 ? (
-              <VStack divider={<StackDivider />} gap="0">
-                {parentComments.map((parentComment) => {
-                  return (
-                    <ParentCommentCard
-                      key={parentComment.id}
-                      comment={parentComment}
-                      onReply={onReply}
-                      commentableType="WhatToDiscardProblem"
-                      commentableId={problemId}
-                    />
-                  );
-                })}
-              </VStack>
-            ) : (
-              <Text textAlign="center" fontSize="lg" fontWeight="bold">
-                コメントはまだありません
-              </Text>
-            )}
-          </Box>
-        </ModalBody>
-
-        <ModalFooter
-          className="bg-neutral"
-          boxShadow="0px -1px 10px 10px rgba(150,150,150,0.1)"
-        >
-          <VStack w="full" gap="1">
-            <CommentForm
-              problemId={problemId}
-              replyingToComment={replyingToComment}
-              onReplyCancel={onReplyCancel}
-              onCommentCreate={(comment: Comment) =>
-                wrappedOnCommentCreate(comment)
-              }
-            />
+    <Modal isOpen={isOpen} onClose={onClose}>
+      <Box minH={30} ref={commentsTopRef}>
+        {parentComments.length > 0 ? (
+          <VStack divider={<StackDivider />} gap="0">
+            {parentComments.map((parentComment) => {
+              return (
+                <ParentCommentCard
+                  key={parentComment.id}
+                  comment={parentComment}
+                  onReply={onReply}
+                  commentableType="WhatToDiscardProblem"
+                  commentableId={problemId}
+                />
+              );
+            })}
           </VStack>
-        </ModalFooter>
-      </ModalContent>
+        ) : (
+          <Text textAlign="center" fontSize="lg" fontWeight="bold">
+            コメントはまだありません
+          </Text>
+        )}
+      </Box>
     </Modal>
   );
 }

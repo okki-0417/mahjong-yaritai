@@ -1,65 +1,48 @@
 "use client";
 
 import { SubmitHandler } from "react-hook-form";
-import {
-  UpdateWhatToDiscardProblemInput,
-  UpdateWhatToDiscardProblemMutation,
-  UpdateWhatToDiscardProblemMutationVariables,
-  WhatToDiscardProblem,
-} from "@/src/generated/graphql";
-import { useMutation } from "@apollo/client/react";
-import { UpdateWhatToDiscardProblemDocument } from "@/src/generated/graphql";
-import { useToast } from "@chakra-ui/react";
 import useProblemForm from "@/src/hooks/useProblemForm";
-
-type ProblemUpdateFormInputs = UpdateWhatToDiscardProblemInput;
+import { WhatToDiscardProblem } from "@/src/types/components";
+import { UpdateWhatToDiscardProblemForm } from "@/src/types/forms";
+import updateWhatToDiscardProblem from "@/src/actions/updateWhatToDiscardProblem";
+import useToast from "@/src/hooks/useToast";
 
 type Props = {
   problem: WhatToDiscardProblem;
-  /* eslint-disable-next-line no-unused-vars */
-  onProblemUpdated: (updatedProblem: WhatToDiscardProblem) => void;
+  onUpdate: (updatedProblem: WhatToDiscardProblem) => void;
 };
 
-export default function ProblemUpdateForm({
-  problem,
-  onProblemUpdated,
-}: Props) {
+export default function ProblemUpdateForm({ problem, onUpdate }: Props) {
   const toast = useToast();
-
-  const [updateProblem] = useMutation<
-    UpdateWhatToDiscardProblemMutation,
-    UpdateWhatToDiscardProblemMutationVariables
-  >(UpdateWhatToDiscardProblemDocument, {
-    onCompleted: (data) => {
-      onProblemUpdated(data.updateWhatToDiscardProblem.whatToDiscardProblem);
-      toast({
-        title: "何切る問題を更新しました",
-        status: "success",
-      });
-    },
-    onError: (error) => {
-      toast({
-        title: "何切る問題の更新に失敗しました",
-        status: "error",
-        description: error.message,
-      });
-    },
-  });
-
   const { BaseForm } = useProblemForm(problem);
 
-  const onSubmit: SubmitHandler<ProblemUpdateFormInputs> = async (formData) => {
-    const isConfirmed = confirm("これで更新しますか？");
-    if (!isConfirmed) return;
+  const onSubmit: SubmitHandler<UpdateWhatToDiscardProblemForm> = async (
+    formData,
+  ) => {
+    try {
+      const updatedProblem = await updateWhatToDiscardProblem({
+        id: problem.id,
+        form: formData,
+      });
 
-    await updateProblem({
-      variables: {
-        input: {
-          id: problem.id,
-          ...formData,
-        },
-      },
-    });
+      onUpdate(updatedProblem);
+
+      toast({
+        title: "問題を更新しました",
+        status: "success",
+      });
+    } catch (error) {
+      console.error("問題の更新に失敗しました", error);
+
+      toast({
+        title: "問題の更新に失敗しました",
+        status: "error",
+        description:
+          error instanceof Error
+            ? error.message
+            : "予期せぬエラーが発生しました",
+      });
+    }
   };
 
   return <BaseForm onSubmit={onSubmit} />;

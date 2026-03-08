@@ -3,25 +3,26 @@
 import LikeButton from "@/src/components/LikeButton";
 import NotLoggedInModal from "@/src/components/Modals/NotLoggedInModal";
 import { useForm } from "react-hook-form";
-import { useState } from "react";
+import { memo, useState } from "react";
 import { useDisclosure } from "@/src/hooks/useDisclosure";
 import createWhatToDiscardProblemLike from "@/src/actions/createWhatToDiscardProblemLike";
 import useToast from "@/src/hooks/useToast";
 import deleteWhatToDiscardProblemLike from "@/src/actions/deleteWhatToDiscardProblemLike";
+import useMe from "@/src/hooks/useMe";
 
 type Props = {
   initialMyLikeId: number | null;
   initialLikesCount: number;
   problemId: number;
-  isLoggedIn: boolean;
 };
 
-export default function ProblemLikeSection({
+const ProblemLikeSection = ({
   problemId,
   initialMyLikeId,
   initialLikesCount,
-  isLoggedIn,
-}: Props) {
+}: Props) => {
+  const { isLoggedIn } = useMe();
+
   const [likeId, setLikeId] = useState<number | null>(initialMyLikeId);
   const [likesCount, setLikesCount] = useState(initialLikesCount);
 
@@ -85,4 +86,6 @@ export default function ProblemLikeSection({
       <NotLoggedInModal isOpen={isOpen} onClose={onClose} />
     </>
   );
-}
+};
+
+export default memo(ProblemLikeSection);

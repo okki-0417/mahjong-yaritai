@@ -1,29 +1,19 @@
 "use client";
 
-import { Comment } from "@/src/generated/graphql";
-import {
-  Box,
-  Button,
-  Circle,
-  HStack,
-  Img,
-  Text,
-  useDisclosure,
-} from "@chakra-ui/react";
 import { MdOutlineReply } from "react-icons/md";
-import useGetSession from "@/src/hooks/useGetSession";
 import UserModal from "@/src/components/Modals/UserModal";
 import NotLoggedInModal from "@/src/components/Modals/NotLoggedInModal";
+import { Comment, ParentComment } from "@/src/types/components";
+import useMe from "@/src/hooks/useMe";
+import { useDisclosure } from "@/src/hooks/useDisclosure";
 
 type Props = {
   comment: Comment;
-  /* eslint-disable-next-line no-unused-vars */
-  onReply: (comment: Comment) => void;
+  onReply: (comment: ParentComment) => void;
 };
 
 export default function CommentCard({ comment, onReply }: Props) {
-  const { session } = useGetSession();
-  const isLoggedIn = session?.isLoggedIn;
+  const { isLoggedIn } = useMe();
 
   const {
     isOpen: isUserModalOpen,
@@ -42,56 +32,54 @@ export default function CommentCard({ comment, onReply }: Props) {
       onNotLoggedInModalOpen();
       return;
     }
-    onReply(comment);
+    onReply(comment as ParentComment);
   };
 
   return (
     <>
-      <Box w="full">
-        <HStack alignItems="center" justifyContent="space-between">
-          <Button colorScheme="" onClick={onUserModalOpen} p="0">
-            <HStack>
-              <Circle
-                size="8"
-                overflow="hidden"
-                border="1px"
-                borderColor="gray.300"
-              >
-                <Img
-                  src={comment.user.avatarUrl || "/no-image.webp"}
+      <div className="w-full p-2 rounded-sm">
+        <div className="flex items-center justify-between">
+          <button
+            type="button"
+            onClick={onUserModalOpen}
+            className="p-0 bg-transparent border-none cursor-pointer"
+          >
+            <div className="flex items-center gap-2 hover:bg-slate-200 rounded-sm pr-2">
+              <div className="w-8 h-8 rounded-full overflow-hidden border border-gray-300">
+                <img
+                  src={comment.user.avatar_url || "/no-image.webp"}
+                  alt={comment.user.name}
                   className="w-full h-full object-cover"
                 />
-              </Circle>
-              <Text fontWeight="bold" className="text-primary">
-                {comment.user.name}
-              </Text>
-            </HStack>
-          </Button>
+              </div>
+              <span className="text-primary">{comment.user.name}</span>
+            </div>
+          </button>
 
-          <Button size="sm" px="1" onClick={handleReplyClick} bgColor="inherit">
-            <MdOutlineReply size={18} className="text-primary" />
-          </Button>
-        </HStack>
-
-        <Text mt="1">{comment.content}</Text>
-
-        <HStack justifyContent="end" mt="1">
-          <Text
-            fontFamily="sans-serif"
-            fontSize="xs"
-            className="text-secondary"
+          <button
+            type="button"
+            onClick={handleReplyClick}
+            className="p-1.5 bg-transparent border-none cursor-pointer hover:bg-slate-200 rounded-full hover:shadow"
           >
-            {new Date(comment.createdAt).toLocaleString()}
-          </Text>
-        </HStack>
-      </Box>
+            <MdOutlineReply size={18} className="text-primary" />
+          </button>
+        </div>
+
+        <p className="mt-1">{comment.content}</p>
+
+        <div className="flex justify-end mt-1">
+          <span className="font-sans text-xs text-secondary">
+            {new Date(comment.created_at).toLocaleString()}
+          </span>
+        </div>
+      </div>
 
       <NotLoggedInModal
         isOpen={isNotLoggedInModalOpen}
         onClose={onNotLoggedInModalClose}
       />
       <UserModal
-        user={comment.user}
+        userId={comment.user.id}
         isOpen={isUserModalOpen}
         onClose={onUserModalClose}
       />

@@ -8,19 +8,11 @@ import { FaRegComment } from "react-icons/fa6";
 
 type Props = {
   parentComment: Comment;
-  commentableType: string;
-  commentableId: string;
-  /* eslint-disable-next-line no-unused-vars */
   onRepliesFetched: (replies: Comment[]) => void;
 };
 
 export default function FetchRepliesButton({
   parentComment,
-  // 今は何切る問題のコメントのみを想定しているが、
-  // 将来的な拡張のために commentable形式で受け取るようにしている
-  /* eslint-disable-next-line no-unused-vars */
-  commentableType,
-  commentableId,
   onRepliesFetched,
 }: Props) {
   const [fetchReplies, { loading }] = useLazyQuery(CommentRepliesDocument);
@@ -30,29 +22,29 @@ export default function FetchRepliesButton({
   const handleFetchReplies = async () => {
     if (loading) return;
 
-    const result = await fetchReplies({
-      variables: {
-        problemId: commentableId,
-        parentCommentId: parentComment.id,
-      },
-    });
+    // const result = await fetchReplies({
+    //   variables: {
+    //     problemId: parentComment.commentableId,
+    //     parentCommentId: parentComment.id,
+    //   },
+    // });
 
-    if (result.error) {
-      toast({
-        status: "error",
-        title: "返信を取得できませんでした",
-        description: result.error.message,
-      });
-      return;
-    }
+    // if (result.error) {
+    //   toast({
+    //     status: "error",
+    //     title: "返信を取得できませんでした",
+    //     description: result.error.message,
+    //   });
+    //   return;
+    // }
 
-    if (result.data?.whatToDiscardProblemCommentReplies) {
-      onRepliesFetched(
-        result.data.whatToDiscardProblemCommentReplies.edges.map(
-          (edge) => edge.node,
-        ),
-      );
-    }
+    // if (result.data?.whatToDiscardProblemCommentReplies) {
+    //   onRepliesFetched(
+    //     result.data.whatToDiscardProblemCommentReplies.edges.map(
+    //       (edge) => edge.node,
+    //     ),
+    //   );
+    // }
   };
 
   return (

@@ -11,12 +11,11 @@ import {
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import { usePathname } from "next/navigation";
-import useGetSession from "@/src/hooks/useGetSession";
+import useMe from "@/src/hooks/useMe";
 
 const STORAGE_KEY = "loginPromptDismissed";
 
 export default function LoginPromptBar() {
-  const { session } = useGetSession();
   const pathname = usePathname();
   const [isDismissed, setIsDismissed] = useState(true);
 
@@ -26,7 +25,7 @@ export default function LoginPromptBar() {
     setIsDismissed(dismissed === "true");
   }, []);
 
-  const isLoggedIn = session?.isLoggedIn;
+  const { isLoggedIn } = useMe();
   const isAuthPage = pathname?.startsWith("/auth");
   const isUserNewPage = pathname === "/users/new";
 

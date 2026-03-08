@@ -3,7 +3,6 @@
 import { FaDeleteLeft } from "react-icons/fa6";
 import { SlLogin } from "react-icons/sl";
 import NavigationItem from "@/src/components/Header/SideNavigation/NavigationItem";
-import useGetSession from "@/src/hooks/useGetSession";
 import {
   Button,
   Drawer,
@@ -27,10 +26,10 @@ import { MdOutlinePrivacyTip } from "react-icons/md";
 import { useEffect } from "react";
 import { usePathname } from "next/navigation";
 import LogoutButton from "@/src/components/Header/SideNavigation/LogoutButton";
+import useMe from "@/src/hooks/useMe";
 
 export default function SideNavigation() {
-  const { session } = useGetSession();
-  const isLoggedIn = session?.isLoggedIn;
+  const { isLoggedIn } = useMe();
 
   const { isOpen, onOpen, onClose } = useDisclosure();
   const pathName = usePathname();

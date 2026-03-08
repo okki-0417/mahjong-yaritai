@@ -1,13 +1,12 @@
 "use client";
 
+import useMe from "@/src/hooks/useMe";
 import { Box, HStack, Text, VStack } from "@chakra-ui/react";
 import Link from "next/link";
 import { MdHome, MdPerson } from "react-icons/md";
-import useGetSession from "@/src/hooks/useGetSession";
 
 export default function BottomNavigation() {
-  const { session } = useGetSession();
-  const isLoggedIn = session?.isLoggedIn;
+  const { isLoggedIn } = useMe();
 
   return (
     <Box

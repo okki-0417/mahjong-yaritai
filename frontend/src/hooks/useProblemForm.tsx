@@ -1,59 +1,45 @@
-"use client";
-
+import Modal from "@/src/components/Modal";
 import PopButton from "@/src/components/PopButton";
 import TileImage from "@/src/components/TileImage";
+import { useDisclosure } from "@/src/hooks/useDisclosure";
+import { WhatToDiscardProblem } from "@/src/types/components";
 import {
-  Box,
-  Button,
-  Center,
-  Divider,
-  Flex,
-  FormControl,
-  FormErrorMessage,
-  FormLabel,
-  HStack,
-  Text,
-  Textarea,
-  VisuallyHiddenInput,
-  VStack,
-  Wrap,
-} from "@chakra-ui/react";
+  CreateWhatToDiscardProblemForm,
+  UpdateWhatToDiscardProblemForm,
+} from "@/src/types/forms";
 import { ReactNode, useState } from "react";
-import {
-  CreateWhatToDiscardProblemInput,
-  UpdateWhatToDiscardProblemInput,
-  WhatToDiscardProblem,
-} from "@/src/generated/graphql";
 import { SubmitHandler, useForm } from "react-hook-form";
 
 const MAX_TURN = 18;
 const ALL_TILES_NUM = 34;
 const handFieldNames = [
-  "hand1Id",
-  "hand2Id",
-  "hand3Id",
-  "hand4Id",
-  "hand5Id",
-  "hand6Id",
-  "hand7Id",
-  "hand8Id",
-  "hand9Id",
-  "hand10Id",
-  "hand11Id",
-  "hand12Id",
-  "hand13Id",
+  "hand1_id",
+  "hand2_id",
+  "hand3_id",
+  "hand4_id",
+  "hand5_id",
+  "hand6_id",
+  "hand7_id",
+  "hand8_id",
+  "hand9_id",
+  "hand10_id",
+  "hand11_id",
+  "hand12_id",
+  "hand13_id",
 ] as const;
 
-const tileFieldNames = [...handFieldNames, "tsumoId", "doraId"] as const;
+const tileFieldNames = [...handFieldNames, "tsumo_id", "dora_id"] as const;
 
 type ProblemFormInputs =
-  | CreateWhatToDiscardProblemInput
-  | UpdateWhatToDiscardProblemInput;
+  | CreateWhatToDiscardProblemForm
+  | UpdateWhatToDiscardProblemForm;
 
 export default function useProblemForm(problem?: WhatToDiscardProblem) {
   const [currentFocussedTileField, setCurrentFocussedTileField] =
-    useState<(typeof tileFieldNames)[number]>("hand1Id");
-  const [detailSettingVisible, setDetailSettingVisible] = useState(false);
+    useState<(typeof tileFieldNames)[number]>("hand1_id");
+  const [isShowingDetail, setIsShowingDetail] = useState(false);
+
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
   const {
     register,
@@ -61,52 +47,55 @@ export default function useProblemForm(problem?: WhatToDiscardProblem) {
     setValue,
     watch,
     getValues,
-    formState: { errors, isSubmitting },
+    setError,
+    reset,
+    resetField,
+    formState: { errors, isSubmitting, isValid },
   } = useForm<ProblemFormInputs>({
     defaultValues: {
-      hand1Id: problem?.hand1Id || "",
-      hand2Id: problem?.hand2Id || "",
-      hand3Id: problem?.hand3Id || "",
-      hand4Id: problem?.hand4Id || "",
-      hand5Id: problem?.hand5Id || "",
-      hand6Id: problem?.hand6Id || "",
-      hand7Id: problem?.hand7Id || "",
-      hand8Id: problem?.hand8Id || "",
-      hand9Id: problem?.hand9Id || "",
-      hand10Id: problem?.hand10Id || "",
-      hand11Id: problem?.hand11Id || "",
-      hand12Id: problem?.hand12Id || "",
-      hand13Id: problem?.hand13Id || "",
-      doraId: problem?.doraId || "",
-      tsumoId: problem?.tsumoId || "",
-      round: problem?.round || "",
+      hand1_id: problem?.hand1_id,
+      hand2_id: problem?.hand2_id,
+      hand3_id: problem?.hand3_id,
+      hand4_id: problem?.hand4_id,
+      hand5_id: problem?.hand5_id,
+      hand6_id: problem?.hand6_id,
+      hand7_id: problem?.hand7_id,
+      hand8_id: problem?.hand8_id,
+      hand9_id: problem?.hand9_id,
+      hand10_id: problem?.hand10_id,
+      hand11_id: problem?.hand11_id,
+      hand12_id: problem?.hand12_id,
+      hand13_id: problem?.hand13_id,
+      dora_id: problem?.dora_id,
+      tsumo_id: problem?.tsumo_id,
+      round: problem?.round,
       turn: problem?.turn || null,
-      wind: problem?.wind || "",
+      wind: problem?.wind,
       points: problem?.points ? Number(problem.points) : null,
-      description: problem?.description || "",
+      description: problem?.description,
     },
   });
 
   const tileFieldErrors = [
-    errors?.hand1Id,
-    errors?.hand2Id,
-    errors?.hand3Id,
-    errors?.hand4Id,
-    errors?.hand5Id,
-    errors?.hand6Id,
-    errors?.hand7Id,
-    errors?.hand8Id,
-    errors?.hand9Id,
-    errors?.hand10Id,
-    errors?.hand11Id,
-    errors?.hand12Id,
-    errors?.hand13Id,
-    errors?.tsumoId,
-    errors?.doraId,
+    errors?.hand1_id,
+    errors?.hand2_id,
+    errors?.hand3_id,
+    errors?.hand4_id,
+    errors?.hand5_id,
+    errors?.hand6_id,
+    errors?.hand7_id,
+    errors?.hand8_id,
+    errors?.hand9_id,
+    errors?.hand10_id,
+    errors?.hand11_id,
+    errors?.hand12_id,
+    errors?.hand13_id,
+    errors?.tsumo_id,
+    errors?.dora_id,
   ];
 
   const handleTileSelected = (tileId: string) => {
-    setValue(currentFocussedTileField, tileId);
+    setValue(currentFocussedTileField, Number(tileId));
 
     const nextFocussedTileField = tileFieldNames.find(
       (name) => Boolean(getValues(name)) == false,
@@ -116,8 +105,8 @@ export default function useProblemForm(problem?: WhatToDiscardProblem) {
   };
 
   const handleTileSelectionReset = () => {
-    tileFieldNames.map((fieldName) => setValue(fieldName, null));
-    setCurrentFocussedTileField("hand1Id");
+    tileFieldNames.map((fieldName) => resetField(fieldName));
+    setCurrentFocussedTileField("hand1_id");
   };
 
   const TileDisplay = ({
@@ -126,8 +115,9 @@ export default function useProblemForm(problem?: WhatToDiscardProblem) {
     fieldName: typeof currentFocussedTileField;
   }) => {
     return (
-      <Box>
-        <VisuallyHiddenInput
+      <div>
+        <input
+          type="hidden"
           {...register(fieldName, {
             required: "すべての牌を選択してください",
           })}
@@ -143,10 +133,10 @@ export default function useProblemForm(problem?: WhatToDiscardProblem) {
           }`}
         >
           {watch(fieldName) && (
-            <TileImage tileId={getValues(fieldName)} hover={false} />
+            <TileImage tileId={Number(getValues(fieldName))} hover={false} />
           )}
         </button>
-      </Box>
+      </div>
     );
   };
 
@@ -155,103 +145,117 @@ export default function useProblemForm(problem?: WhatToDiscardProblem) {
   }: {
     onSubmit: SubmitHandler<ProblemFormInputs>;
   }) => (
-    <form onSubmit={handleSubmit(onSubmit)} className="bg-neutral text-primary">
-      <VStack gap={6} align="stretch">
-        <FormControl isRequired isInvalid={tileFieldErrors.some(Boolean)}>
-          <VStack alignItems="start">
-            <FormErrorMessage>
-              {tileFieldErrors.find(Boolean)?.message}
-            </FormErrorMessage>
+    <form
+      onSubmit={() => {
+        onClose();
+        handleSubmit(onSubmit)();
+      }}
+      className="bg-neutral text-primary"
+    >
+      <div className="flex flex-col gap-6">
+        {errors.root?.message && (
+          <p className="text-red-500">{errors.root.message}</p>
+        )}
+        <fieldset className={tileFieldErrors.some(Boolean) ? "form-error" : ""}>
+          <div className="flex flex-col items-start gap-2">
+            {tileFieldErrors.some(Boolean) && (
+              <p className="text-red-500 text-sm">
+                {tileFieldErrors.find(Boolean)?.message}
+              </p>
+            )}
 
-            <Box>
-              <FormLabel fontSize="lg" m="0">
-                手牌
-              </FormLabel>
+            <div>
+              <div>
+                <label>
+                  手牌<span className="text-red-500 ml-1">*</span>
+                </label>
+              </div>
 
-              <Wrap gap="0" mt="2">
+              <div className="flex flex-wrap gap-px mt-2">
                 {handFieldNames.map((fieldName, index) => (
                   <TileDisplay key={index} fieldName={fieldName} />
                 ))}
-              </Wrap>
-            </Box>
+              </div>
+            </div>
 
-            <HStack>
-              <Box>
-                <FormLabel fontSize="md" m="0">
-                  <span>ツモ</span>
-                </FormLabel>
+            <div className="flex gap-px">
+              <div className="flex flex-col items-center">
+                <label className="text-sm">ツモ</label>
 
-                <TileDisplay fieldName="tsumoId" />
-              </Box>
+                <TileDisplay fieldName="tsumo_id" />
+              </div>
 
-              <Box>
-                <FormLabel fontSize="md" m="0">
-                  <span>ドラ</span>
-                </FormLabel>
+              <div className="flex flex-col items-center">
+                <label className="text-sm">ドラ</label>
 
-                <TileDisplay fieldName="doraId" />
-              </Box>
-            </HStack>
+                <TileDisplay fieldName="dora_id" />
+              </div>
+            </div>
 
-            <PopButton
-              className="form-button"
-              onClick={() => handleTileSelectionReset()}
+            <button
+              className="px-3 py-1 rounded-sm border hover:bg-gray-200"
+              onClick={handleTileSelectionReset}
             >
-              <Text as="span" fontSize={["md", "lg"]}>
-                牌をリセット
-              </Text>
-            </PopButton>
-          </VStack>
+              <span className="text-sm">牌をリセット</span>
+            </button>
+          </div>
 
-          <Divider borderColor="gray.500" variant="dashed" mt="6" />
+          <hr className="border border-black border-dashed mt-6" />
 
-          <Box mt="6">
-            <Text fontSize="sm">牌をクリックして選ぶ</Text>
-            <Wrap mt="1">
+          <div className="mt-6">
+            <p className="text-sm">牌をクリックして選ぶ</p>
+            <div className="flex flex-wrap gap-1 mt-1">
               {Array.from({ length: ALL_TILES_NUM }).map((_, index) => {
                 const tileId = String(index + 1);
                 return (
-                  <Flex flexDir="column" alignItems="center" key={index}>
+                  <div className="flex flex-col items-center" key={index}>
                     <PopButton
                       onClick={() => handleTileSelected(tileId)}
-                      className="h-12 aspect-7/9 border  border-primary rounded-sm"
+                      className="h-12 aspect-7/9 border border-primary rounded-sm"
                     >
                       <TileImage tile={tileId} hover={false} />
                     </PopButton>
-                  </Flex>
+                  </div>
                 );
               })}
-            </Wrap>
-          </Box>
-        </FormControl>
+            </div>
+          </div>
+        </fieldset>
 
-        <Button onClick={() => setDetailSettingVisible((prev) => !prev)}>
-          詳細な設定
-        </Button>
+        <button
+          type="button"
+          onClick={() => setIsShowingDetail((prev) => !prev)}
+          className="w-full text-sm py-1 bg-gray-100 hover:bg-gray-200 border border-gray-300 rounded-sm text-gray-700 "
+        >
+          詳細設定
+        </button>
 
-        <VStack>
-          <FormControl>
-            <Textarea
+        <div className="flex flex-col">
+          <div>
+            <textarea
               {...register("description")}
-              placeholder="問題にコメントを追加する（任意）"
+              placeholder="コメントを追加..."
               rows={5}
+              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
             />
-          </FormControl>
-        </VStack>
+          </div>
+        </div>
 
-        <VStack spacing="6" display={detailSettingVisible ? "flex" : "none"}>
-          <FormControl isInvalid={Boolean(errors.round)}>
-            <VStack alignItems="start">
-              <FormLabel fontSize="lg" m="0">
-                局数
-              </FormLabel>
-              <VisuallyHiddenInput {...register("round")} readOnly />
-              <FormErrorMessage>{errors.round?.message}</FormErrorMessage>
+        <div
+          className={`flex flex-col gap-6 ${isShowingDetail ? "block" : "hidden"}`}
+        >
+          <fieldset className={errors.round ? "form-error" : ""}>
+            <div className="flex flex-col items-start gap-2">
+              <label className="text-lg font-medium">局数</label>
+              <input type="hidden" {...register("round")} readOnly />
+              {errors.round && (
+                <p className="text-red-500 text-sm">{errors.round?.message}</p>
+              )}
               <DisplayInput>
                 {watch("round") && `${watch("round")}局`}
               </DisplayInput>
 
-              <Wrap gap={2}>
+              <div className="flex flex-wrap gap-2">
                 {[
                   "東一",
                   "東二",
@@ -268,37 +272,33 @@ export default function useProblemForm(problem?: WhatToDiscardProblem) {
                       onClick={() => setValue("round", roundName)}
                       className="form-button"
                     >
-                      <Text as="span" fontSize="lg">
-                        {roundName}
-                      </Text>
+                      <span className="text-lg">{roundName}</span>
                     </PopButton>
                   );
                 })}
-              </Wrap>
+              </div>
 
               <PopButton
                 className="form-button"
                 onClick={() => setValue("round", null)}
               >
-                <Text as="span" fontSize="lg">
-                  局数をリセット
-                </Text>
+                <span className="text-lg">局数をリセット</span>
               </PopButton>
-            </VStack>
-          </FormControl>
+            </div>
+          </fieldset>
 
-          <FormControl isInvalid={Boolean(errors.turn)}>
-            <VStack alignItems="start">
-              <FormLabel fontSize="lg" m="0">
-                巡目
-              </FormLabel>
-              <FormErrorMessage>{errors.turn?.message}</FormErrorMessage>
-              <VisuallyHiddenInput {...register("turn")} readOnly />
+          <fieldset className={errors.turn ? "form-error" : ""}>
+            <div className="flex flex-col items-start gap-2">
+              <label className="text-lg font-medium">巡目</label>
+              {errors.turn && (
+                <p className="text-red-500 text-sm">{errors.turn?.message}</p>
+              )}
+              <input type="hidden" {...register("turn")} readOnly />
               <DisplayInput>
                 {watch("turn") && `${getValues("turn")}巡目`}
               </DisplayInput>
 
-              <Wrap gap={2}>
+              <div className="flex flex-wrap gap-2">
                 {Array.from({ length: MAX_TURN }).map((_, index) => {
                   const turn = index + 1;
                   return (
@@ -307,35 +307,33 @@ export default function useProblemForm(problem?: WhatToDiscardProblem) {
                       className="form-button"
                       key={index}
                     >
-                      <Text fontSize="lg">{`${turn}巡目`}</Text>
+                      <span className="text-lg">{`${turn}巡目`}</span>
                     </PopButton>
                   );
                 })}
-              </Wrap>
+              </div>
 
               <PopButton
                 className="form-button"
                 onClick={() => setValue("turn", null)}
               >
-                <Text as="span" fontSize="lg">
-                  巡目をリセット
-                </Text>
+                <span className="text-lg">巡目をリセット</span>
               </PopButton>
-            </VStack>
-          </FormControl>
+            </div>
+          </fieldset>
 
-          <FormControl isInvalid={Boolean(errors.wind)}>
-            <VStack alignItems="start">
-              <FormLabel fontSize="lg" m="0">
-                風
-              </FormLabel>
-              <FormErrorMessage>{errors.wind?.message}</FormErrorMessage>
-              <VisuallyHiddenInput {...register("wind")} readOnly />
+          <fieldset className={errors.wind ? "form-error" : ""}>
+            <div className="flex flex-col items-start gap-2">
+              <label className="text-lg font-medium">風</label>
+              {errors.wind && (
+                <p className="text-red-500 text-sm">{errors.wind?.message}</p>
+              )}
+              <input type="hidden" {...register("wind")} readOnly />
               <DisplayInput>
                 {watch("wind") && `${getValues("wind")}家`}
               </DisplayInput>
 
-              <Wrap gap={2}>
+              <div className="flex flex-wrap gap-2">
                 {["東", "南", "西", "北"].map((windName, index) => {
                   return (
                     <PopButton
@@ -343,33 +341,33 @@ export default function useProblemForm(problem?: WhatToDiscardProblem) {
                       onClick={() => setValue("wind", windName)}
                       className="form-button"
                     >
-                      <Text fontSize="lg">{windName}</Text>
+                      <span className="text-lg">{windName}</span>
                     </PopButton>
                   );
                 })}
-              </Wrap>
+              </div>
 
               <PopButton
                 className="form-button"
                 onClick={() => setValue("wind", null)}
               >
-                <Text as="span" fontSize="lg">
-                  風をリセット
-                </Text>
+                <span className="text-lg">風をリセット</span>
               </PopButton>
-            </VStack>
-          </FormControl>
+            </div>
+          </fieldset>
 
-          <FormControl isInvalid={Boolean(errors.points)}>
-            <VStack alignItems="start">
-              <Box>
-                <FormLabel m="0" fontSize="xl">
-                  持ち点
-                </FormLabel>
+          <fieldset className={errors.points ? "form-error" : ""}>
+            <div className="flex flex-col items-start gap-2">
+              <div>
+                <label className="text-xl font-medium">持ち点</label>
 
-                <FormErrorMessage>{errors.points?.message}</FormErrorMessage>
+                {errors.points && (
+                  <p className="text-red-500 text-sm">
+                    {errors.points?.message}
+                  </p>
+                )}
 
-                <VisuallyHiddenInput {...register("points")} readOnly />
+                <input type="hidden" {...register("points")} readOnly />
 
                 <DisplayInput>
                   {watch("points") &&
@@ -377,9 +375,9 @@ export default function useProblemForm(problem?: WhatToDiscardProblem) {
                       Number(watch("points")),
                     )}
                 </DisplayInput>
-              </Box>
+              </div>
 
-              <Wrap gap={2}>
+              <div className="flex flex-wrap gap-2">
                 {[10000, 1000, 100, -10000, -1000, -100].map(
                   (addend, index) => (
                     <PopButton
@@ -389,41 +387,63 @@ export default function useProblemForm(problem?: WhatToDiscardProblem) {
                         setValue("points", Number(getValues("points")) + addend)
                       }
                     >
-                      <Text as="span" fontSize="lg">
+                      <span className="text-lg">
                         {`${addend > 0 ? "+" : ""} ${new Intl.NumberFormat("en-US").format(addend)}`}
-                      </Text>
+                      </span>
                     </PopButton>
                   ),
                 )}
-              </Wrap>
+              </div>
 
-              <PopButton
-                className="form-button"
-                onClick={() => setValue("points", null)}
-              >
-                <Text as="span" fontSize="lg">
-                  得点をリセット
-                </Text>
+              <PopButton onClick={() => setValue("points", null)}>
+                <span>得点をリセット</span>
               </PopButton>
-            </VStack>
-          </FormControl>
-        </VStack>
+            </div>
+          </fieldset>
+        </div>
 
-        <Center>
-          <Button
-            type="submit"
-            colorScheme="teal"
-            size="lg"
-            isLoading={isSubmitting}
+        <div className="flex justify-center">
+          <button
+            type="button"
+            disabled={!isValid || isOpen || isSubmitting}
+            onClick={onOpen}
+            className="px-4 py-3 bg-pink-500 hover:bg-pink-600 disabled:bg-pink-300 text-white rounded-sm"
           >
-            作成する
-          </Button>
-        </Center>
-      </VStack>
+            <span>作成する</span>
+          </button>
+        </div>
+
+        {isOpen && (
+          <Modal
+            isOpen={isOpen}
+            onClose={onClose}
+            width="fit-content"
+            height="fit-content"
+          >
+            <div className="px-8 py-3">
+              <p className="text-center">これで送信しますか？</p>
+              <div className="flex justify-end gap-4 mt-4">
+                <button
+                  onClick={onClose}
+                  className="px-4 py-2 bg-gray-300 hover:bg-gray-400 text-gray-700 rounded-sm"
+                >
+                  <span>キャンセル</span>
+                </button>
+                <button
+                  type="submit"
+                  className="px-4 py-2 bg-pink-500 hover:bg-pink-600 text-white rounded-sm"
+                >
+                  <span>作成</span>
+                </button>
+              </div>
+            </div>
+          </Modal>
+        )}
+      </div>
     </form>
   );
 
-  return { BaseForm };
+  return { BaseForm, setError, reset };
 }
 
 const DisplayInput = ({
@@ -436,21 +456,11 @@ const DisplayInput = ({
   onClick?: () => void;
 }) => {
   return (
-    <Text
-      w="xs"
-      minH="12"
-      border="1px"
-      borderColor="gray.400"
-      py={2}
-      px={4}
-      fontSize="xl"
-      width={40}
-      borderRadius="md"
-      bgColor="gray.50"
-      className={className}
+    <div
+      className={`w-40 min-h-12 border border-gray-400 py-2 px-4 text-xl rounded-md bg-gray-50 ${className ?? ""}`}
       onClick={onClick}
     >
       {children}
-    </Text>
+    </div>
   );
 };

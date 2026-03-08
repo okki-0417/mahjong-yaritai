@@ -8,6 +8,8 @@ type Props = {
   children?: React.ReactNode;
   width?: string | number;
   height?: string | number;
+  maxWidth?: string | number;
+  minWidth?: string | number;
 };
 
 export default function Modal({
@@ -16,6 +18,8 @@ export default function Modal({
   children,
   width,
   height,
+  maxWidth,
+  minWidth,
 }: Props) {
   const ref = useRef<HTMLDialogElement>(null);
 
@@ -51,7 +55,8 @@ export default function Modal({
       className="bg-neutral backdrop:bg-black/30 m-auto rounded p-4 z-40"
       style={{
         width: width || "90%",
-        maxWidth: "500px",
+        maxWidth: maxWidth || "500px",
+        minWidth: minWidth || "200px",
         height: height || "80vh",
       }}
       onCancel={onClose}

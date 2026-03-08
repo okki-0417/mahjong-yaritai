@@ -2,10 +2,11 @@ import "@/src/styles/globals.css";
 import { Metadata } from "next";
 import Header from "@/src/components/Header";
 import BottomNavigation from "@/src/components/BottomNavigation";
-import { SessionProvider } from "@/src/contexts/SessionProvider";
 import AppolloProviderWrapper from "@/src/contexts/AppolloProviderWrapper";
 import ChakraCustomProvider from "@/src/contexts/ChakraCustomProvider";
 import { ToastProvider } from "@/src/contexts/ToastProvider";
+import { MeProvider } from "@/src/contexts/MeProvider";
+import { ReactNode } from "react";
 
 export const metadata: Metadata = {
   title: {
@@ -47,17 +48,13 @@ export const viewport = {
   initialScale: 1.0,
 };
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="ja" suppressHydrationWarning>
       <body>
         <ChakraCustomProvider>
           <AppolloProviderWrapper>
-            <SessionProvider>
+            <MeProvider>
               <ToastProvider>
                 <main
                   className="flex pb-24 flex-col min-h-screen bg-secondary overflow-x-hidden text-neutral "
@@ -72,7 +69,7 @@ export default function RootLayout({
                 </main>
                 <BottomNavigation />
               </ToastProvider>
-            </SessionProvider>
+            </MeProvider>
           </AppolloProviderWrapper>
         </ChakraCustomProvider>
       </body>

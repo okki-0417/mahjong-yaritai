@@ -1,13 +1,8 @@
 import { cookies } from "next/headers";
 import { API_BASE_URL } from "@/config/apiConfig";
-import { User, WhatToDiscardProblemList } from "@/src/types/components";
+import { WhatToDiscardProblemList } from "@/src/types/components";
 
-export type FetchProblemsResult = [
-  problems: WhatToDiscardProblemList,
-  me: User | null,
-];
-
-export async function fetchProblems(): Promise<FetchProblemsResult> {
+export async function fetchProblems(): Promise<WhatToDiscardProblemList> {
   const cookieStore = await cookies();
   const accessToken = cookieStore.get("access_token")?.value;
 
@@ -23,16 +18,5 @@ export async function fetchProblems(): Promise<FetchProblemsResult> {
 
   const problems: WhatToDiscardProblemList = await problemsResponse.json();
 
-  let me: User | null = null;
-
-  if (accessToken) {
-    const meResponse = await fetch(`${API_BASE_URL}/me`, {
-      headers: { Authorization: `Bearer ${accessToken}` },
-    });
-    if (meResponse.ok) {
-      me = await meResponse.json();
-    }
-  }
-
-  return [problems, me];
+  return problems;
 }

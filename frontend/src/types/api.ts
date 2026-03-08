@@ -584,7 +584,73 @@ export interface paths {
             };
         };
         put?: never;
-        post?: never;
+        /**
+         * 何切る問題を作成
+         * @description 新しい何切る問題を作成する
+         */
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody: {
+                content: {
+                    "application/json": {
+                        round?: string | null;
+                        turn?: number | null;
+                        wind?: string | null;
+                        points?: number | null;
+                        description?: string | null;
+                        dora_id: number;
+                        hand1_id: number;
+                        hand2_id: number;
+                        hand3_id: number;
+                        hand4_id: number;
+                        hand5_id: number;
+                        hand6_id: number;
+                        hand7_id: number;
+                        hand8_id: number;
+                        hand9_id: number;
+                        hand10_id: number;
+                        hand11_id: number;
+                        hand12_id: number;
+                        hand13_id: number;
+                        tsumo_id: number;
+                    };
+                };
+            };
+            responses: {
+                /** @description 作成成功 */
+                201: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["WhatToDiscardProblem"];
+                    };
+                };
+                /** @description 認証エラー */
+                401: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["Error"];
+                    };
+                };
+                /** @description バリデーションエラー */
+                422: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["Error"];
+                    };
+                };
+            };
+        };
         delete?: never;
         options?: never;
         head?: never;
@@ -875,10 +941,186 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/what_to_discard_problems/{what_to_discard_problem_id}/comments": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * 何切る問題のコメント一覧を取得
+         * @description 指定した何切る問題の親コメント一覧を取得する
+         */
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    what_to_discard_problem_id: number;
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description コメント一覧取得成功 */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["CommentList"];
+                    };
+                };
+                /** @description 問題が見つからない */
+                404: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["Error"];
+                    };
+                };
+            };
+        };
+        put?: never;
+        /**
+         * 何切る問題にコメントする
+         * @description 指定した何切る問題にコメントを追加する
+         */
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    what_to_discard_problem_id: number;
+                };
+                cookie?: never;
+            };
+            requestBody: {
+                content: {
+                    "application/json": {
+                        comment: {
+                            content: string;
+                            parent_comment_id?: number | null;
+                        };
+                    };
+                };
+            };
+            responses: {
+                /** @description コメント作成成功 */
+                201: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["Comment"];
+                    };
+                };
+                /** @description 認証エラー */
+                401: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["Error"];
+                    };
+                };
+                /** @description 問題が見つからない */
+                404: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["Error"];
+                    };
+                };
+                /** @description バリデーションエラー */
+                422: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["Error"];
+                    };
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/what_to_discard_problems/{what_to_discard_problem_id}/comments/{comment_id}/replies": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * コメントの返信一覧を取得
+         * @description 指定したコメントの返信（子コメント）一覧を取得する
+         */
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    what_to_discard_problem_id: number;
+                    comment_id: number;
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description 返信一覧取得成功 */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["CommentList"];
+                    };
+                };
+                /** @description コメントが見つからない */
+                404: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["Error"];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
     schemas: {
+        Comment: {
+            id: number;
+            content: string;
+            parent_comment_id: number | null;
+            replies_count: number;
+            commentable_type: string;
+            commentable_id: number;
+            /** Format: date-time */
+            created_at: string;
+            user: components["schemas"]["User"];
+        };
+        CommentList: {
+            comments: components["schemas"]["Comment"][];
+        };
         Like: {
             id: number;
             user_id: number;

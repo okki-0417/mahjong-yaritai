@@ -1,60 +1,47 @@
 "use client";
 
 import { SubmitHandler } from "react-hook-form";
-import {
-  CreateWhatToDiscardProblemInput,
-  CreateWhatToDiscardProblemMutation,
-  CreateWhatToDiscardProblemMutationVariables,
-  WhatToDiscardProblem,
-} from "@/src/generated/graphql";
 import useProblemForm from "@/src/hooks/useProblemForm";
-import { useMutation } from "@apollo/client/react";
-import { CreateWhatToDiscardProblemDocument } from "@/src/generated/graphql";
-import { useToast } from "@chakra-ui/react";
-
-type CreateProblemFormInputs = CreateWhatToDiscardProblemInput;
+import { WhatToDiscardProblem } from "@/src/types/components";
+import createWhatToDiscardProblem from "@/src/actions/createWhatToDiscardProblem";
+import { CreateWhatToDiscardProblemForm } from "@/src/types/forms";
+import useToast from "@/src/hooks/useToast";
 
 type Props = {
-  /* eslint-disable-next-line no-unused-vars */
-  onProblemCreated: (newProblem: WhatToDiscardProblem) => void;
+  onCreate: (newProblem: WhatToDiscardProblem) => void;
 };
 
-export default function ProblemCreateForm({ onProblemCreated }: Props) {
+export default function ProblemCreateForm({ onCreate }: Props) {
+  const { BaseForm, setError, reset } = useProblemForm();
   const toast = useToast();
 
-  const [createProblem] = useMutation<
-    CreateWhatToDiscardProblemMutation,
-    CreateWhatToDiscardProblemMutationVariables
-  >(CreateWhatToDiscardProblemDocument, {
-    onCompleted: (data) => {
-      onProblemCreated(data.createWhatToDiscardProblem.whatToDiscardProblem);
+  const onSubmit: SubmitHandler<CreateWhatToDiscardProblemForm> = async (
+    formData,
+  ) => {
+    try {
+      const newProblem = await createWhatToDiscardProblem({
+        formData,
+      });
+      reset();
       toast({
-        title: "何切る問題を作成しました",
+        title: "問題を作成しました",
         status: "success",
       });
-    },
-    onError: (error) => {
+      onCreate(newProblem);
+    } catch (error) {
+      setError("root", {
+        type: "server",
+        message:
+          error instanceof Error
+            ? error.message
+            : "問題の作成に失敗しました。時間をおいて再度お試しください。",
+      });
       toast({
-        title: "何切る問題の作成に失敗しました",
-        description: error.message,
+        title: "問題の作成に失敗しました",
+        description: "エラーメッセージを確認してください",
         status: "error",
       });
-    },
-  });
-
-  const { BaseForm } = useProblemForm();
-
-  const onSubmit: SubmitHandler<CreateProblemFormInputs> = async (formData) => {
-    const isConfirmed = confirm("これで作成しますか？");
-    if (!isConfirmed) return;
-
-    await createProblem({
-      variables: {
-        input: {
-          ...formData,
-        },
-      },
-    });
+    }
   };
 
   return <BaseForm onSubmit={onSubmit} />;

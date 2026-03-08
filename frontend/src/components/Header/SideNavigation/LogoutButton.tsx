@@ -9,13 +9,10 @@ import {
   LogoutUserMutation,
 } from "@/src/generated/graphql";
 import { useForm } from "react-hook-form";
-import useGetSession from "@/src/hooks/useGetSession";
 
 export default function LogoutButton() {
   const toast = useToast();
   const router = useRouter();
-
-  const { updateSession } = useGetSession();
 
   const {
     formState: { isSubmitting },
@@ -24,8 +21,6 @@ export default function LogoutButton() {
 
   const [logoutUser] = useMutation<LogoutUserMutation>(LogoutUserDocument, {
     onCompleted: async () => {
-      await updateSession();
-
       toast({
         title: "ログアウトしました。",
         status: "success",

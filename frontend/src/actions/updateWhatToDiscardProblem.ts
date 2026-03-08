@@ -10,7 +10,10 @@ type Props = {
   form: EditWhatToDiscardProblemForm;
 };
 
-export default async function updateWhatToDiscardProblem({ id, form }: Props) {
+export default async function updateWhatToDiscardProblem({
+  id,
+  form,
+}: Props): Promise<WhatToDiscardProblem> {
   const cookieStore = await cookies();
   const accessToken = cookieStore.get("access_token")?.value;
 
@@ -22,7 +25,7 @@ export default async function updateWhatToDiscardProblem({ id, form }: Props) {
         "Content-Type": "application/json",
         Authorization: `Bearer ${accessToken}`,
       },
-      body: JSON.stringify(form),
+      body: JSON.stringify({ what_to_discard_problem: form }),
     },
   );
 

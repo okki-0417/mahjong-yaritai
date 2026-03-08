@@ -1,3 +1,4 @@
+import { memo } from "react";
 import Image, { StaticImageData } from "next/image";
 import Tile1 from "@/public/tiles/1.webp";
 import Tile2 from "@/public/tiles/2.webp";
@@ -72,7 +73,7 @@ export const tileImagePathByTileId: Record<number, StaticImageData> = {
   34: Tile34,
 };
 
-export default function TileImage({
+const TileImage = memo(function TileImage({
   tile,
   tileId,
   hover = false,
@@ -103,4 +104,6 @@ export default function TileImage({
       <div className={`${isShiny ? "shining-tile" : "hidden"}`} />
     </div>
   );
-}
+});
+
+export default TileImage;

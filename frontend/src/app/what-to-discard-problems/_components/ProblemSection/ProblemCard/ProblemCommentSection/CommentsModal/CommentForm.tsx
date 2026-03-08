@@ -1,37 +1,21 @@
 "use client";
 
-import {
-  Box,
-  Button,
-  Container,
-  FormControl,
-  FormErrorMessage,
-  HStack,
-  Text,
-  Textarea,
-  useToast,
-  VisuallyHiddenInput,
-  VStack,
-} from "@chakra-ui/react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import Link from "next/link";
-import { useMutation } from "@apollo/client/react";
-import {
-  CreateCommentDocument,
-  Comment,
-  CreateWhatToDiscardProblemCommentInput,
-} from "@/src/generated/graphql";
-import useGetSession from "@/src/hooks/useGetSession";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { IoMdClose } from "react-icons/io";
-
-type CommentCreateFormInputs = CreateWhatToDiscardProblemCommentInput;
+import createWhatToDiscardProblemCommentAction from "@/src/actions/createWhatToDiscardProblemCommentAction";
+import { Comment } from "@/src/types/components";
+import { CreateWhatToDiscardProblemCommentForm } from "@/src/types/forms";
+import useToast from "@/src/hooks/useToast";
+import useMe from "@/src/hooks/useMe";
+import { useDisclosure } from "@/src/hooks/useDisclosure";
+import Modal from "@/src/components/Modal";
 
 type Props = {
-  problemId: string;
+  problemId: number;
   replyingToComment: Comment | null;
   onReplyCancel: () => void;
-  /* eslint-disable-next-line no-unused-vars */
   onCommentCreate: (comment: Comment) => void;
   isFocused?: boolean;
 };
@@ -42,37 +26,35 @@ export default function CommentForm({
   onReplyCancel,
   onCommentCreate,
 }: Props) {
-  const { session } = useGetSession();
-  const isLoggedIn = Boolean(session?.isLoggedIn);
-
+  const isReplying = Boolean(replyingToComment);
+  const { isLoggedIn } = useMe();
   const toast = useToast();
 
-  const [createComment] = useMutation(CreateCommentDocument, {
-    onCompleted: (data) => {
-      toast({
-        status: "success",
-        title: "コメントを投稿しました",
+  const { isOpen, onOpen, onClose } = useDisclosure();
+
+  const onSubmit: SubmitHandler<CreateWhatToDiscardProblemCommentForm> = async (
+    formData,
+  ) => {
+    try {
+      const comment: Comment = await createWhatToDiscardProblemCommentAction({
+        problemId,
+        formData,
       });
 
-      resetForm();
-      onCommentCreate(data.createWhatToDiscardProblemComment.comment);
-    },
-    onError: (error) => {
+      reset();
+      onReplyCancel();
+      onClose();
+      onCommentCreate(comment);
+    } catch (error) {
       toast({
         status: "error",
         title: "コメントの投稿に失敗しました",
-        description: error.message,
+        description:
+          error instanceof Error
+            ? error.message
+            : "予期せぬエラーが発生しました",
       });
-    },
-  });
-
-  const onSubmit: SubmitHandler<CommentCreateFormInputs> = async (formData) => {
-    await createComment({
-      variables: {
-        whatToDiscardProblemId: problemId,
-        ...formData,
-      },
-    });
+    }
   };
 
   const {
@@ -81,93 +63,115 @@ export default function CommentForm({
     formState: { errors, isSubmitting, isValid },
     setFocus,
     setValue,
-    reset: resetForm,
-  } = useForm<CommentCreateFormInputs>({
+    reset,
+  } = useForm<CreateWhatToDiscardProblemCommentForm>({
     defaultValues: {
-      parentCommentId: replyingToComment
-        ? String(
-            Number(replyingToComment.parentCommentId) || replyingToComment.id,
-          )
-        : undefined,
+      parent_comment_id: replyingToComment
+        ? replyingToComment.parent_comment_id || replyingToComment.id
+        : null,
       content: "",
     },
   });
 
   useEffect(() => {
-    if (replyingToComment) {
+    if (isReplying) {
       setFocus("content");
       setValue(
-        "parentCommentId",
-        String(
-          Number(replyingToComment.parentCommentId) || replyingToComment.id,
-        ),
+        "parent_comment_id",
+        replyingToComment?.parent_comment_id || replyingToComment?.id,
       );
     } else {
-      setValue("parentCommentId", null);
+      setValue("parent_comment_id", null);
     }
-  }, [replyingToComment, setFocus, setValue]);
+  }, [isReplying]);
 
   return (
-    <Box w="full" fontFamily="serif" className="text-primary">
+    <div className="w-full text-primary">
       {isLoggedIn ? (
         <form onSubmit={handleSubmit(onSubmit)}>
-          <VStack alignItems="stretch" gap="1">
+          <div className="flex flex-col items-stretch">
             {replyingToComment && (
-              <HStack justifyContent="space-between">
-                <Text fontStyle="italic">
-                  @{replyingToComment.user.name}...
-                </Text>
-                <Button
-                  bgColor="inherit"
-                  size="xs"
-                  fontSize="sm"
-                  onClick={onReplyCancel}
-                >
-                  <IoMdClose />
-                </Button>
-              </HStack>
+              <button
+                onClick={onReplyCancel}
+                className="flex items-center justify-between hover:bg-slate-100 rounded-sm px-2 py-1"
+              >
+                <p className="italic text-blue-500">
+                  @{replyingToComment.user.name}
+                </p>
+                <IoMdClose />
+              </button>
             )}
 
-            <FormControl>
-              <VisuallyHiddenInput {...register("parentCommentId")} />
-              <FormErrorMessage>
-                {errors.parentCommentId?.message}
-              </FormErrorMessage>
-            </FormControl>
+            <div>
+              <input type="hidden" {...register("parent_comment_id")} />
+              <span>{errors.parent_comment_id?.message}</span>
+            </div>
 
-            <FormControl isRequired isInvalid={Boolean(errors.content)}>
-              <Textarea
-                className="text-primary"
+            <div>
+              <textarea
+                className="p-2 text-primary w-full rounded-sm border"
                 placeholder="コメントする..."
+                rows={3}
                 {...register("content", { required: true })}
               />
-              <FormErrorMessage>{errors.content?.message}</FormErrorMessage>
-            </FormControl>
+              <span>{errors.content?.message}</span>
+            </div>
 
-            <HStack justifyContent="end">
-              <Button
-                type="submit"
-                colorScheme="pink"
-                isLoading={isSubmitting}
-                isDisabled={!isValid}
+            <div className="flex justify-end gap-2">
+              <button
+                type="button"
+                disabled={isSubmitting || !isValid}
+                className={`bg-gray-500 text-white rounded-sm px-3 py-2 text-sm
+                  ${isSubmitting || !isValid ? "opacity-50" : "bg-pink-500 hover:bg-pink-600"}`}
+                onClick={onOpen}
               >
-                送信
-              </Button>
-            </HStack>
-          </VStack>
+                投稿する
+              </button>
+
+              {isOpen && (
+                <Modal
+                  isOpen={isOpen}
+                  onClose={onClose}
+                  width="fit-content"
+                  height="fit-content"
+                >
+                  <div className="p-4">
+                    <p className="text-center">本当に投稿しますか？</p>
+                    <div className="mt-6 flex justify-center gap-2">
+                      <button
+                        onClick={onClose}
+                        className="bg-gray-500 text-white rounded-sm px-3 py-2"
+                      >
+                        キャンセル
+                      </button>
+                      <button
+                        type="submit"
+                        disabled={isSubmitting || !isValid}
+                        className="bg-pink-500 hover:bg-pink-600 text-white rounded-sm px-3 py-2"
+                      >
+                        投稿する
+                      </button>
+                    </div>
+                  </div>
+                </Modal>
+              )}
+            </div>
+          </div>
         </form>
       ) : (
-        <Container>
-          <Text textAlign="center">
+        <div>
+          <p className="text-center">
             コメントを投稿するにはログインしてください
-          </Text>
-          <Container textAlign="center" mt={2}>
+          </p>
+          <div className="text-center mt-2">
             <Link href="/auth/request">
-              <Button colorScheme="pink">ログイン / 新規登録する</Button>
+              <button className="bg-pink-500 hover:bg-pink-600/90 text-white px-4 py-2 rounded-sm">
+                ログイン / 新規登録する
+              </button>
             </Link>
-          </Container>
-        </Container>
+          </div>
+        </div>
       )}
-    </Box>
+    </div>
   );
 }

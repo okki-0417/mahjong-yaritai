@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class WhatToDiscardProblemsController < ApplicationController
-  before_action :authorize_request, only: %i[update destroy]
+  before_action :authorize_request, only: %i[create update destroy]
 
   def index
     limit = [(params[:first] || 10).to_i, 50].min
@@ -30,6 +30,17 @@ class WhatToDiscardProblemsController < ApplicationController
   def show
     @problem = WhatToDiscardProblem.find(params[:id])
     set_current_user_interactions(@problem)
+  end
+
+  def create
+    @problem = current_user.created_what_to_discard_problems.new(what_to_discard_problem_params)
+
+    if @problem.save
+      set_current_user_interactions(@problem)
+      render :show, status: :created
+    else
+      render_error(@problem.errors.full_messages.join(", "), status: :unprocessable_entity)
+    end
   end
 
   def update
@@ -62,7 +73,7 @@ class WhatToDiscardProblemsController < ApplicationController
   end
 
   def what_to_discard_problem_params
-    params.permit(
+    params.require(:what_to_discard_problem).permit(
       :round,
       :turn,
       :wind,

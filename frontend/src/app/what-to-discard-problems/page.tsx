@@ -15,7 +15,7 @@ export const metadata: Metadata = {
 
 export default function WhatToDiscardProblems() {
   return (
-    <div className="w-7xl mx-auto lg:px-6 px-px lg:mt-12 mt-6">
+    <div className="mx-auto lg:px-6 px-px lg:mt-12 mt-6">
       <Suspense fallback={<div>読み込み中...</div>}>
         <ProblemsSection />
       </Suspense>
